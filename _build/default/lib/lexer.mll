@@ -15,8 +15,11 @@ rule read =
   | newline             { new_line lexbuf; read lexbuf }
   | '<'                 { LT }
   | '>'                 { GT }
+  | '('                 { LPAR }
+  | ')'                 { RPAR }
   | ':'                 { COLON }
   | '='                 { EQ }
+  | '-'                 { MINUS }
   | ','                 { COMMA }
   | "type"              { TYPE_KEYWORD }
   | "InternalChoice"    { INTERNALCHOICE }
@@ -28,6 +31,7 @@ rule read =
   | "SharedToLinear"    { SHAREDTOLINEAR }
   | "LinearToShared"    { LINEARTOSHARED }
   | "End"               { END }
+  | "fn"                { FUNC }
   | id                  { ID (Lexing.lexeme lexbuf) }
   | eof                 { EOF }
   | _                   { read lexbuf } (* Other rust tokens are skipped *)
