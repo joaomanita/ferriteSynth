@@ -1,0 +1,4 @@
+type myType = ReceiveChannel<
+      InternalChoice<left: SendValue<String, End>, right: ReceiveValue<u64, End>>,
+      End
+    >

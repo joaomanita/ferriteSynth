@@ -1,0 +1,16 @@
+# dune exec bin/main.exe /home/joaomanita/Tese/ferriteSynth/test/test.txt
+# OCAMLPARAM: unset
+# Shared cache: enabled-except-user-rules
+# Shared cache location: /home/joaomanita/.cache/dune/db
+# Workspace root: /home/joaomanita/Tese/ferriteSynth
+# Auto-detected concurrency: 8
+# Dune context:
+#  { name = "default"
+#  ; kind = "default"
+#  ; profile = Dev
+#  ; merlin = true
+#  ; fdo_target_exe = None
+#  ; build_dir = In_build_dir "default"
+#  ; instrument_with = []
+#  }
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_2560c9_output

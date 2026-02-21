@@ -1,0 +1,9 @@
+(library
+ (name ferriteSynth)
+ (libraries menhirLib))
+
+(menhir
+ (modules parser)
+ (flags --table --inspection --trace))
+
+(ocamllex lexer)
