@@ -8,3 +8,6 @@ module Mini_ast = FerriteSynth__Mini_ast
 
 (** @canonical FerriteSynth.Parser *)
 module Parser = FerriteSynth__Parser
+
+(** @canonical FerriteSynth.Synthesizer *)
+module Synthesizer = FerriteSynth__Synthesizer

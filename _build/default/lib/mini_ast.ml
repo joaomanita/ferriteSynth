@@ -1,20 +1,7 @@
 type program = decl list
-
-and decl =
-  | TypeDef of type_def
-  | Function of func_def
-
-and type_def = {
-  name: string;
-  body: ty;
-}
-
-and func_def = {
-  fname: string;
-  params: (string * ty) list;
-  return: ty;
-}
-
+and decl = TypeDef of type_def | Function of func_def
+and type_def = { name : string; body : ty }
+and func_def = { fname : string; params : (string * ty) list; return : ty }
 and label = string
 and value = Value of string
 

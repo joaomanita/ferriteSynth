@@ -2,3 +2,7 @@ type myType = ReceiveChannel<
       InternalChoice<left: SendValue<String, End>, right: ReceiveValue<u64, End>>,
       End
     >
+
+fn myFunc(myArg: Int) -> SendValue<Int, End> {}
+
+fn myFunc2() -> SendValue<Int, End> {}

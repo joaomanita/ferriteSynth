@@ -40,9 +40,6 @@ type_defs:
 type_def:
   | TYPE_KEYWORD; _name = ID; EQ; t = s_type { {name = _name; body = t} }
 
-labeled_type:
-  | label = ID; COLON; t = s_type { (label, t) }
-
 s_type:
   | INTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyInternalChoice(xs) }
   | EXTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyExternalChoice(xs) }
@@ -53,6 +50,14 @@ s_type:
   | END                                                                  { TyEnd }
   | SHAREDTOLINEAR; LT; t = s_type; GT                                   { TySharedToLinear(t) }
   | LINEARTOSHARED; LT; t = s_type; GT                                   { TyLinearToShared(t) }
+
+labeled_type:
+  | label = ID; COLON; t = s_type { (label, t) }
+
+choice_list:
+  | t1 = labeled_type; COMMA; t2 = labeled_type { (t1, t2) }
+  | l1 = choice_list; COMMA; l2 = choice_list { ((l1 * fst(l2)), snd(l2)) }
+  | l = choice_list; COMMA; t = labeled_type { (l, t)}
 
 funcs:
   | f = func; { [f] }
