@@ -41,12 +41,12 @@ type_def:
   | TYPE_KEYWORD; _name = ID; EQ; t = s_type { {name = _name; body = t} }
 
 s_type:
-  | INTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyInternalChoice(xs) }
-  | EXTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyExternalChoice(xs) }
+  | INTERNALCHOICE; LT; xs = choice_list; GT                             { TyInternalChoice(xs) }
+  | EXTERNALCHOICE; LT; xs = choice_list; GT                             { TyExternalChoice(xs) }
   | SENDCHANNEL; LT; t = s_type; COMMA; cont = s_type; GT                { TySendChannel(t, cont) }
   | RECEIVECHANNEL; LT; t = s_type; COMMA; cont = s_type; GT             { TyReceiveChannel(t, cont) }
-  | SENDVALUE; LT; v = ID; COMMA; cont = s_type; GT                      { TySendValue(Value(v), cont) }
-  | RECEIVEVALUE; LT; v  = ID; COMMA; cont = s_type; GT                  { TyReceiveValue(Value(v), cont) }
+  | SENDVALUE; LT; v = ID; COMMA; cont = s_type; GT                      { TySendValue(v, cont) }
+  | RECEIVEVALUE; LT; v  = ID; COMMA; cont = s_type; GT                  { TyReceiveValue(v, cont) }
   | END                                                                  { TyEnd }
   | SHAREDTOLINEAR; LT; t = s_type; GT                                   { TySharedToLinear(t) }
   | LINEARTOSHARED; LT; t = s_type; GT                                   { TyLinearToShared(t) }
@@ -55,9 +55,11 @@ labeled_type:
   | label = ID; COLON; t = s_type { (label, t) }
 
 choice_list:
-  | t1 = labeled_type; COMMA; t2 = labeled_type { (t1, t2) }
-  | l1 = choice_list; COMMA; l2 = choice_list { ((l1 * fst(l2)), snd(l2)) }
-  | l = choice_list; COMMA; t = labeled_type { (l, t)}
+  | t = labeled_type
+      { HCons (t, HNil) }
+
+  | t = labeled_type; COMMA; rest = choice_list
+      { HCons (t, rest) }
 
 funcs:
   | f = func; { [f] }
@@ -70,6 +72,6 @@ arg:
   | arg_name = ID; COLON; t = arg_type { (arg_name, t) }
 
 arg_type:
-  | id = ID     { TyPrimitive(Value(id)) }
+  | id = ID     { TyPrimitive(id) }
   | t = s_type  { t }
 

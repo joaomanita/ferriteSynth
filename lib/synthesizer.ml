@@ -30,15 +30,27 @@ type tm =
   | Accept of tm
   | Accquire of tm * tm
 
-type index =
-  | Z
-  | S of index
-
+type index = Z | S of index
 type lens = index
 type prism = index
 
-let rec print_type t = 
+let rec print_hlist l =
+  match l with
+  | HNil -> "()"
+  | HCons (t, rest) ->
+      "(" ^ fst t ^ ":" ^ print_type (snd t) ^ "," ^ print_hlist rest ^ ")"
+
+and print_type t =
   match t with
-  | Value a -> a
-  | TyPrimitive t -> print_type t
-  | TyInternalChoice 
+  | TyPrimitive t -> t
+  | TyInternalChoice l -> "InternalChoice<" ^ print_hlist l ^ ">"
+  | TyExternalChoice l -> "ExternalChoice<" ^ print_hlist l ^ ">"
+  | TySendChannel t ->
+      "SendChannel<" ^ print_type (fst t) ^ print_type (snd t) ^ ">"
+  | TyReceiveChannel t ->
+      "ReceiveChannel<" ^ print_type (fst t) ^ print_type (snd t) ^ ">"
+  | TySendValue t -> "SendValue<" ^ fst t ^ print_type (snd t) ^ ">"
+  | TyReceiveValue t -> "ReceiveValue<" ^ fst t ^ print_type (snd t) ^ ">"
+  | TyEnd -> "End"
+  | TySharedToLinear t -> "SharedToLinear<" ^ print_type t ^ ">"
+  | TyLinearToShared t -> "LinearToShared<" ^ print_type t ^ ">"

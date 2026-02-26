@@ -23,21 +23,17 @@ type token =
 val menhir_begin_marker : int
 val xv_type_defs : Mini_ast.decl list
 val xv_type_def : Mini_ast.type_def
-val xv_separated_nonempty_list_COMMA_labeled_type_ :
-  (string * Mini_ast.ty) list
 val xv_separated_nonempty_list_COMMA_arg_ : (string * Mini_ast.ty) list
-val xv_separated_list_COMMA_labeled_type_ : (string * Mini_ast.ty) list
 val xv_separated_list_COMMA_arg_ : (string * Mini_ast.ty) list
 val xv_s_type : Mini_ast.ty
 val xv_prog : Mini_ast.decl list
 val xv_opt_type_defs : Mini_ast.decl list
-val xv_loption_separated_nonempty_list_COMMA_labeled_type__ :
-  (string * Mini_ast.ty) list
 val xv_loption_separated_nonempty_list_COMMA_arg__ :
   (string * Mini_ast.ty) list
 val xv_labeled_type : string * Mini_ast.ty
 val xv_funcs : Mini_ast.decl list
 val xv_func : Mini_ast.decl
+val xv_choice_list : Mini_ast.hlist
 val xv_arg_type : Mini_ast.ty
 val xv_arg : string * Mini_ast.ty
 val menhir_end_marker : int
