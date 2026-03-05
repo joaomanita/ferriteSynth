@@ -70,15 +70,16 @@ module MenhirInterpreter : sig
   type _ nonterminal = 
     | N_type_defs : (Mini_ast.decl list) nonterminal
     | N_type_def : (Mini_ast.type_def) nonterminal
+    | N_separated_nonempty_list_COMMA_labeled_type_ : ((string * Mini_ast.ty) list) nonterminal
     | N_separated_nonempty_list_COMMA_arg_ : ((string * Mini_ast.ty) list) nonterminal
     | N_s_type : (Mini_ast.ty) nonterminal
     | N_prog : (Mini_ast.decl list) nonterminal
     | N_opt_type_defs : (Mini_ast.decl list) nonterminal
+    | N_loption_separated_nonempty_list_COMMA_labeled_type__ : ((string * Mini_ast.ty) list) nonterminal
     | N_loption_separated_nonempty_list_COMMA_arg__ : ((string * Mini_ast.ty) list) nonterminal
     | N_labeled_type : (string * Mini_ast.ty) nonterminal
     | N_funcs : (Mini_ast.decl list) nonterminal
     | N_func : (Mini_ast.decl) nonterminal
-    | N_choice_list : (Mini_ast.hlist) nonterminal
     | N_arg_type : (Mini_ast.ty) nonterminal
     | N_arg : (string * Mini_ast.ty) nonterminal
   

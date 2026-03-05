@@ -7,8 +7,8 @@ and value = string
 
 and ty =
   | TyPrimitive of value
-  | TyInternalChoice of hlist
-  | TyExternalChoice of hlist
+  | TyInternalChoice of (label * ty) list
+  | TyExternalChoice of (label * ty) list
   | TySendChannel of (ty * ty)
   | TyReceiveChannel of (ty * ty)
   | TySendValue of (value * ty)
@@ -16,5 +16,3 @@ and ty =
   | TyEnd
   | TySharedToLinear of ty
   | TyLinearToShared of ty
-
-and hlist = HNil | HCons of (label * ty) * hlist

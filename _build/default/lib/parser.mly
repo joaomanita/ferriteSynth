@@ -41,8 +41,8 @@ type_def:
   | TYPE_KEYWORD; _name = ID; EQ; t = s_type { {name = _name; body = t} }
 
 s_type:
-  | INTERNALCHOICE; LT; xs = choice_list; GT                             { TyInternalChoice(xs) }
-  | EXTERNALCHOICE; LT; xs = choice_list; GT                             { TyExternalChoice(xs) }
+  | INTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyInternalChoice(xs) }
+  | EXTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyExternalChoice(xs) }
   | SENDCHANNEL; LT; t = s_type; COMMA; cont = s_type; GT                { TySendChannel(t, cont) }
   | RECEIVECHANNEL; LT; t = s_type; COMMA; cont = s_type; GT             { TyReceiveChannel(t, cont) }
   | SENDVALUE; LT; v = ID; COMMA; cont = s_type; GT                      { TySendValue(v, cont) }
@@ -53,13 +53,6 @@ s_type:
 
 labeled_type:
   | label = ID; COLON; t = s_type { (label, t) }
-
-choice_list:
-  | t = labeled_type
-      { HCons (t, HNil) }
-
-  | t = labeled_type; COMMA; rest = choice_list
-      { HCons (t, rest) }
 
 funcs:
   | f = func; { [f] }
