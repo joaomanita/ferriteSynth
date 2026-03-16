@@ -1,13 +1,13 @@
 open Mini_ast
 open Printf
 
-type id = string
-
 let fresh_id =
   let unique = ref (-1) in
   fun () ->
     incr unique;
     "x_" ^ string_of_int !unique
+
+type id = string
 
 (* For context see Table 2 of https://web.tecnico.ulisboa.pt/bernardo.toninho/papers/ecoop22-ferrite.pdf*)
 type tm =
@@ -92,3 +92,40 @@ let rec print_exp e =
   | Accquire (chan, (binder, tm)) ->
       sprintf "acquire_shared_session(%s, move |%s| {%s})" chan binder
         (print_exp tm)
+
+let rec subst e1 x e2 =
+  match e1 with
+  | Var y -> if x = y then e2 else e1
+  | Offer (label, tm) -> Offer (label, subst tm x e2)
+  | Case (chan, choices) ->
+      Case (chan, List.map (fun (label, tm) -> (label, subst tm x e2)) choices)
+  | OfferChoice choices ->
+      OfferChoice (List.map (fun (label, tm) -> (label, subst tm x e2)) choices)
+  | Choose (chan, (label, tm)) -> Choose (chan, (label, subst tm x e2))
+  | SendChannelFrom (chan, tm) -> SendChannelFrom (chan, subst tm x e2)
+  | ReceiveChannelFrom (chan, (binder, tm)) ->
+      if x <> binder then ReceiveChannelFrom (chan, (binder, subst tm x e2))
+      else e1
+  | ReceiveChannel (binder, tm) ->
+      if x <> binder then ReceiveChannel (binder, subst tm x e2) else e1
+  | SendChannelTo ((chan, chan_sent), tm) ->
+      SendChannelTo ((chan, chan_sent), subst tm x e2)
+  | SendValue (v, tm) -> SendValue (subst v x e2, subst tm x e2)
+  | SendValueTo ((chan, v), tm) ->
+      SendValueTo ((chan, subst v x e2), subst tm x e2)
+  | ReceiveValueFrom ((chan, binder), tm) ->
+      if x <> binder then ReceiveValueFrom ((chan, binder), subst tm x e2)
+      else e1
+  | ReceiveValue (binder, tm) ->
+      if x <> binder then ReceiveValue (binder, subst tm x e2) else e1
+  | Terminate -> Terminate
+  | Wait (chan, tm) -> Wait (chan, subst tm x e2)
+  | Detach tm -> Detach (subst tm x e2)
+  | Release (chan, tm) -> Release (chan, subst tm x e2)
+  | Accept tm -> Accept (subst tm x e2)
+  | Accquire (chan, (binder, tm)) ->
+      if x <> binder then Accquire (chan, (binder, subst tm x e2)) else e1
+
+let rec inversionR delta_in omega t =
+    match t with
+    TyReceiveChannel

@@ -1,1 +1,1 @@
-lib/synthesizer.ml: Mini_ast Printf
+lib/synthesizer.ml:
