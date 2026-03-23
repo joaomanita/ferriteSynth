@@ -1,5 +1,7 @@
 open Mini_ast
 open Printf
+open Choice
+open Stdlib
 
 let fresh_channel_id =
   let unique = ref (-1) in
@@ -55,8 +57,7 @@ let rec print_labeled_choices l print_func =
   | [] -> ""
   | (label, tx) :: [] -> label ^ ": " ^ print_func tx
   | (label, tx) :: xs ->
-      label ^ ": " ^ print_func tx ^ ", "
-      ^ print_labeled_choices xs print_func
+      label ^ ": " ^ print_func tx ^ ", " ^ print_labeled_choices xs print_func
 
 let rec print_type t =
   match t with
@@ -161,30 +162,80 @@ let rec inversionR gamma delta_in omega t =
       (delta_out, ReceiveValue (x, e1))
   | TyExternalChoice l ->
       let branches =
-        List.map (fun (label, t) -> (label, inversionR gamma delta_in omega t)) l
+        List.map
+          (fun (label, t) -> (label, inversionR gamma delta_in omega t))
+          l
       in
-      let out_ctxts = List.map (fun (_, (delta_out, e)) -> delta_out) branches in
+      let out_ctxts =
+        List.map (fun (_, (delta_out, _)) -> delta_out) branches
+      in
       if all_equal out_ctxts then
-        match out_ctxts with 
+        match out_ctxts with
         | [] -> raise Fail
-        | delta_out :: _ -> (delta_out, OfferChoice (List.map (fun (_, choice) -> choice) branches))
+        | delta_out :: _ ->
+            ( delta_out,
+              OfferChoice (List.map (fun (_, choice) -> choice) branches) )
       else raise Fail
-    | _ -> inversionL gamma delta_in omega t
+  | _ -> inversionL gamma delta_in omega t
 
 and inversionL gamma delta_in omega t =
-    match omega with
-    | [] -> inversionR
-    | (x, ty) :: xs -> match ty with
-                       | TySendChannel (tyChan, tyCont) -> let binder = fresh_binder_id () in
-                            let x1 = fresh_channel_id () in
-                            let delta_out, e1 = inversionL gamma delta_in ((x, tyCont)::(x1, tyChan)::xs) t in
-                            (delta_out, subst e1 x (ReceiveChannelFrom (x, (binder, e1))))
-                        | TySendValue (tau, tyCont) -> let binder = fresh_binder_id () in
-                            let x1 = fresh_val_id () in
-                            let delta_out, e1 = inversionL ((x1, TyPrimitive(tau))::gamma) delta_in ((x, tyCont)::xs) t in
-                            (delta_out, subst e1 x (ReceiveValueFrom((x, binder), e1)))
-                        | TyInternalChoice l -> let branches = List.map (fun (label, t) -> inversionL gamma delta_in ((x, t)::xs) t)
+  match omega with
+  | [] -> ("a", Var "a") (*decideFocus gamma delta_in t*)
+  | (x, ty) :: xs -> (
+      match ty with
+      | TySendChannel (tyChan, tyCont) ->
+          let binder = fresh_binder_id () in
+          let x1 = fresh_channel_id () in
+          let delta_out, e1 =
+            inversionL gamma delta_in ((x, tyCont) :: (x1, tyChan) :: xs) t
+          in
+          (delta_out, subst e1 x (ReceiveChannelFrom (x, (binder, e1))))
+      | TySendValue (tau, tyCont) ->
+          let binder = fresh_binder_id () in
+          let x1 = fresh_val_id () in
+          let delta_out, e1 =
+            inversionL
+              ((x1, TyPrimitive tau) :: gamma)
+              delta_in ((x, tyCont) :: xs) t
+          in
+          (delta_out, subst e1 x (ReceiveValueFrom ((x, binder), e1)))
+      | TyInternalChoice l ->
+          let branches =
+            List.map
+              (fun (label, t) ->
+                (label, inversionL gamma ((x, t) :: xs) omega t))
+              l
+          in
+          let out_ctxts =
+            List.map (fun (_, (delta_out, _)) -> delta_out) branches
+          in
+          if all_equal out_ctxts then
+            match out_ctxts with
+            | [] -> raise Fail
+            | delta_out :: _ ->
+                ( delta_out,
+                  Case (x, List.map (fun (_, choice) -> choice) branches) )
+          else raise Fail
+      | TyEnd ->
+          let delta_out, e1 = inversionL gamma delta_in xs t in
+          (delta_out, Wait (x, e1))
+      | TySharedToLinear t1 ->
+          let x1 = fresh_channel_id () in
+          let delta_out, e1 = inversionL ((x1, t1) :: gamma) delta_in xs t in
+          (delta_out, Release (x, e1))
+      | TyLinearToShared _ -> inversionL ((x, ty) :: gamma) delta_in omega t
+      | _ -> inversionL gamma ((x, ty) :: delta_in) omega t)
+
 and all_equal ctxts =
   match ctxts with
   | [] -> true
   | ctxt1 :: xs -> List.for_all (fun ctxt2 -> ctxt2 = ctxt1) xs
+
+and decideFocus gamma delta_in t =
+    mplus
+        (return (focusR gamma delta_in t))
+        (mplus
+              (return (focusL gamma delta_in t))
+              (return (focusGamma gamma delta_in t))
+
+and focusR gamma delta_in t = 

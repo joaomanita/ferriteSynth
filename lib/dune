@@ -1,6 +1,6 @@
 (library
  (name ferriteSynth)
- (libraries menhirLib))
+ (libraries menhirLib choice))
 
 (menhir
  (modules parser)
