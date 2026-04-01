@@ -7,6 +7,7 @@ and value = string
 
 and ty =
   | TyPrimitive of value
+  | TyAtomic of string
   | TyInternalChoice of (label * ty) list
   | TyExternalChoice of (label * ty) list
   | TySendChannel of (ty * ty)
