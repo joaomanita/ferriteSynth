@@ -10,12 +10,17 @@ let () =
   let lexbuf = Lexing.from_channel channel in
   let prog = Parser.prog Lexer.read lexbuf in
   print_endline "Parsed successfully!";
-  let fst_type =
-    match prog with
-    | [] -> ""
-    | h :: _ -> (
-        match h with
-        | TypeDef v -> Synthesizer.print_type v.body
-        | Function _ -> "")
-  in
-  print_endline fst_type
+  match prog with
+  | [] -> print_endline "empty"
+  | h :: _ -> (
+      match h with
+      | TypeDef v ->
+          print_endline (Synthesizer.print_type v.body);
+          let programs = Synthesizer.synthesize v.body in
+          List.iter
+            (fun (delta_out, e) ->
+              Printf.printf "c:%s program: %s\n"
+                (Synthesizer.print_ctxt delta_out)
+                (Synthesizer.print_exp e))
+            programs
+      | Function _ -> print_endline "")
