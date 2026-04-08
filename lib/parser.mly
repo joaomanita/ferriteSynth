@@ -3,6 +3,7 @@
 %}
 
 %token <string> ID
+%token <string> ATOMIC
 %token TYPE_KEYWORD
 %token LT
 %token GT
@@ -41,6 +42,7 @@ type_def:
   | TYPE_KEYWORD; _name = ID; EQ; t = s_type { {name = _name; body = t} }
 
 s_type:
+  | uppercaseid = ATOMIC                                                 { TyAtomic(uppercaseid) }
   | INTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyInternalChoice(xs) }
   | EXTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyExternalChoice(xs) }
   | SENDCHANNEL; LT; t = s_type; COMMA; cont = s_type; GT                { TySendChannel(t, cont) }

@@ -23,6 +23,7 @@ type token =
   | END
   | COMMA
   | COLON
+  | ATOMIC of (string)
 
 (* This exception is raised by the monolithic API functions. *)
 
@@ -64,6 +65,7 @@ module MenhirInterpreter : sig
     | T_END : unit terminal
     | T_COMMA : unit terminal
     | T_COLON : unit terminal
+    | T_ATOMIC : (string) terminal
   
   (* The indexed type of nonterminal symbols. *)
   

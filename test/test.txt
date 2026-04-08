@@ -1,4 +1,4 @@
-type myType = ReceiveChannel< SendValue<String, End>, SendValue<String, End>>
+type myType = ReceiveChannel<ExternalChoice<left: A, right:A>, A>
 
 fn myFunc(myArg: Int) -> SendValue<Int, End> {}
 

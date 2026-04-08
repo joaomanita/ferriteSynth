@@ -197,25 +197,22 @@ and sequence lst =
       sequence xs >>= fun vs -> Choice.return (v :: vs)
 
 and inversionL gamma delta_in omega t =
-  print_endline "boas";
   match omega with
   | [] -> decideFocus gamma delta_in t
   | (x, ty) :: xs -> (
       match ty with
       | TySendChannel (tyChan, tyCont) ->
           let binder = fresh_binder_id () in
-          let x1 = fresh_channel_id () in
-          inversionL gamma delta_in ((x, tyCont) :: (x1, tyChan) :: xs) t
+          inversionL gamma delta_in ((x, tyCont) :: (binder, tyChan) :: xs) t
           >>= fun (delta_out, e1) ->
-          return (delta_out, subst e1 x (ReceiveChannelFrom (x, (binder, e1))))
+          return (delta_out, ReceiveChannelFrom (x, (binder, e1)))
       | TySendValue (tau, tyCont) ->
           let binder = fresh_binder_id () in
-          let x1 = fresh_val_id () in
           inversionL
-            ((x1, TyPrimitive tau) :: gamma)
+            ((binder, TyPrimitive tau) :: gamma)
             delta_in ((x, tyCont) :: xs) t
           >>= fun (delta_out, e1) ->
-          return (delta_out, subst e1 x (ReceiveValueFrom ((x, binder), e1)))
+          return (delta_out, ReceiveValueFrom ((x, binder), e1))
       | TyInternalChoice l -> (
           let branches =
             List.map

@@ -8,6 +8,7 @@ exception SyntaxError of string
 let white = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
 let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
+let uppercaseid = ['A'-'Z']
 
 rule read =
   parse
@@ -32,6 +33,7 @@ rule read =
   | "LinearToShared"    { LINEARTOSHARED }
   | "End"               { END }
   | "fn"                { FUNC }
+  | uppercaseid         { ATOMIC (Lexing.lexeme lexbuf) }
   | id                  { ID (Lexing.lexeme lexbuf) }
   | eof                 { EOF }
   | _                   { read lexbuf } (* Other rust tokens are skipped *)

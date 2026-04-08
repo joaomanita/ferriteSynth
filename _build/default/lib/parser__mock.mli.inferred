@@ -20,6 +20,7 @@ type token =
   | END
   | COMMA
   | COLON
+  | ATOMIC of string
 val menhir_begin_marker : int
 val xv_type_defs : Mini_ast.decl list
 val xv_type_def : Mini_ast.type_def
