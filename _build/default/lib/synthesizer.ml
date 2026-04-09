@@ -70,8 +70,8 @@ let rec print_type t =
   | TySendValue (t1, t2) -> "SendValue<" ^ t1 ^ ", " ^ print_type t2 ^ ">"
   | TyReceiveValue (t1, t2) -> "ReceiveValue<" ^ t1 ^ ", " ^ print_type t2 ^ ">"
   | TyEnd -> "End"
-  | TySharedToLinear t -> "SharedToLinear<" ^ ", " ^ print_type t ^ ">"
-  | TyLinearToShared t -> "LinearToShared<" ^ ", " ^ print_type t ^ ">"
+  | TySharedToLinear t -> "SharedToLinear<" ^ print_type t ^ ">"
+  | TyLinearToShared t -> "LinearToShared<" ^ print_type t ^ ">"
 
 let rec print_ctxt ctxt =
   match ctxt with
@@ -252,6 +252,7 @@ and all_equal ctxts =
   | ctxt1 :: xs -> List.for_all (fun ctxt2 -> ctxt2 = ctxt1) xs
 
 and decideFocus gamma delta_in t =
+  print_endline (print_ctxt gamma);
   mplus (focusR gamma delta_in t)
     (mplus (focusL gamma delta_in t) (focusGamma gamma delta_in t))
 
@@ -287,7 +288,7 @@ and focusR gamma delta_in t =
   | TyLinearToShared t ->
       if delta_in <> [] then Choice.fail
       else
-        focusR gamma delta_in t >>= fun (delta_out, e1) ->
+        decideFocus gamma delta_in t >>= fun (delta_out, e1) ->
         return (delta_out, Accept e1)
   | TyEnd -> if delta_in <> [] then Choice.fail else return (delta_in, Terminate)
   | TyAtomic _ -> (
@@ -356,6 +357,8 @@ and focusL' gamma delta_in id foc t =
       focusL' gamma (removeWithId x ty delta_in) id t2 t
       >>= fun (delta_out, e1) ->
       return (delta_out, SendValueTo ((id, Var x), e1))
-  | _ ->
-      print_endline (print_type foc);
-      inversionL gamma delta_in [ (id, foc) ] t
+  | TyLinearToShared t1 ->
+      let x1 = fresh_binder_id () in
+      decideFocus gamma ((x1, t1) :: delta_in) t >>= fun (delta_out, e1) ->
+      return (delta_out, Accquire (id, (x1, e1)))
+  | _ -> inversionL gamma delta_in [ (id, foc) ] t

@@ -1,0 +1,1 @@
+type myType = ReceiveChannel< ReceiveChannel<A, ReceiveChannel<B,C>>, ReceiveChannel<SendChannel<A,B>, C>>

@@ -1,4 +1,5 @@
-type myType = ReceiveChannel<ExternalChoice<left: A, right:A>, A>
+type myType = ReceiveChannel< LinearToShared<ReceiveChannel<A, B>>, ReceiveChannel<LinearToShared<A>, LinearToShared<B>>>
+
 
 fn myFunc(myArg: Int) -> SendValue<Int, End> {}
 

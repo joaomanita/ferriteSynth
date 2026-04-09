@@ -1,0 +1,1 @@
+type myType1 = ReceiveChannel<ExternalChoice<left: A, right:A>, A>
