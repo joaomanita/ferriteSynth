@@ -1,1 +1,5 @@
 type myType1 = ReceiveChannel<ExternalChoice<left: A, right:A>, A>
+
+fn myFunc(myArg: Int) -> SendValue<Int, End> {}
+
+fn myFunc2() -> SendValue<Int, End> {}

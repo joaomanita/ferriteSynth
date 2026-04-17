@@ -36,4 +36,4 @@ rule read =
   | uppercaseid         { ATOMIC (Lexing.lexeme lexbuf) }
   | id                  { ID (Lexing.lexeme lexbuf) }
   | eof                 { EOF }
-  | _                   { read lexbuf } (* Other rust tokens are skipped *)
+  | _ as c              { RAW (String.make 1 c) }

@@ -1,0 +1,5 @@
+type myType = ReceiveChannel< SendChannel< SendChannel<ReceiveChannel<A, B>, ReceiveChannel<B, C>>, ReceiveChannel<C, D>>, ReceiveChannel<A, D>>
+
+fn myFunc(myArg: Int) -> SendValue<Int, End> {}
+
+fn myFunc2() -> SendValue<Int, End> {}

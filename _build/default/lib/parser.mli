@@ -9,6 +9,7 @@ type token =
   | RPAR
   | RECEIVEVALUE
   | RECEIVECHANNEL
+  | RAW of (string)
   | MINUS
   | LT
   | LPAR
@@ -51,6 +52,7 @@ module MenhirInterpreter : sig
     | T_RPAR : unit terminal
     | T_RECEIVEVALUE : unit terminal
     | T_RECEIVECHANNEL : unit terminal
+    | T_RAW : (string) terminal
     | T_MINUS : unit terminal
     | T_LT : unit terminal
     | T_LPAR : unit terminal
@@ -70,18 +72,17 @@ module MenhirInterpreter : sig
   (* The indexed type of nonterminal symbols. *)
   
   type _ nonterminal = 
-    | N_type_defs : (Mini_ast.decl list) nonterminal
-    | N_type_def : (Mini_ast.type_def) nonterminal
+    | N_type_def : (Mini_ast.decl) nonterminal
     | N_separated_nonempty_list_COMMA_labeled_type_ : ((string * Mini_ast.ty) list) nonterminal
     | N_separated_nonempty_list_COMMA_arg_ : ((string * Mini_ast.ty) list) nonterminal
     | N_s_type : (Mini_ast.ty) nonterminal
     | N_prog : (Mini_ast.decl list) nonterminal
-    | N_opt_type_defs : (Mini_ast.decl list) nonterminal
     | N_loption_separated_nonempty_list_COMMA_labeled_type__ : ((string * Mini_ast.ty) list) nonterminal
     | N_loption_separated_nonempty_list_COMMA_arg__ : ((string * Mini_ast.ty) list) nonterminal
+    | N_list_decl_ : (Mini_ast.decl list) nonterminal
     | N_labeled_type : (string * Mini_ast.ty) nonterminal
-    | N_funcs : (Mini_ast.decl list) nonterminal
     | N_func : (Mini_ast.decl) nonterminal
+    | N_decl : (Mini_ast.decl) nonterminal
     | N_arg_type : (Mini_ast.ty) nonterminal
     | N_arg : (string * Mini_ast.ty) nonterminal
   

@@ -1,0 +1,5 @@
+type myType = ReceiveChannel< LinearToShared<ReceiveChannel<A, B>>, ReceiveChannel<LinearToShared<A>, LinearToShared<B>>>
+
+fn myFunc(myArg: Int) -> SendValue<Int, End> {}
+
+fn myFunc2() -> SendValue<Int, End> {}

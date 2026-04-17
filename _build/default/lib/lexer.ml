@@ -2138,9 +2138,14 @@ and __ocaml_lex_read_rec lexbuf __ocaml_lex_state =
 # 2139 "lib/lexer.ml"
 
   | 24 ->
+let
 # 39 "lib/lexer.mll"
-                        ( read lexbuf )
-# 2144 "lib/lexer.ml"
+         c
+# 2145 "lib/lexer.ml"
+= Lexing.sub_lexeme_char lexbuf lexbuf.Lexing.lex_start_pos in
+# 39 "lib/lexer.mll"
+                        ( RAW (String.make 1 c) )
+# 2149 "lib/lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_read_rec lexbuf __ocaml_lex_state

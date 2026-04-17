@@ -151,8 +151,8 @@ let rec subst e1 x e2 =
       if x <> binder then Accquire (chan, (binder, subst tm x e2)) else e1
   | Forward chan -> if chan = x then e2 else e1
 
-let rec synthesize t =
-  let programs = inversionR [] [] [] t in
+let rec synthesize t ctxt =
+  let programs = inversionR [] ctxt [] t in
   run_all programs
 
 (* Apply all invertible/asynchronous rules to the goal t*)
@@ -252,14 +252,14 @@ and all_equal ctxts =
   | ctxt1 :: xs -> List.for_all (fun ctxt2 -> ctxt2 = ctxt1) xs
 
 and decideFocus gamma delta_in t =
-  print_endline (print_ctxt gamma);
   mplus (focusR gamma delta_in t)
     (mplus (focusL gamma delta_in t) (focusGamma gamma delta_in t))
 
 and focusGamma gamma delta_in t =
-  match gamma with
-  | [] -> Choice.fail
-  | (id, ty) :: xs -> focusL' xs delta_in id ty t
+  let focus_options = of_list gamma in
+  focus_options >>= fun (id, ty) ->
+  let gamma' = removeWithId id ty gamma in
+  focusL' gamma' delta_in id ty t
 
 and focusR gamma delta_in t =
   match t with
@@ -342,12 +342,12 @@ and focusL' gamma delta_in id foc t =
         List.filter (fun (_, ty) -> ty = tChan) delta_in
       in
       of_list possible_channels >>= fun (x, ty) ->
-      focusL' gamma (removeWithId x ty delta_in) id tCont t
+      inversionL gamma (removeWithId x ty delta_in) [ (x, tCont) ] t
       >>= fun (delta_out, e1) -> return (delta_out, SendChannelTo ((id, x), e1))
   | TyExternalChoice l ->
       let branches = of_list l in
       branches >>= fun (label, ty) ->
-      focusL' gamma delta_in id ty t >>= fun (delta_out, e1) ->
+      inversionR gamma delta_in [ (id, ty) ] t >>= fun (delta_out, e1) ->
       return (delta_out, Choose (id, (label, e1)))
   | TyReceiveValue (t1, t2) ->
       let possible_values =

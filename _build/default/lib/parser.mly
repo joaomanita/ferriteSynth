@@ -2,6 +2,7 @@
   open Mini_ast
 %}
 
+%token <string> RAW
 %token <string> ID
 %token <string> ATOMIC
 %token TYPE_KEYWORD
@@ -28,18 +29,15 @@
 %%
 
 prog: 
-  | tdefs = opt_type_defs; f_defs = funcs EOF { tdefs @ f_defs }
+  | d = list(decl); EOF { d }
 
-opt_type_defs: 
-  |                 { [] }
-  | v = type_defs   { v }
-
-type_defs:
-  | v = type_def                  { [TypeDef(v)] }
-  | v1 = type_def; v2 = type_defs { TypeDef(v1) :: v2 }
+decl:
+  | text = RAW { Raw(text) }
+  | tdef = type_def { tdef }
+  | f = func { f }
 
 type_def:
-  | TYPE_KEYWORD; _name = ID; EQ; t = s_type { {name = _name; body = t} }
+  | TYPE_KEYWORD; _name = ID; EQ; t = s_type { TypeDef({name = _name; body = t}) }
 
 s_type:
   | uppercaseid = ATOMIC                                                 { TyAtomic(uppercaseid) }
@@ -55,10 +53,6 @@ s_type:
 
 labeled_type:
   | label = ID; COLON; t = s_type { (label, t) }
-
-funcs:
-  | f = func; { [f] }
-  | f = func; fs = funcs { f :: fs }
 
 func:
   | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type { Function({fname = name; params = ars; return = ret }) }

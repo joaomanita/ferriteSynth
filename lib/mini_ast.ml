@@ -1,5 +1,5 @@
 type program = decl list
-and decl = TypeDef of type_def | Function of func_def
+and decl = TypeDef of type_def | Function of func_def | Raw of string
 and type_def = { name : string; body : ty }
 and func_def = { fname : string; params : (string * ty) list; return : ty }
 and label = string
