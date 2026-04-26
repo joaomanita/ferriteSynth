@@ -10,9 +10,12 @@
 %token GT
 %token LPAR
 %token RPAR
+%token LBRACE
+%token RBRACE
 %token EQ
 %token COMMA
 %token COLON
+%token SEMICOLON
 %token MINUS
 %token EOF
 %token INTERNALCHOICE
@@ -37,9 +40,10 @@ decl:
   | f = func { f }
 
 type_def:
-  | TYPE_KEYWORD; _name = ID; EQ; t = s_type { TypeDef({name = _name; body = t}) }
+  | TYPE_KEYWORD; _name = ID; EQ; t = s_type; SEMICOLON { TypeDef({name = _name; body = t}) }
 
 s_type:
+  | id = ID                                                              { TyPrimitive(id) }
   | uppercaseid = ATOMIC                                                 { TyAtomic(uppercaseid) }
   | INTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyInternalChoice(xs) }
   | EXTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyExternalChoice(xs) }
@@ -55,7 +59,7 @@ labeled_type:
   | label = ID; COLON; t = s_type { (label, t) }
 
 func:
-  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type { Function({fname = name; params = ars; return = ret }) }
+  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE RBRACE { Function({fname = name; params = ars; return = ret }) }
 
 arg:
   | arg_name = ID; COLON; t = arg_type { (arg_name, t) }

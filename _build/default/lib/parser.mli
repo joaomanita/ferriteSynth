@@ -6,14 +6,17 @@ type token =
   | SHAREDTOLINEAR
   | SENDVALUE
   | SENDCHANNEL
+  | SEMICOLON
   | RPAR
   | RECEIVEVALUE
   | RECEIVECHANNEL
+  | RBRACE
   | RAW of (string)
   | MINUS
   | LT
   | LPAR
   | LINEARTOSHARED
+  | LBRACE
   | INTERNALCHOICE
   | ID of (string)
   | GT
@@ -49,14 +52,17 @@ module MenhirInterpreter : sig
     | T_SHAREDTOLINEAR : unit terminal
     | T_SENDVALUE : unit terminal
     | T_SENDCHANNEL : unit terminal
+    | T_SEMICOLON : unit terminal
     | T_RPAR : unit terminal
     | T_RECEIVEVALUE : unit terminal
     | T_RECEIVECHANNEL : unit terminal
+    | T_RBRACE : unit terminal
     | T_RAW : (string) terminal
     | T_MINUS : unit terminal
     | T_LT : unit terminal
     | T_LPAR : unit terminal
     | T_LINEARTOSHARED : unit terminal
+    | T_LBRACE : unit terminal
     | T_INTERNALCHOICE : unit terminal
     | T_ID : (string) terminal
     | T_GT : unit terminal

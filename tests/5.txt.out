@@ -1,0 +1,24 @@
+type myType = ReceiveChannel<
+    SendChannel<SendChannel<ReceiveChannel<A, B>, ReceiveChannel<B, C>>, ReceiveChannel<C, D>>,
+    ReceiveChannel<A, D>,
+>;
+
+fn myFunc2() -> myType {
+    receive_channel(|chan_0| {
+        receive_channel(|chan_1| {
+            receive_channel_from(chan_0, |binder_0| {
+                receive_channel_from(binder_0, |binder_1| {
+                    send_channel_to(
+                        binder_1,
+                        chan_1,
+                        send_channel_to(
+                            binder_0,
+                            chan_1,
+                            send_channel_to(chan_0, chan_1, forward(chan_1)),
+                        ),
+                    )
+                })
+            })
+        })
+    })
+}

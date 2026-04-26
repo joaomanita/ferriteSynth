@@ -1,0 +1,7 @@
+type myType1 = ReceiveChannel<ExternalChoice<left: A, right: A>, A>;
+
+fn myFunc2() -> myType1 {
+    receive_channel(|chan_0| choose!(chan_0, right, forward(chan_0)))
+    // OR
+    // receive_channel(|chan_0| {choose!(chan_0, left, forward(chan_0))})
+}

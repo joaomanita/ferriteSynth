@@ -152,7 +152,7 @@ let rec subst e1 x e2 =
   | Forward chan -> if chan = x then e2 else e1
 
 let rec synthesize t ctxt =
-  let programs = inversionR [] ctxt [] t in
+  let programs = inversionR [] [] ctxt t in
   run_all programs
 
 (* Apply all invertible/asynchronous rules to the goal t*)
@@ -201,6 +201,7 @@ and inversionL gamma delta_in omega t =
   | [] -> decideFocus gamma delta_in t
   | (x, ty) :: xs -> (
       match ty with
+      | TyPrimitive _ -> inversionL ((x, ty) :: gamma) delta_in xs t
       | TySendChannel (tyChan, tyCont) ->
           let binder = fresh_binder_id () in
           inversionL gamma delta_in ((x, tyCont) :: (binder, tyChan) :: xs) t
@@ -275,6 +276,7 @@ and focusR gamma delta_in t =
         return (delta_out, SendChannelFrom (id, e1))
       with Fail -> Choice.fail)
   | TySendValue (tau, t2) -> (
+      print_endline (print_ctxt delta_in);
       try
         let id, ctxt_out = search (TyPrimitive tau) gamma in
         focusR ctxt_out delta_in t2 >>= fun (delta_out, e1) ->
@@ -294,12 +296,12 @@ and focusR gamma delta_in t =
   | TyAtomic _ -> (
       try
         let id, ctxt_out = searchAndRemove t delta_in in
-        return (ctxt_out, Forward id)
+        if delta_in <> [] then Choice.fail else return (ctxt_out, Forward id)
       with Fail -> Choice.fail)
   | TyPrimitive _ -> (
       try
         let id, ctxt_out = searchAndRemove t delta_in in
-        return (ctxt_out, Var id)
+        if delta_in <> [] then Choice.fail else return (ctxt_out, Var id)
       with Fail -> Choice.fail)
   | _ -> inversionR gamma delta_in [] t
 
@@ -335,8 +337,12 @@ and focusL gamma delta_in t =
 
 and focusL' gamma delta_in id foc t =
   match foc with
-  | TyAtomic _ -> if foc = t then return (delta_in, Forward id) else Choice.fail
-  | TyPrimitive _ -> if foc = t then return (delta_in, Var id) else Choice.fail
+  | TyAtomic _ ->
+      if foc = t && delta_in = [] then return (delta_in, Forward id)
+      else Choice.fail
+  | TyPrimitive _ ->
+      if foc = t && delta_in <> [] then return (delta_in, Var id)
+      else Choice.fail
   | TyReceiveChannel (tChan, tCont) ->
       let possible_channels =
         List.filter (fun (_, ty) -> ty = tChan) delta_in

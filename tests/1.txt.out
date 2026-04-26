@@ -1,0 +1,20 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+type myType = ReceiveChannel<
+    ExternalChoice<l: ReceiveChannel<A, B>, r: ReceiveChannel<A, C>>,
+    ReceiveChannel<A, ExternalChoice<l: B, r: C>>,
+>;
+
+fn myFunc(myArg: Int) -> SendValue<Int, End> {
+    send_value(myArg, terminate())
+}
+
+fn myFunc2(myArg2: myType) -> myType {
+    receive_channel(|chan_0| {
+        receive_channel(|chan_1| {
+            offer_choice! { l: send_channel_to(myArg2, chan_0, send_channel_to(chan_0, chan_1, choose!(chan_1, l, forward(chan_1)))), r: send_channel_to(myArg2, chan_0, send_channel_to(chan_0, chan_1, choose!(chan_1, r, forward(chan_1)))) }
+        })
+    })
+}

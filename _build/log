@@ -1,4 +1,4 @@
-# dune exec bin/main.exe /home/joaomanita/Tese/ferriteSynth/test/test.txt
+# dune exec bin/main.exe /home/joaomanita/Tese/ferriteSynth/tests/5.txt
 # OCAMLPARAM: unset
 # Shared cache: enabled-except-user-rules
 # Shared cache location: /home/joaomanita/.cache/dune/db
@@ -13,4 +13,4 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-$ /usr/bin/ocamlc.opt -config > /tmp/dune_dfc559_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_52f2fb_output

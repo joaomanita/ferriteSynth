@@ -1,0 +1,18 @@
+type myType = ReceiveChannel<
+    LinearToShared<ReceiveChannel<A, B>>,
+    ReceiveChannel<LinearToShared<A>, LinearToShared<B>>,
+>;
+
+fn myFunc2() -> myType {
+    receive_channel(|chan_0| {
+        receive_channel(|chan_1| {
+            accept_shared_session(acquire_shared_session(chan_1, move |binder_2| {
+                acquire_shared_session(chan_0, move |binder_3| {
+                    send_channel_to(binder_3, binder_2, forward(binder_2))
+                })
+            }))
+        })
+    })
+    // OR
+    // receive_channel(|chan_0| {receive_channel(|chan_1| {accept_shared_session(acquire_shared_session(chan_0, move |binder_0| {acquire_shared_session(chan_1, move |binder_1| {send_channel_to(binder_0, binder_1, forward(binder_1))})}))})})
+}

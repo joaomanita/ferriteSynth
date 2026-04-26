@@ -3,14 +3,17 @@ type token =
   | SHAREDTOLINEAR
   | SENDVALUE
   | SENDCHANNEL
+  | SEMICOLON
   | RPAR
   | RECEIVEVALUE
   | RECEIVECHANNEL
+  | RBRACE
   | RAW of string
   | MINUS
   | LT
   | LPAR
   | LINEARTOSHARED
+  | LBRACE
   | INTERNALCHOICE
   | ID of string
   | GT

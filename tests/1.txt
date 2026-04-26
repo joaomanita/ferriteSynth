@@ -1,5 +1,9 @@
-type myType = ReceiveChannel<ExternalChoice<l:ReceiveChannel<A,B>, r:ReceiveChannel<A,C>>, ReceiveChannel<A, ExternalChoice<l:B,r:C>>>
+use std::format;
+
+use ferrite_session::prelude::*;
+
+type myType = ReceiveChannel<ExternalChoice<l:ReceiveChannel<A,B>, r:ReceiveChannel<A,C>>, ReceiveChannel<A, ExternalChoice<l:B,r:C>>>;
 
 fn myFunc(myArg: Int) -> SendValue<Int, End> {}
 
-fn myFunc2() -> SendValue<Int, End> {}
+fn myFunc2(myArg2: myType) -> myType {}
