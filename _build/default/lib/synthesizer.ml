@@ -157,8 +157,8 @@ let rec subst e1 x e2 =
   | Cut (session, (binder, tm)) ->
       if x <> binder then Cut (session, (binder, subst tm x e2)) else e1
 
-let rec synthesize t ctxt =
-  let programs = inversionR [] [] ctxt t in
+let rec synthesize t gamma_ctxt omega_ctxt =
+  let programs = inversionR gamma_ctxt [] omega_ctxt t in
   run_all programs
 
 (* Apply all invertible/asynchronous rules to the goal t*)
@@ -273,8 +273,7 @@ and focusGamma gamma delta_in t =
   let focus_options = of_list gamma in
   focus_options >>= fun (id, ty) ->
   let gamma' = removeWithId id ty gamma in
-  focusL' gamma' delta_in id ty t >>= fun (delta_out, e) ->
-  return ((id, ty) :: delta_out, e)
+  focusL' gamma' delta_in id ty t >>= fun (delta_out, e) -> return (delta_out, e)
 
 and focusR gamma delta_in t =
   match t with
@@ -361,7 +360,7 @@ and focusL' gamma delta_in id foc t =
         List.filter (fun (_, ty) -> ty = tChan) delta_in
       in
       of_list possible_channels >>= fun (x, ty) ->
-      inversionL gamma (removeWithId x ty delta_in) [ (x, tCont) ] t
+      inversionL gamma (removeWithId x ty delta_in) [ (id, tCont) ] t
       >>= fun (delta_out, e1) -> return (delta_out, SendChannelTo ((id, x), e1))
   | TyExternalChoice l ->
       let branches = of_list l in

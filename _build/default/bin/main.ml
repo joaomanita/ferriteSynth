@@ -21,6 +21,7 @@ let () =
     aux [] prog
   in
   let prog = merge_raw prog in
+  let fn_ctxt = ref [] in
   let type_ctxt = ref [] in
   let rec lookup_type name ctxt =
     match ctxt with
@@ -55,14 +56,16 @@ let () =
               | _ -> t
             in
 
-            let synth_ctxt =
+            let omega_ctxt =
               f.params |> List.map (fun (name, t) -> (name, resolve_type t))
             in
 
             let resolved_return = resolve_type f.return in
 
             let body =
-              match Synthesizer.synthesize resolved_return synth_ctxt with
+              match
+                Synthesizer.synthesize resolved_return !fn_ctxt omega_ctxt
+              with
               | [] -> "panic!(\"couldn't synthesize!\")"
               | sols -> (
                   let exprs =
@@ -78,9 +81,10 @@ let () =
                       in
                       if others = "" then first else first ^ "\n" ^ others)
             in
-
             Printf.fprintf out_channel "fn %s(%s) -> %s { %s }\n" f.fname
-              args_str ret_str body);
+              args_str ret_str body;
+            fn_ctxt := (f.fname, resolved_return) :: !fn_ctxt);
+
         print_prog xs
   in
   print_prog prog;
