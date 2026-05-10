@@ -4,6 +4,7 @@
 type token = 
   | TYPE_KEYWORD
   | SHAREDTOLINEAR
+  | SESSION
   | SENDVALUE
   | SENDCHANNEL
   | SEMICOLON
@@ -50,6 +51,7 @@ module MenhirInterpreter : sig
     | T_error : unit terminal
     | T_TYPE_KEYWORD : unit terminal
     | T_SHAREDTOLINEAR : unit terminal
+    | T_SESSION : unit terminal
     | T_SENDVALUE : unit terminal
     | T_SENDCHANNEL : unit terminal
     | T_SEMICOLON : unit terminal

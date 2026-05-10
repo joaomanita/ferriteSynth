@@ -47,6 +47,7 @@ type tm =
   | Accept of tm
   | Accquire of id * (id * tm)
   | Forward of id
+  | Cut of id * (id * tm)
 
 let rec print_labeled_choices l print_func =
   match l with
@@ -72,6 +73,7 @@ let rec print_type t =
   | TyEnd -> "End"
   | TySharedToLinear t -> "SharedToLinear<" ^ print_type t ^ ">"
   | TyLinearToShared t -> "LinearToShared<" ^ print_type t ^ ">"
+  | TySession t -> "Session<" ^ print_type t ^ ">"
 
 let rec print_ctxt ctxt =
   match ctxt with
@@ -115,6 +117,8 @@ let rec print_exp e =
       sprintf "acquire_shared_session(%s, move |%s| {%s})" chan binder
         (print_exp tm)
   | Forward chan -> sprintf "forward(%s)" chan
+  | Cut (session, (binder, tm)) ->
+      sprintf "cut::<HList![]>(%s, |%s| {%s})" session binder (print_exp tm)
 
 (* Substitutes name x in expression e1 with expression e2 *)
 let rec subst e1 x e2 =
@@ -150,6 +154,8 @@ let rec subst e1 x e2 =
   | Accquire (chan, (binder, tm)) ->
       if x <> binder then Accquire (chan, (binder, subst tm x e2)) else e1
   | Forward chan -> if chan = x then e2 else e1
+  | Cut (session, (binder, tm)) ->
+      if x <> binder then Cut (session, (binder, subst tm x e2)) else e1
 
 let rec synthesize t ctxt =
   let programs = inversionR [] [] ctxt t in
@@ -158,6 +164,9 @@ let rec synthesize t ctxt =
 (* Apply all invertible/asynchronous rules to the goal t*)
 and inversionR gamma delta_in omega t =
   match t with
+  | TySession t ->
+      inversionR gamma delta_in omega t >>= fun (delta_out, e) ->
+      if delta_out <> [] then Choice.fail else return (delta_out, e)
   | TyReceiveChannel (tChan, tCont) ->
       let x = fresh_channel_id () in
       inversionR gamma delta_in ((x, tChan) :: omega) tCont
@@ -202,6 +211,10 @@ and inversionL gamma delta_in omega t =
   | (x, ty) :: xs -> (
       match ty with
       | TyPrimitive _ -> inversionL ((x, ty) :: gamma) delta_in xs t
+      | TySession t1 ->
+          let x1 = fresh_binder_id () in
+          inversionL gamma delta_in ((x1, t1) :: xs) t >>= fun (delta_out, e) ->
+          return (delta_out, Cut (x, (x1, e)))
       | TySendChannel (tyChan, tyCont) ->
           let binder = fresh_binder_id () in
           inversionL gamma delta_in ((x, tyCont) :: (binder, tyChan) :: xs) t
@@ -260,7 +273,8 @@ and focusGamma gamma delta_in t =
   let focus_options = of_list gamma in
   focus_options >>= fun (id, ty) ->
   let gamma' = removeWithId id ty gamma in
-  focusL' gamma' delta_in id ty t
+  focusL' gamma' delta_in id ty t >>= fun (delta_out, e) ->
+  return ((id, ty) :: delta_out, e)
 
 and focusR gamma delta_in t =
   match t with
@@ -276,7 +290,6 @@ and focusR gamma delta_in t =
         return (delta_out, SendChannelFrom (id, e1))
       with Fail -> Choice.fail)
   | TySendValue (tau, t2) -> (
-      print_endline (print_ctxt delta_in);
       try
         let id, ctxt_out = search (TyPrimitive tau) gamma in
         focusR ctxt_out delta_in t2 >>= fun (delta_out, e1) ->

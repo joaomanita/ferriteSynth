@@ -17,3 +17,4 @@ and ty =
   | TyEnd
   | TySharedToLinear of ty
   | TyLinearToShared of ty
+  | TySession of ty

@@ -6,6 +6,7 @@
 %token <string> ID
 %token <string> ATOMIC
 %token TYPE_KEYWORD
+%token SESSION
 %token LT
 %token GT
 %token LPAR
@@ -54,6 +55,7 @@ s_type:
   | END                                                                  { TyEnd }
   | SHAREDTOLINEAR; LT; t = s_type; GT                                   { TySharedToLinear(t) }
   | LINEARTOSHARED; LT; t = s_type; GT                                   { TyLinearToShared(t) }
+  | SESSION; LT; t = s_type; GT                                          { TySession(t) }
 
 labeled_type:
   | label = ID; COLON; t = s_type { (label, t) }
@@ -65,6 +67,5 @@ arg:
   | arg_name = ID; COLON; t = arg_type { (arg_name, t) }
 
 arg_type:
-  | id = ID     { TyPrimitive(id) }
   | t = s_type  { t }
 

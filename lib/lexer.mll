@@ -63,6 +63,7 @@ rule read = parse
   | '-' { match !current_mode with | Raw -> RAW "-" | _ -> MINUS }
 
   (* ---- KEYWORDS ---- *)
+  | "Session"        { SESSION }
   | "InternalChoice" { INTERNALCHOICE }
   | "ExternalChoice" { EXTERNALCHOICE }
   | "SendChannel"    { SENDCHANNEL }
