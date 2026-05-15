@@ -74,6 +74,11 @@ let rec print_type t =
   | TySharedToLinear t -> "SharedToLinear<" ^ print_type t ^ ">"
   | TyLinearToShared t -> "LinearToShared<" ^ print_type t ^ ">"
   | TySession t -> "Session<" ^ print_type t ^ ">"
+  | TyRec t -> "Rec<" ^ print_type t ^ ">"
+  | TyZ i -> print_peano i
+
+and print_peano i =
+  match i with 0 -> "Z" | x -> "S<" ^ print_peano (x - 1) ^ ">"
 
 let rec print_ctxt ctxt =
   match ctxt with
@@ -156,6 +161,46 @@ let rec subst e1 x e2 =
   | Forward chan -> if chan = x then e2 else e1
   | Cut (session, (binder, tm)) ->
       if x <> binder then Cut (session, (binder, subst tm x e2)) else e1
+
+let rec shift d t =
+  match t with
+  | TyZ k -> TyZ (k + d)
+  | TyRec t1 -> TyRec (shift d t1)
+  | TyInternalChoice l ->
+      TyInternalChoice (List.map (fun (lbl, t1) -> (lbl, shift d t1)) l)
+  | TyExternalChoice l ->
+      TyExternalChoice (List.map (fun (lbl, t1) -> (lbl, shift d t1)) l)
+  | TySendChannel (t1, t2) -> TySendChannel (shift d t1, shift d t2)
+  | TyReceiveChannel (t1, t2) -> TyReceiveChannel (shift d t1, shift d t2)
+  | TySendValue (v, t1) -> TySendValue (v, shift d t1)
+  | TyReceiveValue (v, t1) -> TyReceiveValue (v, shift d t1)
+  | TySharedToLinear t1 -> TySharedToLinear (shift d t1)
+  | TyLinearToShared t1 -> TyLinearToShared (shift d t1)
+  | TySession t1 -> TySession (shift d t1)
+  | _ -> t
+
+let rec subst k replacement t =
+  match t with
+  | TyZ n -> if n = k then replacement else if n > k then TyZ (n - 1) else TyZ n
+  | TyRec t1 -> TyRec (subst (k + 1) (shift 1 replacement) t1)
+  | TyInternalChoice l ->
+      TyInternalChoice
+        (List.map (fun (lbl, t1) -> (lbl, subst k replacement t1)) l)
+  | TyExternalChoice l ->
+      TyExternalChoice
+        (List.map (fun (lbl, t1) -> (lbl, subst k replacement t1)) l)
+  | TySendChannel (t1, t2) ->
+      TySendChannel (subst k replacement t1, subst k replacement t2)
+  | TyReceiveChannel (t1, t2) ->
+      TyReceiveChannel (subst k replacement t1, subst k replacement t2)
+  | TySendValue (v, t1) -> TySendValue (v, subst k replacement t1)
+  | TyReceiveValue (v, t1) -> TyReceiveValue (v, subst k replacement t1)
+  | TySharedToLinear t1 -> TySharedToLinear (subst k replacement t1)
+  | TyLinearToShared t1 -> TyLinearToShared (subst k replacement t1)
+  | TySession t1 -> TySession (subst k replacement t1)
+  | _ -> t
+
+let unfold t = match t with TyRec t1 -> subst 0 (TyRec t1) t1 | _ -> t
 
 let rec synthesize t gamma_ctxt omega_ctxt =
   let programs = inversionR gamma_ctxt [] omega_ctxt t in

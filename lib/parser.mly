@@ -29,6 +29,9 @@
 %token LINEARTOSHARED
 %token END
 %token FUNC
+%token REC
+%token Z
+%token S
 %start <decl list> prog
 %%
 
@@ -56,6 +59,8 @@ s_type:
   | SHAREDTOLINEAR; LT; t = s_type; GT                                   { TySharedToLinear(t) }
   | LINEARTOSHARED; LT; t = s_type; GT                                   { TyLinearToShared(t) }
   | SESSION; LT; t = s_type; GT                                          { TySession(t) }
+  | REC; LT; t = s_type; GT                                              { TyRec(t) }
+  | t = z_type                                                           { TyZ (t) }
 
 labeled_type:
   | label = ID; COLON; t = s_type { (label, t) }
@@ -68,4 +73,8 @@ arg:
 
 arg_type:
   | t = s_type  { t }
+
+z_type:
+  | Z { 0}
+  | S; LT; t = z_type; GT { t + 1 }
 

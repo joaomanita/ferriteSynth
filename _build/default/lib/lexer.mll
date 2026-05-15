@@ -73,6 +73,9 @@ rule read = parse
   | "SharedToLinear" { SHAREDTOLINEAR }
   | "LinearToShared" { LINEARTOSHARED }
   | "End"            { END }
+  | "Rec"            { REC }
+  | "Z"              { Z }
+  | "S"              { S }
 
   (* ---- IDENTIFIERS ---- *)
   | uppercaseid as id_s {

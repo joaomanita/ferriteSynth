@@ -74,6 +74,11 @@ let rec print_type t =
   | TySharedToLinear t -> "SharedToLinear<" ^ print_type t ^ ">"
   | TyLinearToShared t -> "LinearToShared<" ^ print_type t ^ ">"
   | TySession t -> "Session<" ^ print_type t ^ ">"
+  | TyRec t -> "Rec<" ^ print_type t ^ ">"
+  | TyZ i -> print_peano i
+
+and print_peano i =
+  match i with 0 -> "Z" | x -> "S<" ^ print_peano (x - 1) ^ ">"
 
 let rec print_ctxt ctxt =
   match ctxt with

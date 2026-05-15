@@ -2,15 +2,18 @@
 (* The type of tokens. *)
 
 type token = 
+  | Z
   | TYPE_KEYWORD
   | SHAREDTOLINEAR
   | SESSION
   | SENDVALUE
   | SENDCHANNEL
   | SEMICOLON
+  | S
   | RPAR
   | RECEIVEVALUE
   | RECEIVECHANNEL
+  | REC
   | RBRACE
   | RAW of (string)
   | MINUS
@@ -49,15 +52,18 @@ module MenhirInterpreter : sig
   
   type _ terminal = 
     | T_error : unit terminal
+    | T_Z : unit terminal
     | T_TYPE_KEYWORD : unit terminal
     | T_SHAREDTOLINEAR : unit terminal
     | T_SESSION : unit terminal
     | T_SENDVALUE : unit terminal
     | T_SENDCHANNEL : unit terminal
     | T_SEMICOLON : unit terminal
+    | T_S : unit terminal
     | T_RPAR : unit terminal
     | T_RECEIVEVALUE : unit terminal
     | T_RECEIVECHANNEL : unit terminal
+    | T_REC : unit terminal
     | T_RBRACE : unit terminal
     | T_RAW : (string) terminal
     | T_MINUS : unit terminal
@@ -80,6 +86,7 @@ module MenhirInterpreter : sig
   (* The indexed type of nonterminal symbols. *)
   
   type _ nonterminal = 
+    | N_z_type : (int) nonterminal
     | N_type_def : (Mini_ast.decl) nonterminal
     | N_separated_nonempty_list_COMMA_labeled_type_ : ((string * Mini_ast.ty) list) nonterminal
     | N_separated_nonempty_list_COMMA_arg_ : ((string * Mini_ast.ty) list) nonterminal

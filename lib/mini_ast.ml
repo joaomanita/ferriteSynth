@@ -18,3 +18,5 @@ and ty =
   | TySharedToLinear of ty
   | TyLinearToShared of ty
   | TySession of ty
+  | TyRec of ty
+  | TyZ of int

@@ -1,13 +1,16 @@
 type token =
-    TYPE_KEYWORD
+    Z
+  | TYPE_KEYWORD
   | SHAREDTOLINEAR
   | SESSION
   | SENDVALUE
   | SENDCHANNEL
   | SEMICOLON
+  | S
   | RPAR
   | RECEIVEVALUE
   | RECEIVECHANNEL
+  | REC
   | RBRACE
   | RAW of string
   | MINUS
@@ -27,6 +30,7 @@ type token =
   | COLON
   | ATOMIC of string
 val menhir_begin_marker : int
+val xv_z_type : int
 val xv_type_def : Mini_ast.decl
 val xv_separated_nonempty_list_COMMA_labeled_type_ :
   (string * Mini_ast.ty) list
