@@ -468,7 +468,7 @@ module Tables = struct
            in
           (
 # 69 "lib/parser.mly"
-                                                                                                         ( Function({fname = name; params = ars; return = ret }) )
+                                                                                                         ( Function(TyFunc((name, ars), ret)) )
 # 473 "lib/parser.ml"
            : (Mini_ast.decl))
         in

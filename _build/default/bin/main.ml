@@ -21,13 +21,6 @@ let () =
     aux [] prog
   in
   let prog = merge_raw prog in
-  let fn_ctxt = ref [] in
-  let type_ctxt = ref [] in
-  let rec lookup_type name ctxt =
-    match ctxt with
-    | [] -> None
-    | (n, t) :: xs -> if n = name then Some t else lookup_type name xs
-  in
   let rec print_prog p =
     match p with
     | [] -> ()
@@ -37,53 +30,24 @@ let () =
         | TypeDef v ->
             Printf.fprintf out_channel "type %s = %s;" v.name
               (Synthesizer.print_type v.body);
-            type_ctxt := (v.name, v.body) :: !type_ctxt
-        | Function f ->
-            let args_str =
-              f.params
-              |> List.map (fun (n, t) -> n ^ ": " ^ Synthesizer.print_type t)
-              |> String.concat ", "
-            in
+            Synthesizer.append_type_ctxt v.name v.body
+        | Function fType -> (
+            let results = Synthesizer.synthesize fType in
+            let tms = List.map snd results in
 
-            let ret_str = Synthesizer.print_type f.return in
+            match tms with
+            | [] ->
+                Printf.fprintf out_channel "// couldnt synthesize function\n"
+            | tm :: rest ->
+                (* print first term normally *)
+                Printf.fprintf out_channel "%s\n" (Synthesizer.print_exp tm);
 
-            let resolve_type t =
-              match t with
-              | TyPrimitive s -> (
-                  match lookup_type s !type_ctxt with
-                  | Some real_t -> real_t
-                  | None -> t)
-              | _ -> t
-            in
-
-            let omega_ctxt =
-              f.params |> List.map (fun (name, t) -> (name, resolve_type t))
-            in
-
-            let resolved_return = resolve_type f.return in
-
-            let body =
-              match
-                Synthesizer.synthesize resolved_return !fn_ctxt omega_ctxt
-              with
-              | [] -> "panic!(\"couldn't synthesize!\")"
-              | sols -> (
-                  let exprs =
-                    sols |> List.map (fun (_, e) -> Synthesizer.print_exp e)
-                  in
-                  match exprs with
-                  | [] -> "panic!(\"no solutions\")"
-                  | first :: rest ->
-                      let others =
-                        rest
-                        |> List.map (fun e -> "// OR\n// " ^ e ^ "\n")
-                        |> String.concat "\n"
-                      in
-                      if others = "" then first else first ^ "\n" ^ others)
-            in
-            Printf.fprintf out_channel "fn %s(%s) -> %s { %s }\n" f.fname
-              args_str ret_str body;
-            fn_ctxt := (f.fname, resolved_return) :: !fn_ctxt);
+                (* print rest as commented terms *)
+                List.iter
+                  (fun tm ->
+                    Printf.fprintf out_channel "// %s\n"
+                      (Synthesizer.print_exp tm))
+                  rest));
 
         print_prog xs
   in

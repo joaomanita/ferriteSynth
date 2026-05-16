@@ -10,7 +10,7 @@ type myType = ReceiveChannel<
 fn myFunc() -> myType {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
-            offer_choice! { l: choose!(chan_0, l, send_channel_to(chan_0, chan_1, forward(chan_1))), r: choose!(chan_0, r, send_channel_to(chan_0, chan_1, forward(chan_1))) }
+            offer_choice! { l: choose!(chan_0, l, send_channel_to(chan_0, chan_1, forward(chan_0))), r: choose!(chan_0, r, send_channel_to(chan_0, chan_1, forward(chan_0))) }
         })
     })
 }

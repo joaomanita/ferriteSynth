@@ -66,7 +66,7 @@ labeled_type:
   | label = ID; COLON; t = s_type { (label, t) }
 
 func:
-  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE RBRACE { Function({fname = name; params = ars; return = ret }) }
+  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE RBRACE { Function(TyFunc((name, ars), ret)) }
 
 arg:
   | arg_name = ID; COLON; t = arg_type { (arg_name, t) }

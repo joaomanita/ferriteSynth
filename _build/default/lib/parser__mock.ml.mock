@@ -638,7 +638,7 @@ and (xv_z_type, xv_type_def, xv_separated_nonempty_list_COMMA_labeled_type_, xv_
    : unit) (_startpos__1_ : Lexing.position) (_endpos__1_ : Lexing.position) (_startofs__1_ : int) (_endofs__1_ : int) (_loc__1_ : Lexing.position * Lexing.position) : 'tv_func ->
     
 # 69 "lib/parser.mly"
-                                                                                                         ( Function({fname = name; params = ars; return = ret }) )
+                                                                                                         ( Function(TyFunc((name, ars), ret)) )
 # 643 "lib/parser__mock.ml.mock"
      in
   let _ = fun (_startpos : Lexing.position) (_endpos : Lexing.position) (_endpos__0_ : Lexing.position) (_symbolstartpos : Lexing.position) (_startofs : int) (_endofs : int) (_endofs__0_ : int) (_symbolstartofs : int) (_sloc : Lexing.position * Lexing.position) (_loc : Lexing.position * Lexing.position) (

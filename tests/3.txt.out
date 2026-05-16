@@ -8,7 +8,7 @@ fn myFunc2() -> myType {
                 send_channel_to(
                     chan_0,
                     binder_0,
-                    send_channel_to(binder_0, chan_1, forward(chan_1)),
+                    send_channel_to(chan_0, chan_1, forward(chan_0)),
                 )
             })
         })

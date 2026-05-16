@@ -6,6 +6,6 @@ type myType = Session<ReceiveChannel<A, B>>;
 
 fn myFunc(arg1: myType, arg2: A) -> Session<B> {
     cut::<HList![]>(arg1, |binder_0| {
-        send_channel_to(binder_0, arg2, forward(arg2))
+        send_channel_to(binder_0, arg2, forward(binder_0))
     })
 }

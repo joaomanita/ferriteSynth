@@ -23,6 +23,21 @@ let fresh_binder_id =
 
 type id = string
 
+let fn_ctxt = ref []
+let type_ctxt = ref []
+let append_type_ctxt name t = type_ctxt := (name, t) :: !type_ctxt
+
+let rec lookup_type name ctxt =
+  match ctxt with
+  | [] -> None
+  | (n, t) :: xs -> if n = name then Some t else lookup_type name xs
+
+let resolve_type t =
+  match t with
+  | TyPrimitive s -> (
+      match lookup_type s !type_ctxt with Some real_t -> real_t | None -> t)
+  | _ -> t
+
 exception Fail
 
 (* For context see Table 2 of https://web.tecnico.ulisboa.pt/bernardo.toninho/papers/ecoop22-ferrite.pdf*)
@@ -47,7 +62,9 @@ type tm =
   | Accept of tm
   | Accquire of id * (id * tm)
   | Forward of id
-  | Cut of id * (id * tm)
+  | Cut of tm * (id * tm)
+  | Func of (id * (id * ty) list) * (ty * tm)
+  | App of tm * tm list
 
 let rec print_labeled_choices l print_func =
   match l with
@@ -74,6 +91,14 @@ let rec print_type t =
   | TySharedToLinear t -> "SharedToLinear<" ^ print_type t ^ ">"
   | TyLinearToShared t -> "LinearToShared<" ^ print_type t ^ ">"
   | TySession t -> "Session<" ^ print_type t ^ ">"
+  | TyFunc ((name, tyArgs), tyRet) ->
+      "FN<<" ^ name ^ ", "
+      ^ print_labeled_choices tyArgs print_type
+      ^ ">, " ^ print_type tyRet ^ ">"
+  | TyApp (tyFunc, tyArgs) ->
+      "App<" ^ print_type tyFunc ^ ", "
+      ^ String.concat ", " (List.map print_type tyArgs)
+      ^ ">"
   | TyRec t -> "Rec<" ^ print_type t ^ ">"
   | TyZ i -> print_peano i
 
@@ -122,11 +147,23 @@ let rec print_exp e =
       sprintf "acquire_shared_session(%s, move |%s| {%s})" chan binder
         (print_exp tm)
   | Forward chan -> sprintf "forward(%s)" chan
-  | Cut (session, (binder, tm)) ->
-      sprintf "cut::<HList![]>(%s, |%s| {%s})" session binder (print_exp tm)
+  | Cut (session_tm, (binder, tm)) ->
+      sprintf "cut::<HList![]>(%s, |%s| {%s})" (print_exp session_tm) binder
+        (print_exp tm)
+  | Func ((name, argList), (t, tm)) ->
+      let args_str =
+        argList
+        |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
+        |> String.concat ", "
+      in
+      sprintf "fn %s(%s) -> %s { %s }" name args_str (print_type t)
+        (print_exp tm)
+  | App (func_tm, arg_tmList) ->
+      sprintf "%s(%s)" (print_exp func_tm)
+        (arg_tmList |> List.map print_exp |> String.concat ", ")
 
 (* Substitutes name x in expression e1 with expression e2 *)
-let rec subst e1 x e2 =
+(* let rec subst e1 x e2 =
   match e1 with
   | Var y -> if x = y then e2 else e1
   | Offer (label, tm) -> Offer (label, subst tm x e2)
@@ -159,8 +196,15 @@ let rec subst e1 x e2 =
   | Accquire (chan, (binder, tm)) ->
       if x <> binder then Accquire (chan, (binder, subst tm x e2)) else e1
   | Forward chan -> if chan = x then e2 else e1
-  | Cut (session, (binder, tm)) ->
-      if x <> binder then Cut (session, (binder, subst tm x e2)) else e1
+  | Cut (session_tm, (binder, tm)) ->
+      if x <> binder then Cut (session_tm, (binder, subst tm x e2)) else e1
+  | Func ((name, argList), (t, tm)) ->
+      let binders = List.map fst argList in
+      if List.mem x binders then e1
+      else Func ((name, argList), (t, subst tm x e2))
+  | App (func_tm, arg_tmList) ->
+      App (subst func_tm x e2, List.map (fun tm -> subst tm x e2) arg_tmList)
+*)
 
 let rec shift d t =
   match t with
@@ -202,13 +246,23 @@ let rec subst k replacement t =
 
 let unfold t = match t with TyRec t1 -> subst 0 (TyRec t1) t1 | _ -> t
 
-let rec synthesize t gamma_ctxt omega_ctxt =
-  let programs = inversionR gamma_ctxt [] omega_ctxt t in
+let rec synthesize t =
+  let programs = inversionR !fn_ctxt [] [] t in
   run_all programs
 
 (* Apply all invertible/asynchronous rules to the goal t*)
 and inversionR gamma delta_in omega t =
   match t with
+  | TyFunc ((name, argList), tRet) ->
+      let resolved_argList =
+        List.map (fun (id, t1) -> (id, resolve_type t1)) argList
+      in
+      fn_ctxt := (name, t) :: !fn_ctxt;
+      let resolved_retType = resolve_type tRet in
+      inversionR gamma delta_in resolved_argList resolved_retType
+      >>= fun (delta_out, e) ->
+      return (delta_out, Func ((name, argList), (tRet, e)))
+  | TyApp _ -> Choice.fail
   | TySession t ->
       inversionR gamma delta_in omega t >>= fun (delta_out, e) ->
       if delta_out <> [] then Choice.fail else return (delta_out, e)
@@ -256,10 +310,26 @@ and inversionL gamma delta_in omega t =
   | (x, ty) :: xs -> (
       match ty with
       | TyPrimitive _ -> inversionL ((x, ty) :: gamma) delta_in xs t
+      | TyFunc ((name, argList), tRet) ->
+          print_endline "boas";
+          let rec sequence_inversion gamma delta = function
+            | [] -> return (delta, [])
+            | (_, t1) :: xs ->
+                inversionR gamma delta [] t1 >>= fun (delta', e) ->
+                sequence_inversion gamma delta' xs >>= fun (delta'', rest) ->
+                return (delta'', e :: rest)
+          in
+          sequence_inversion gamma delta_in argList
+          >>= fun (delta_out, tm_list) ->
+          let x1 = fresh_binder_id () in
+          (* Assume every function application will yield a session into a cut*)
+          inversionL gamma delta_out ((x1, tRet) :: xs) t
+          >>= fun (delta_out, e1) ->
+          return (delta_out, Cut (App (Var name, tm_list), (x1, e1)))
       | TySession t1 ->
           let x1 = fresh_binder_id () in
           inversionL gamma delta_in ((x1, t1) :: xs) t >>= fun (delta_out, e) ->
-          return (delta_out, Cut (x, (x1, e)))
+          return (delta_out, Cut (Var x, (x1, e)))
       | TySendChannel (tyChan, tyCont) ->
           let binder = fresh_binder_id () in
           inversionL gamma delta_in ((x, tyCont) :: (binder, tyChan) :: xs) t

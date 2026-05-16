@@ -10,6 +10,14 @@ fn myFunc(arg1: myType, arg2: A) -> Session<B> {
     })
 }
 
-fn myFunc2() -> Session<SendChannel<B, End>> {
-    cut::<HList![]>(myFunc, |binder_1| send_channel_from(binder_1, terminate()))
+fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> {
+    receive_channel(|chan_0| {
+        receive_channel(|chan_1| {
+            cut::<HList![]>(myFunc(chan_0, forward(chan_1)), |binder_1| {
+                cut::<HList![]>(binder_1, |binder_2| {
+                    send_channel_from(binder_2, terminate())
+                })
+            })
+        })
+    })
 }
