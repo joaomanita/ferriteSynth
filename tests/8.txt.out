@@ -5,19 +5,14 @@ use ferrite_session::prelude::*;
 type myType = Session<ReceiveChannel<A, B>>;
 
 fn myFunc(arg1: myType, arg2: A) -> Session<B> {
-    cut::<HList![]>(arg1, |binder_0| {
-        send_channel_to(binder_0, arg2, forward(binder_0))
-    })
+    cut! { []; arg1; binder_0 => {send_channel_to(binder_0, arg2, forward(binder_0))}}
 }
+// fn myFunc(arg1: myType, arg2: A) -> Session<B> { cut! { []; arg1; binder_0 => {send_channel_to(binder_0, arg2, forward(binder_0))}} }
 
 fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
-            cut::<HList![]>(myFunc(chan_0, forward(chan_1)), |binder_1| {
-                cut::<HList![]>(binder_1, |binder_2| {
-                    send_channel_from(binder_2, terminate())
-                })
-            })
+            cut! { [L]; myFunc(chan_0, forward(chan_1)); binder_1 => {cut! { []; binder_1; binder_2 => {send_channel_from(binder_2, terminate ())}}}}
         })
     })
 }
