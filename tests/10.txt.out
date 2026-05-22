@@ -1,0 +1,28 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+type myType = Rec<ExternalChoice<l: SendValue<Int, Z>, r: End>>;
+
+fn myFunc(arg1: myType) -> Session<SendValue<Int, SendValue<Int, End>>> {
+    unfix_session(
+        arg1,
+        choose!(
+            arg1,
+            l,
+            receive_value_from(arg1, move |binder_1| {
+                unfix_session(
+                    arg1,
+                    choose!(
+                        arg1,
+                        r,
+                        wait(
+                            arg1,
+                            send_value(binder_1, send_value(binder_1, terminate()))
+                        )
+                    ),
+                )
+            })
+        ),
+    )
+}

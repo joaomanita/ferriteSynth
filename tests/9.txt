@@ -1,0 +1,12 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+fn myFunc() -> Session<
+  Rec<
+    ExternalChoice<
+      l: ReceiveValue<Int, End>,
+      r: Z
+    >
+  >
+> {}

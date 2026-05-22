@@ -2,7 +2,7 @@ use std::format;
 
 use ferrite_session::prelude::*;
 
-type myType = Session<ReceiveChannel<A, B>>;
+type myType = ReceiveChannel<A, B>;
 
 fn myFunc(arg1: myType, arg2: A) -> Session<B> {}
 

@@ -1,0 +1,7 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+fn myFunc() -> Session<Rec<ExternalChoice<l: ReceiveValue<Int, End>, r: Z>>> {
+    fix_session(offer_choice! { l: receive_value(|val_0| {terminate ()}), r: myFunc() })
+}
