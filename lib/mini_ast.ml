@@ -1,5 +1,11 @@
 type program = decl list
-and decl = TypeDef of type_def | Function of ty | Raw of string
+
+and decl =
+  | TypeDef of type_def
+  | Function of ty
+  | Raw of string
+  | ClosedFunction of ty * string
+
 and type_def = { name : string; body : ty }
 and label = string
 and value = string
@@ -18,6 +24,6 @@ and ty =
   | TyLinearToShared of ty
   | TySession of ty
   | TyFunc of (string * (label * ty) list) * ty
-  | TyApp of (ty * ty list)
+  | TyApp of (string * ty list)
   | TyRec of ty
   | TyZ of int

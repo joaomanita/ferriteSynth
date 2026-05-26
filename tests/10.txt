@@ -9,4 +9,4 @@ type myType = Rec<
     >
   >;
 
-fn myFunc(arg1: myType) -> Session<SendValue<Int, SendValue<Int, End>>> {}
+fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { @SYNTHESIZE }

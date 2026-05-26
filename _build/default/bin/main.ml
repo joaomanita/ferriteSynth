@@ -47,7 +47,11 @@ let () =
                   (fun tm ->
                     Printf.fprintf out_channel "// %s\n"
                       (Synthesizer.print_exp tm))
-                  rest));
+                  rest)
+        | ClosedFunction (fType, body) ->
+            Printf.fprintf out_channel "%s\n"
+              (Synthesizer.print_exp
+                 (Synthesizer.process_closed_function (fType, body))));
 
         print_prog xs
   in

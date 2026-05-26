@@ -1,1 +1,1 @@
-lib/parser.ml: MenhirLib Mini_ast Obj
+lib/parser.ml: MenhirLib Mini_ast Obj String

@@ -4,6 +4,7 @@
 type token = 
   | Z
   | TYPE_KEYWORD
+  | SYNTHESIZE
   | SHAREDTOLINEAR
   | SESSION
   | SENDVALUE
@@ -32,6 +33,7 @@ type token =
   | COMMA
   | COLON
   | ATOMIC of (string)
+  | AT
 
 (* This exception is raised by the monolithic API functions. *)
 
@@ -54,6 +56,7 @@ module MenhirInterpreter : sig
     | T_error : unit terminal
     | T_Z : unit terminal
     | T_TYPE_KEYWORD : unit terminal
+    | T_SYNTHESIZE : unit terminal
     | T_SHAREDTOLINEAR : unit terminal
     | T_SESSION : unit terminal
     | T_SENDVALUE : unit terminal
@@ -82,6 +85,7 @@ module MenhirInterpreter : sig
     | T_COMMA : unit terminal
     | T_COLON : unit terminal
     | T_ATOMIC : (string) terminal
+    | T_AT : unit terminal
   
   (* The indexed type of nonterminal symbols. *)
   
@@ -95,9 +99,11 @@ module MenhirInterpreter : sig
     | N_loption_separated_nonempty_list_COMMA_labeled_type__ : ((string * Mini_ast.ty) list) nonterminal
     | N_loption_separated_nonempty_list_COMMA_arg__ : ((string * Mini_ast.ty) list) nonterminal
     | N_list_decl_ : (Mini_ast.decl list) nonterminal
+    | N_list_RAW_ : (string list) nonterminal
     | N_labeled_type : (string * Mini_ast.ty) nonterminal
     | N_func : (Mini_ast.decl) nonterminal
     | N_decl : (Mini_ast.decl) nonterminal
+    | N_closed_func : (Mini_ast.decl) nonterminal
     | N_arg_type : (Mini_ast.ty) nonterminal
     | N_arg : (string * Mini_ast.ty) nonterminal
   

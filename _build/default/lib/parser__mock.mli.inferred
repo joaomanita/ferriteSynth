@@ -1,6 +1,7 @@
 type token =
     Z
   | TYPE_KEYWORD
+  | SYNTHESIZE
   | SHAREDTOLINEAR
   | SESSION
   | SENDVALUE
@@ -29,6 +30,7 @@ type token =
   | COMMA
   | COLON
   | ATOMIC of string
+  | AT
 val menhir_begin_marker : int
 val xv_z_type : int
 val xv_type_def : Mini_ast.decl
@@ -44,9 +46,11 @@ val xv_loption_separated_nonempty_list_COMMA_labeled_type__ :
 val xv_loption_separated_nonempty_list_COMMA_arg__ :
   (string * Mini_ast.ty) list
 val xv_list_decl_ : Mini_ast.decl list
+val xv_list_RAW_ : string list
 val xv_labeled_type : string * Mini_ast.ty
 val xv_func : Mini_ast.decl
 val xv_decl : Mini_ast.decl
+val xv_closed_func : Mini_ast.decl
 val xv_arg_type : Mini_ast.ty
 val xv_arg : string * Mini_ast.ty
 val menhir_end_marker : int

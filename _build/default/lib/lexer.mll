@@ -42,15 +42,23 @@ rule read = parse
 
   (* ---- BRACES ---- *)
   | '{' {
-      LBRACE
+      (match !current_mode with
+       | Raw -> RAW "{"
+       | _ -> LBRACE);
     }
 
   | '}' {
-      (match !current_mode with
-       | Func -> current_mode := Raw
-       | _ -> ());
-      RBRACE
-    }
+    match !current_mode with
+    | Raw ->
+        RAW "}"
+
+    | Func ->
+        current_mode := Raw;
+        RBRACE
+
+    | _ ->
+        RBRACE
+  }
 
   (* ---- STRUCTURED TOKENS ---- *)
   | '<' { match !current_mode with | Raw -> RAW "<" | _ -> LT }
@@ -61,6 +69,7 @@ rule read = parse
   | '=' { match !current_mode with | Raw -> RAW "=" | _ -> EQ }
   | ',' { match !current_mode with | Raw -> RAW "," | _ -> COMMA }
   | '-' { match !current_mode with | Raw -> RAW "-" | _ -> MINUS }
+  | '@' { match !current_mode with | Raw -> RAW "@" | _ -> AT }
 
   (* ---- KEYWORDS ---- *)
   | "Session"        { SESSION }
@@ -76,6 +85,7 @@ rule read = parse
   | "Rec"            { REC }
   | "Z"              { Z }
   | "S"              { S }
+  | "SYNTHESIZE"     { SYNTHESIZE }
 
   (* ---- IDENTIFIERS ---- *)
   | uppercaseid as id_s {
@@ -94,7 +104,8 @@ rule read = parse
   | _ as c {
       match !current_mode with
       | Raw -> RAW (String.make 1 c)
-      | _   -> raise (SyntaxError ("unknown character" ^ (String.make 1 c) ^ "in structured mode"))   (* unknown chars in structured mode *)
+      | Func -> RAW (String.make 1 c)
+      | _   -> raise (SyntaxError ("unknown character" ^ (String.make 1 c) ^ "in type mode"))   (* unknown chars in structured mode *)
     }
 
   | eof { EOF }

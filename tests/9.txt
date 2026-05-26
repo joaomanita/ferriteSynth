@@ -9,4 +9,4 @@ fn myFunc() -> Session<
       r: Z
     >
   >
-> {}
+> { @SYNTHESIZE }

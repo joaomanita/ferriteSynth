@@ -32,6 +32,8 @@
 %token REC
 %token Z
 %token S
+%token AT
+%token SYNTHESIZE
 %start <decl list> prog
 %%
 
@@ -42,6 +44,7 @@ decl:
   | text = RAW { Raw(text) }
   | tdef = type_def { tdef }
   | f = func { f }
+  | closed_f = closed_func { closed_f }
 
 type_def:
   | TYPE_KEYWORD; _name = ID; EQ; t = s_type; SEMICOLON { TypeDef({name = _name; body = t}) }
@@ -66,7 +69,10 @@ labeled_type:
   | label = ID; COLON; t = s_type { (label, t) }
 
 func:
-  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE RBRACE { Function(TyFunc((name, ars), ret)) }
+  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE AT SYNTHESIZE RBRACE { Function(TyFunc((name, ars), ret)) }
+
+closed_func:
+  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE; body = list(RAW); RBRACE { ClosedFunction(TyFunc((name, ars), ret), String.concat "" body) }
 
 arg:
   | arg_name = ID; COLON; t = arg_type { (arg_name, t) }

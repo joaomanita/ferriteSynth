@@ -4,18 +4,12 @@ use ferrite_session::prelude::*;
 
 type myType = ReceiveChannel<A, B>;
 
-fn myFunc(arg1: myType, arg2: A) -> Session<B> {
-    send_channel_to(arg1, arg2, forward(arg1))
-}
-// fn myFunc(arg1: myType, arg2: A) -> Session<B> { send_channel_to(arg1, arg2, forward(arg1)) }
+fn myFunc(arg1: myType, arg2: A) -> Session<B> {}
 
 fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
-            cut! { [L, L]; myFunc(receive_channel(|chan_3| {send_channel_to(chan_0, chan_1, forward(chan_0))}), forward(chan_3)); binder_4 => {cut! { [L]; binder_4; binder_5 => {send_channel_from(binder_5, terminate ())}}}}
+            send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate()))
         })
     })
 }
-// fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> { receive_channel(|chan_0| {receive_channel(|chan_1| {cut! { [L, L]; myFunc(receive_channel(|chan_3| {send_channel_to(chan_0, chan_3, forward(chan_0))}), forward(chan_1)); binder_2 => {cut! { [L]; binder_2; binder_3 => {send_channel_from(binder_3, terminate ())}}}}})}) }
-// fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> { receive_channel(|chan_0| {receive_channel(|chan_1| {send_channel_to(chan_0, chan_1, cut! { [L]; myFunc(receive_channel(|chan_2| {forward(chan_0)}), forward(chan_2)); binder_0 => {cut! { [L]; binder_0; binder_1 => {send_channel_from(binder_1, terminate ())}}}})})}) }
-// fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> { receive_channel(|chan_0| {receive_channel(|chan_1| {send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))})}) }

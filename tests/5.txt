@@ -1,3 +1,3 @@
 type myType = ReceiveChannel< SendChannel< SendChannel<ReceiveChannel<A, B>, ReceiveChannel<B, C>>, ReceiveChannel<C, D>>, ReceiveChannel<A, D>>;
 
-fn myFunc2() -> myType {}
+fn myFunc2() -> myType { @SYNTHESIZE }

@@ -4,8 +4,7 @@ use ferrite_session::prelude::*;
 
 type myType = Session<ReceiveChannel<A, B>>;
 
-fn myFunc(arg1: myType, arg2: A) -> Session<B> {
-    cut::<HList![]>(arg1, |binder_0| {
-        send_channel_to(binder_0, arg2, forward(binder_0))
-    })
+fn myFunc(arg1: Session<ReceiveChannel<A, B>>, arg2: A) -> Session<B> {
+    cut! { [L, R]; arg1; binder_0 => {send_channel_to(binder_0, arg2, forward(binder_0))}}
 }
+// fn myFunc(arg1: Session<ReceiveChannel<A, B>>, arg2: A) -> Session<B> { cut! { [L, R]; arg1; binder_0 => {send_channel_to(binder_0, arg2, forward(binder_0))}} }
