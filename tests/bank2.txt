@@ -1,0 +1,9 @@
+use ferrite_session::{prelude::*};
+
+type BankOps = ExternalChoice<deposit: ReceiveValue<Int, End>, withdraw: SendValue<Int, ReceiveValue<Int, End>>, terminate: End>;
+
+fn bankops(arg1: Int) -> Session<BankOps> { @SYNTHESIZE }
+
+fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, BankOps>> { @SYNTHESIZE }
+
+fn client_session(myId: String, depositAmt: Int) -> Session< ReceiveChannel< ReceiveValue<String, BankOps>, End>> { @SYNTHESIZE }
