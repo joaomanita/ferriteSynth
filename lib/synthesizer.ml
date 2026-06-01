@@ -358,10 +358,8 @@ let rec prune_recursive_choices target ty =
   match ty with
   | TyInternalChoice l ->
       TyInternalChoice
-        (List.filter_map
-           (fun (label, t) ->
-             if contains_type target t then None
-             else Some (label, prune_recursive_choices target t))
+        (List.map
+           (fun (label, t) -> (label, prune_recursive_choices target t))
            l)
   | TyExternalChoice l ->
       TyExternalChoice
@@ -411,7 +409,9 @@ and inversionR gamma delta_in omega t psi zeta ident =
     match t with
     | TyFunc ((name, argList), tRet) ->
         fn_ctxt := (name, t) :: !fn_ctxt;
-        inversionR (argList @ gamma) delta_in [] tRet psi zeta (ident + 1)
+        inversionR
+          ((name, t) :: (argList @ gamma))
+          delta_in [] tRet psi zeta (ident + 1)
         >>= fun (delta_out, e) ->
         return (delta_out, Func ((name, argList), (rev_resolve_type tRet, e)))
     | TyApp (func_name, tyArgList) ->
@@ -585,29 +585,52 @@ and all_equal ctxts =
   | [] -> true
   | ctxt1 :: xs -> List.for_all (fun ctxt2 -> ctxt2 = ctxt1) xs
 
+and used_by_delta ret_ty delta =
+  List.exists
+    (fun (_, ty) ->
+      match ty with
+      | TyReceiveChannel (tChan, _) -> tChan = ret_ty
+      | TyReceiveValue (_, tCont) -> tCont = ret_ty
+      | _ -> false)
+    delta
+
+and ends_in ty goal =
+  ty = goal
+  ||
+  match ty with
+  | TyReceiveValue (_, cont)
+  | TySendValue (_, cont)
+  | TyReceiveChannel (_, cont)
+  | TySendChannel (_, cont)
+  | TySession cont ->
+      ends_in cont goal
+  | TyExternalChoice branches | TyInternalChoice branches ->
+      List.exists (fun (_, t) -> ends_in t goal) branches
+  | TyRec _ -> ends_in (unfold ty) goal
+  | _ -> false
+
 and decideFocus gamma delta_in t psi zeta ident =
   print_func_entry "decideFocus" t ident;
   print_ctxts_with_ident gamma delta_in ident;
-  match t with
-  | TyEnd ->
-      if delta_in <> [] then
-        mplus
-          (focusR gamma delta_in t psi zeta (ident + 1))
-          (focusL gamma delta_in t psi zeta (ident + 1))
-      else
-        mplus
-          (focusR gamma delta_in t psi zeta (ident + 1))
-          (mplus
-             (focusL gamma delta_in t psi zeta (ident + 1))
-             (let tm = focusGamma gamma delta_in t psi zeta (ident + 1) in
-              match tm with None -> Choice.fail | Some c -> return c))
-  | _ ->
-      mplus
-        (focusR gamma delta_in t psi zeta (ident + 1))
-        (mplus
-           (focusL gamma delta_in t psi zeta (ident + 1))
-           (let tm = focusGamma gamma delta_in t psi zeta (ident + 1) in
-            match tm with None -> Choice.fail | Some c -> return c))
+
+  let try_focus_gamma () =
+    match t with
+    | TyRec _ ->
+        Choice.fail
+        (* Building TyRec on the rigt is already dealt with in inversionR*)
+    | _ -> (
+        match focusGamma gamma delta_in t psi zeta (ident + 1) with
+        | None -> Choice.fail
+        | Some c -> return c)
+  in
+
+  let r = delay (fun () -> focusR gamma delta_in t psi zeta (ident + 1)) in
+
+  if not (is_empty r) then r
+  else
+    let l = delay (fun () -> focusL gamma delta_in t psi zeta (ident + 1)) in
+
+    if not (is_empty l) then l else try_focus_gamma ()
 
 and focusGamma gamma delta_in t psi zeta ident =
   let focus_options = of_list gamma in
@@ -615,30 +638,37 @@ and focusGamma gamma delta_in t psi zeta ident =
   run_one
     ( focus_options >>= fun (id, ty) ->
       log "%s< focusGamma: %s\n" (String.make ident ' ') (print_type ty);
+      print_ctxts_with_ident gamma delta_in ident;
       let gamma' = removeWithId id ty gamma in
-      print_ctxts_with_ident gamma' delta_in ident;
       let tm =
         match ty with
         | TyFunc ((name, argList), TySession tRet) ->
-            let tArgList = List.map (fun (_, t1) -> t1) argList in
-            inversionR gamma' delta_in []
-              (TyApp (name, tArgList))
-              psi zeta (ident + 1)
-            >>= fun (delta', cutL) ->
-            let cut_dirs =
-              List.map
-                (fun (id, ty) ->
-                  if List.exists (fun (id', ty') -> id = id' && ty = ty') delta'
-                  then R
-                  else L)
-                delta_in
-            in
+            if (not (ends_in tRet t)) && not (used_by_delta tRet delta_in) then
+              Choice.fail
+            else
+              let tArgList = List.map (fun (_, t1) -> t1) argList in
 
-            let x1 = fresh_binder_id () in
+              inversionR gamma' delta_in []
+                (TyApp (name, tArgList))
+                psi zeta (ident + 1)
+              >>= fun (delta', cutL) ->
+              let cut_dirs =
+                List.map
+                  (fun (id, ty) ->
+                    if
+                      List.exists
+                        (fun (id', ty') -> id = id' && ty = ty')
+                        delta'
+                    then R
+                    else L)
+                  delta_in
+              in
 
-            inversionL gamma' delta' [ (x1, tRet) ] t psi zeta (ident + 1)
-            >>= fun (delta_out, cutR) ->
-            return (delta_out, Cut (cut_dirs, cutL, (x1, cutR)))
+              let x1 = fresh_binder_id () in
+
+              inversionL gamma' delta' [ (x1, tRet) ] t psi zeta (ident + 1)
+              >>= fun (delta_out, cutR) ->
+              return (delta_out, Cut (cut_dirs, cutL, (x1, cutR)))
         | _ -> Choice.fail
       in
       tm )
@@ -794,8 +824,11 @@ and focusL' gamma delta_in id foc t psi zeta ident =
         return (delta_out, Cut ([ L ] @ cut_dirs, Var id, (x1, e)))
     | TyRec _ ->
         print_ctxts_with_ident gamma delta_in ident;
+
         let zeta = if searchZeta id zeta then zeta else (id, 0) :: zeta in
+
         log "%s\n" (string_of_int (searchTimesUsedZeta id zeta));
+
         if searchTimesUsedZeta id zeta > 2 then (
           print_fail "focusL" ident;
           Choice.fail)
@@ -807,11 +840,20 @@ and focusL' gamma delta_in id foc t psi zeta ident =
           >>= fun (delta_out, e) -> return (delta_out, Unfix (id, e))
         else
           let unfolded_foc = unfold foc in
-          let try_no_unfolding =
-            focusL' gamma delta_in id
-              (prune_recursive_choices foc unfolded_foc)
-              t psi zeta (ident + 1)
+
+          let pruned_foc = prune_recursive_choices foc unfolded_foc in
+
+          let did_prune = pruned_foc <> unfolded_foc in
+
+          let zeta_for_pruned =
+            if did_prune then zeta else incTimesUsedZeta id [] zeta
           in
+
+          let try_no_unfolding =
+            focusL' gamma delta_in id pruned_foc t psi zeta_for_pruned
+              (ident + 1)
+          in
+
           if is_empty try_no_unfolding then
             focusL' gamma delta_in id unfolded_foc t psi
               (incTimesUsedZeta id [] zeta)

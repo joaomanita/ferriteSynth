@@ -1,0 +1,14 @@
+use std::{
+  future::Future,
+  time::Duration,
+};
+
+use ferrite_session::{
+  either::*,
+  prelude::*,
+};
+use tokio::time::sleep;
+
+type StringQueue = Rec<InternalChoice<l: End, r: SendValue<String, Z>>>;
+
+fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> { @SYNTHESIZE }
