@@ -1,0 +1,10 @@
+use std::time::Duration;
+
+pub use ferrite_session::prelude::*;
+use tokio::time::sleep;
+
+type Producer = SendValue<String, End>;
+
+fn client() -> Session<SendValue<String, Producer>> {
+    cut! { []; client(); binder_0 => {receive_value_from(binder_0, move |binder_1| {receive_value_from(binder_0, move |binder_2| {wait(binder_0, send_value(binder_2, send_value(binder_2, terminate ())))})})}}
+}

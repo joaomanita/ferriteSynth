@@ -1,0 +1,6 @@
+type myType = ReceiveChannel<
+    LinearToShared<ReceiveChannel<A, B>>,
+    ReceiveChannel<LinearToShared<A>, LinearToShared<B>>,
+>;
+
+// couldnt synthesize function

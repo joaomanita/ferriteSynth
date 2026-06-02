@@ -1,0 +1,16 @@
+use ferrite_session::{either::*, prelude::*};
+
+fn provider(arg1: String) -> ExternalChoice<l: SendValue<String, End>, r: ReceiveValue<u64, End>> {
+    offer_choice! { l: send_value(arg1, terminate ()), r: receive_value(|val_0| {terminate ()}) }
+}
+
+fn client(
+) -> ReceiveChannel<ExternalChoice<l: SendValue<String, End>, r: ReceiveValue<u64, End>>, End> {
+    receive_channel(|chan_0| {
+        choose!(
+            chan_0,
+            l,
+            receive_value_from(chan_0, move |binder_1| { wait(chan_0, terminate()) })
+        )
+    })
+}

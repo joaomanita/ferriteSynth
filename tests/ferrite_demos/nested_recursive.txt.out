@@ -1,0 +1,14 @@
+use ferrite_session::{either::*, prelude::*};
+
+type Stream = Rec<
+    ExternalChoice<
+        rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>,
+        end1: ReceiveValue<String, End>,
+    >,
+>;
+
+fn producer(arg1: String) -> Session<Stream> {
+    fix_session(
+        offer_choice! { rec1: fix_session(offer_case!(end2, producer(arg1))), end1: receive_value(|val_0| {terminate ()}) },
+    )
+}

@@ -1,3 +1,0 @@
-type myType = ReceiveChannel<A, B>;
-
-fn myFunc(arg1: myType, arg2: A) -> SendChannel<B, End> {}

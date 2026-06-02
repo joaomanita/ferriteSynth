@@ -1,389 +1,54 @@
-< InversionR: FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>
- < InversionR: Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-  < InversionR: Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-   < InversionR: ExternalChoice<deposit: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, withdraw: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>, terminate: End>
-    < InversionR: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-     < InversionR: Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-      < InversionR: App<bankops, Int>
-       < InversionR: Int
-        < inversionL: Empty with goal Int 
-        < [(val_0, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), (arg1, Int), ] []
-         < decideFocus: Int
-         < [(val_0, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), (arg1, Int), ] []
-          < FocusR: Int
-           success
-    < InversionR: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>
-     < inversionL: Empty with goal SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>> 
-     < [(bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), (arg1, Int), ] []
-      < decideFocus: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>
-      < [(bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), (arg1, Int), ] []
-       < FocusR: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>
-        < FocusR: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-         < InversionR: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-          < InversionR: Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-           < InversionR: App<bankops, Int>
-            < InversionR: Int
-             < inversionL: Empty with goal Int 
-             < [(val_1, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), (arg1, Int), ] []
-              < decideFocus: Int
-              < [(val_1, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), (arg1, Int), ] []
-               < FocusR: Int
+< InversionR: FN<<producer, arg1: String>, Session<Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>
+ < InversionR: Session<Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>
+  < InversionR: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>
+   < InversionR: ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>, end1: ReceiveValue<String, End>>
+    < InversionR: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>
+     < InversionR: InternalChoice<rec2: SendValue<String, Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>
+      < inversionL: Empty with goal InternalChoice<rec2: SendValue<String, Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>> 
+      < [(producer, FN<<producer, arg1: String>, Session<Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>), (arg1, String), ] []
+       < decideFocus: InternalChoice<rec2: SendValue<String, Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>
+       < [(producer, FN<<producer, arg1: String>, Session<Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>), (arg1, String), ] []
+        < FocusR: InternalChoice<rec2: SendValue<String, Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>
+         < FocusR: SendValue<String, Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>>
+          < FocusR: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>
+           < InversionR: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>
+         < focusR: fail
+         < FocusR: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>
+          < InversionR: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>
+           < InversionR: App<producer, String>
+            < InversionR: String
+             < inversionL: Empty with goal String 
+             < [(producer, FN<<producer, arg1: String>, Session<Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>), (arg1, String), ] []
+              < decideFocus: String
+              < [(producer, FN<<producer, arg1: String>, Session<Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>), (arg1, String), ] []
+               < FocusR: String
                 success
-               < FocusR: Int
+               < FocusR: String
                 success
-    < InversionR: End
-     < inversionL: Empty with goal End 
-     < [(bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), (arg1, Int), ] []
-      < decideFocus: End
-      < [(bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), (arg1, Int), ] []
-       < FocusR: End
-        success
-          < FocusR: Int
-           success
-       < FocusR: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>
-        < FocusR: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-         < InversionR: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-          < InversionR: Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-           < InversionR: App<bankops, Int>
-            < InversionR: Int
-             < inversionL: Empty with goal Int 
-             < [(val_2, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), (arg1, Int), ] []
-              < decideFocus: Int
-              < [(val_2, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), (arg1, Int), ] []
-               < FocusR: Int
-                success
-               < FocusR: Int
-                success
-       < FocusR: End
-        success
-< InversionR: FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>
- < InversionR: Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>
-  < InversionR: ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-   < InversionR: Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-    < InversionR: ExternalChoice<deposit: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, withdraw: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>, terminate: End>
-     < InversionR: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-      < InversionR: Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-       < InversionR: App<bankops, Int>
-        < InversionR: Int
-         < inversionL: Empty with goal Int 
-         < [(val_4, Int), (val_3, String), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (withdraw_value, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-          < decideFocus: Int
-          < [(val_4, Int), (val_3, String), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (withdraw_value, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-           < FocusR: Int
-            success
-     < InversionR: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>
-      < inversionL: Empty with goal SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>> 
-      < [(val_3, String), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (withdraw_value, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-       < decideFocus: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>
-       < [(val_3, String), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (withdraw_value, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-        < FocusR: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>
-         < FocusR: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-          < InversionR: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-           < InversionR: Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-            < InversionR: App<bankops, Int>
-             < InversionR: Int
-              < inversionL: Empty with goal Int 
-              < [(val_5, Int), (val_3, String), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (withdraw_value, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-               < decideFocus: Int
-               < [(val_5, Int), (val_3, String), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (withdraw_value, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                < FocusR: Int
-                 success
-                < FocusR: Int
-                 success
+    < InversionR: ReceiveValue<String, End>
      < InversionR: End
       < inversionL: Empty with goal End 
-      < [(val_3, String), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (withdraw_value, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
+      < [(val_0, String), (producer, FN<<producer, arg1: String>, Session<Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>), (arg1, String), ] []
        < decideFocus: End
-       < [(val_3, String), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (withdraw_value, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
+       < [(val_0, String), (producer, FN<<producer, arg1: String>, Session<Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>), (arg1, String), ] []
         < FocusR: End
          success
-           < FocusR: Int
-            success
-        < FocusR: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>
-         < FocusR: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-          < InversionR: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-           < InversionR: Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-            < InversionR: App<bankops, Int>
-             < InversionR: Int
-              < inversionL: Empty with goal Int 
-              < [(val_6, Int), (val_3, String), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (withdraw_value, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-               < decideFocus: Int
-               < [(val_6, Int), (val_3, String), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (withdraw_value, Int), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                < FocusR: Int
-                 success
-                < FocusR: Int
-                 success
+        < FocusR: InternalChoice<rec2: SendValue<String, Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>
+         < FocusR: SendValue<String, Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>>
+          < FocusR: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>
+           < InversionR: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>
+         < focusR: fail
+         < FocusR: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>
+          < InversionR: Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>
+           < InversionR: App<producer, String>
+            < InversionR: String
+             < inversionL: Empty with goal String 
+             < [(producer, FN<<producer, arg1: String>, Session<Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>), (arg1, String), ] []
+              < decideFocus: String
+              < [(producer, FN<<producer, arg1: String>, Session<Rec<ExternalChoice<rec1: Rec<InternalChoice<rec2: SendValue<String, Z>, end2: S<Z>>>, end1: ReceiveValue<String, End>>>>>), (arg1, String), ] []
+               < FocusR: String
+                success
+               < FocusR: String
+                success
         < FocusR: End
          success
-< InversionR: FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>
- < InversionR: Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>
-  < InversionR: ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>
-   < InversionR: End
-    < inversionL: ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>> with goal End 
-     < inversionL: Empty with goal End 
-     < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-      < decideFocus: End
-      < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-       < FocusR: End
-       < focusR: fail
-       < focusL: End
-       < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-       > 1
-        < FocusL': ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-        < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-         < FocusL': Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-         < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-0
-          < FocusL': ExternalChoice<deposit: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, withdraw: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>, terminate: End>
-          < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-           < InversionR: End
-            < inversionL: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>> with goal End 
-             < inversionL: Empty with goal End 
-             < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-              < decideFocus: End
-              < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-               < FocusR: End
-               < focusR: fail
-               < focusL: End
-               < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-               > 1
-                < FocusL': ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-                < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                 < FocusL': Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-                 < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-1
-                  < FocusL': ExternalChoice<terminate: End>
-                  < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                   < InversionR: End
-                    < inversionL: End with goal End 
-                     < inversionL: Empty with goal End 
-                     < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                      < decideFocus: End
-                      < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < FocusR: End
-                        success
-                       < FocusR: End
-                        success
-                   < InversionR: End
-                    < inversionL: End with goal End 
-                     < inversionL: Empty with goal End 
-                     < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                      < decideFocus: End
-                      < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < FocusR: End
-                        success
-                       < FocusR: End
-                        success
-               < focusL: End
-               < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-               > 1
-                < FocusL': ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-                < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                 < FocusL': Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-                 < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-1
-                  < FocusL': ExternalChoice<terminate: End>
-                  < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                   < InversionR: End
-                    < inversionL: End with goal End 
-                     < inversionL: Empty with goal End 
-                     < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                      < decideFocus: End
-                      < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < FocusR: End
-                        success
-                       < FocusR: End
-                        success
-                   < InversionR: End
-                    < inversionL: End with goal End 
-                     < inversionL: Empty with goal End 
-                     < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                      < decideFocus: End
-                      < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < FocusR: End
-                        success
-                       < FocusR: End
-                        success
-       < focusL: End
-       < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-       > 1
-        < FocusL': ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-        < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-         < FocusL': Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-         < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-0
-          < FocusL': ExternalChoice<deposit: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, withdraw: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>, terminate: End>
-          < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-           < InversionR: End
-            < inversionL: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>> with goal End 
-             < inversionL: Empty with goal End 
-             < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-              < decideFocus: End
-              < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-               < FocusR: End
-               < focusR: fail
-               < focusL: End
-               < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-               > 1
-                < FocusL': ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-                < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                 < FocusL': Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-                 < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-1
-                  < FocusL': ExternalChoice<terminate: End>
-                  < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                   < InversionR: End
-                    < inversionL: End with goal End 
-                     < inversionL: Empty with goal End 
-                     < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                      < decideFocus: End
-                      < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < FocusR: End
-                        success
-                       < FocusR: End
-                        success
-                   < InversionR: End
-                    < inversionL: End with goal End 
-                     < inversionL: Empty with goal End 
-                     < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                      < decideFocus: End
-                      < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < FocusR: End
-                        success
-                       < FocusR: End
-                        success
-               < focusL: End
-               < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-               > 1
-                < FocusL': ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-                < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                 < FocusL': Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-                 < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-1
-                  < FocusL': ExternalChoice<terminate: End>
-                  < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                   < InversionR: End
-                    < inversionL: End with goal End 
-                     < inversionL: Empty with goal End 
-                     < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                      < decideFocus: End
-                      < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < FocusR: End
-                        success
-                       < FocusR: End
-                        success
-                   < InversionR: End
-                    < inversionL: End with goal End 
-                     < inversionL: Empty with goal End 
-                     < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                      < decideFocus: End
-                      < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < FocusR: End
-                        success
-                       < FocusR: End
-                        success
-           < InversionR: End
-            < inversionL: SendValue<Int, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>> with goal End 
-            < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-             < inversionL: ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>> with goal End 
-              < inversionL: Empty with goal End 
-              < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-               < decideFocus: End
-               < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-                < FocusR: End
-                < focusR: fail
-                < focusL: End
-                < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-                > 1
-                 < FocusL': ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-                 < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                  < FocusL': Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-                  < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-1
-                   < FocusL': ExternalChoice<terminate: End>
-                   < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                    < InversionR: End
-                     < inversionL: End with goal End 
-                      < inversionL: Empty with goal End 
-                      < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < decideFocus: End
-                       < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                        < FocusR: End
-                         success
-                        < FocusR: End
-                         success
-                    < InversionR: End
-                     < inversionL: End with goal End 
-                      < inversionL: Empty with goal End 
-                      < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < decideFocus: End
-                       < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                        < FocusR: End
-                         success
-                        < FocusR: End
-                         success
-                < focusL: End
-                < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] [(chan_0, ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>), ]
-                > 1
-                 < FocusL': ReceiveValue<Int, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>
-                 < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                  < FocusL': Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-                  < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-1
-                   < FocusL': ExternalChoice<terminate: End>
-                   < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                    < InversionR: End
-                     < inversionL: End with goal End 
-                      < inversionL: Empty with goal End 
-                      < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < decideFocus: End
-                       < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                        < FocusR: End
-                         success
-                        < FocusR: End
-                         success
-                    < InversionR: End
-                     < inversionL: End with goal End 
-                      < inversionL: Empty with goal End 
-                      < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < decideFocus: End
-                       < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                        < FocusR: End
-                         success
-                        < FocusR: End
-                         success
-                  < FocusL': Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>
-                  < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-1
-                   < FocusL': ExternalChoice<terminate: End>
-                   < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                    < InversionR: End
-                     < inversionL: End with goal End 
-                      < inversionL: Empty with goal End 
-                      < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < decideFocus: End
-                       < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                        < FocusR: End
-                         success
-                        < FocusR: End
-                         success
-                    < InversionR: End
-                     < inversionL: End with goal End 
-                      < inversionL: Empty with goal End 
-                      < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                       < decideFocus: End
-                       < [(binder_0, Int), (client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-                        < FocusR: End
-                         success
-                        < FocusR: End
-                         success
-           < InversionR: End
-            < inversionL: End with goal End 
-             < inversionL: Empty with goal End 
-             < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-              < decideFocus: End
-              < [(client_session, FN<<client_session, myId: String, depositAmt: Int>, Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>, End>>>), (myId, String), (depositAmt, Int), (bank_session, FN<<bank_session, withdraw_value: Int>, Session<ReceiveValue<String, Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>>), (bankops, FN<<bankops, arg1: Int>, Session<Rec<ExternalChoice<deposit: ReceiveValue<Int, Z>, withdraw: SendValue<Int, ReceiveValue<Int, Z>>, terminate: End>>>>), ] []
-               < FocusR: End
-                success
-               < FocusR: End
-                success

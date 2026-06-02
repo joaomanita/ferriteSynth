@@ -14,4 +14,3 @@ fn myFunc2() -> myType {
         })
     })
 }
-// fn myFunc2() -> myType { receive_channel(|chan_0| {receive_channel(|chan_1| {receive_channel_from(chan_1, |binder_0| {send_channel_to(chan_0, binder_0, send_channel_to(chan_0, chan_1, forward(chan_0)))})})}) }

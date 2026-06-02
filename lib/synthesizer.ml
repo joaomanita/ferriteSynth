@@ -316,7 +316,7 @@ let rec shift d t =
 let rec subst k replacement t =
   match t with
   | TyZ n -> if n = k then replacement else if n > k then TyZ (n - 1) else TyZ n
-  | TyRec t1 -> TyRec (subst (k + 1) (shift 1 replacement) t1)
+  | TyRec t1 -> TyRec (subst (k + 1) replacement t1)
   | TyInternalChoice l ->
       TyInternalChoice
         (List.map (fun (lbl, t1) -> (lbl, subst k replacement t1)) l)

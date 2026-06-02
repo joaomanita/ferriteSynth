@@ -1,0 +1,7 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+type myType = Session<ReceiveChannel<A, B>>;
+
+// couldnt synthesize function

@@ -1,0 +1,19 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+type HelloSession = ReceiveValue<String, SendValue<String, End>>;
+
+fn server() -> Session<HelloSession> {
+    receive_value(|val_0| send_value(val_0, terminate()))
+}
+
+fn client(arg1: String) -> ReceiveChannel<HelloSession, End> {
+    receive_channel(|chan_0| {
+        send_value_to(
+            chan_0,
+            arg1,
+            receive_value_from(chan_0, move |binder_1| wait(chan_0, terminate())),
+        )
+    })
+}

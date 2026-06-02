@@ -1,0 +1,13 @@
+use ferrite_session::{
+  either::*,
+  prelude::*,
+};
+
+type Choice = InternalChoice<l: SendValue<String, End>, r: ReceiveValue<u64, End>>;
+
+fn client(arg1: u64) -> Session<ReceiveChannel<Choice, End>> { @SYNTHESIZE }
+
+fn provider(arg2: String) -> Session<Choice> { @SYNTHESIZE }
+
+
+
