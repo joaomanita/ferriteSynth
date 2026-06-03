@@ -9,6 +9,7 @@ type token =
   | SEMICOLON
   | S
   | RPAR
+  | RELEASE
   | RECEIVEVALUE
   | RECEIVECHANNEL
   | REC
@@ -31,6 +32,7 @@ type token =
   | COLON
   | ATOMIC of string
   | AT
+  | ACQUIRE
 val menhir_begin_marker : int
 val xv_z_type : int
 val xv_type_def : Mini_ast.decl

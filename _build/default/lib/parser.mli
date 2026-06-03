@@ -12,6 +12,7 @@ type token =
   | SEMICOLON
   | S
   | RPAR
+  | RELEASE
   | RECEIVEVALUE
   | RECEIVECHANNEL
   | REC
@@ -34,6 +35,7 @@ type token =
   | COLON
   | ATOMIC of (string)
   | AT
+  | ACQUIRE
 
 (* This exception is raised by the monolithic API functions. *)
 
@@ -64,6 +66,7 @@ module MenhirInterpreter : sig
     | T_SEMICOLON : unit terminal
     | T_S : unit terminal
     | T_RPAR : unit terminal
+    | T_RELEASE : unit terminal
     | T_RECEIVEVALUE : unit terminal
     | T_RECEIVECHANNEL : unit terminal
     | T_REC : unit terminal
@@ -86,6 +89,7 @@ module MenhirInterpreter : sig
     | T_COLON : unit terminal
     | T_ATOMIC : (string) terminal
     | T_AT : unit terminal
+    | T_ACQUIRE : unit terminal
   
   (* The indexed type of nonterminal symbols. *)
   

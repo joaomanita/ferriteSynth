@@ -22,6 +22,8 @@ and ty =
   | TyEnd
   | TySharedToLinear of ty
   | TyLinearToShared of ty
+  | TyRelease
+  | TyAcquire
   | TySession of ty
   | TyFunc of (string * (label * ty) list) * ty
   | TyApp of (string * ty list)

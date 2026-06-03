@@ -60,6 +60,8 @@ let rec resolve_type t =
   | TyEnd -> t
   | TySharedToLinear t -> TySharedToLinear (resolve_type t)
   | TyLinearToShared t -> TyLinearToShared (resolve_type t)
+  | TyRelease -> t
+  | TyAcquire -> t
   | TySession t -> TySession (resolve_type t)
   | TyFunc ((name, argList), tRet) ->
       TyFunc
@@ -126,7 +128,7 @@ type tm =
   | Detach of tm
   | Release of id * tm
   | Accept of tm
-  | Accquire of id * (id * tm)
+  | Acquire of id * (id * tm)
   | Forward of id
   | Cut of side list * tm * (id * tm)
   | Func of (id * (id * ty) list) * (ty * tm)
@@ -160,6 +162,8 @@ let rec print_type t =
   | TyEnd -> "End"
   | TySharedToLinear t -> "SharedToLinear<" ^ print_type t ^ ">"
   | TyLinearToShared t -> "LinearToShared<" ^ print_type t ^ ">"
+  | TyRelease -> "Release"
+  | TyAcquire -> "Acquire"
   | TySession t -> "Session<" ^ print_type t ^ ">"
   | TyFunc ((name, tyArgs), tyRet) ->
       "FN<<" ^ name ^ ", "
@@ -230,7 +234,7 @@ let rec print_exp e =
   | Release (chan, tm) ->
       sprintf "release_shared_session(%s, %s)" chan (print_exp tm)
   | Accept tm -> sprintf "accept_shared_session(%s)" (print_exp tm)
-  | Accquire (chan, (binder, tm)) ->
+  | Acquire (chan, (binder, tm)) ->
       sprintf "acquire_shared_session(%s, move |%s| {%s})" chan binder
         (print_exp tm)
   | Forward chan -> sprintf "forward(%s)" chan
@@ -283,8 +287,8 @@ let rec print_exp e =
   | Detach tm -> Detach (subst tm x e2)
   | Release (chan, tm) -> Release (chan, subst tm x e2)
   | Accept tm -> Accept (subst tm x e2)
-  | Accquire (chan, (binder, tm)) ->
-      if x <> binder then Accquire (chan, (binder, subst tm x e2)) else e1
+  | Acquire (chan, (binder, tm)) ->
+      if x <> binder then Acquire (chan, (binder, subst tm x e2)) else e1
   | Forward chan -> if chan = x then e2 else e1
   | Cut (session_tm, (binder, tm)) ->
       if x <> binder then Cut (session_tm, (binder, subst tm x e2)) else e1
@@ -334,7 +338,35 @@ let rec subst k replacement t =
   | TySession t1 -> TySession (subst k replacement t1)
   | _ -> t
 
+let rec substShared replacement t =
+  match t with
+  | TyRec t1 -> TyRec (substShared replacement t1)
+  | TyInternalChoice l ->
+      TyInternalChoice
+        (List.map (fun (lbl, t1) -> (lbl, substShared replacement t1)) l)
+  | TyExternalChoice l ->
+      TyExternalChoice
+        (List.map (fun (lbl, t1) -> (lbl, substShared replacement t1)) l)
+  | TySendChannel (t1, t2) ->
+      TySendChannel (substShared replacement t1, substShared replacement t2)
+  | TyReceiveChannel (t1, t2) ->
+      TyReceiveChannel (substShared replacement t1, substShared replacement t2)
+  | TySendValue (v, t1) -> TySendValue (v, substShared replacement t1)
+  | TyReceiveValue (v, t1) -> TyReceiveValue (v, substShared replacement t1)
+  | TySharedToLinear t1 -> TySharedToLinear (substShared replacement t1)
+  | TyLinearToShared t1 -> TyLinearToShared (substShared replacement t1)
+  | TyRelease -> replacement
+  | TyAcquire -> replacement
+  | TySession t1 -> TySession (substShared replacement t1)
+  | _ -> t
+
 let unfold t = match t with TyRec t1 -> subst 0 (TyRec t1) t1 | _ -> t
+
+let unfoldShared t =
+  match t with
+  | TyLinearToShared t1 -> substShared t1 (TySharedToLinear t1)
+  | TySharedToLinear t1 -> substShared t1 (TyLinearToShared t1)
+  | _ -> t
 
 let rec contains_type target ty =
   target = ty
@@ -570,8 +602,16 @@ and inversionL gamma delta_in omega t psi zeta ident =
             inversionL gamma delta_in xs t psi zeta (ident + 1)
             >>= fun (delta_out, e1) -> return (delta_out, Wait (x, e1))
         | TySharedToLinear t1 ->
+            let t2 = unfoldShared t1 in
             let x1 = fresh_channel_id () in
-            inversionL ((x1, t1) :: gamma) delta_in xs t psi zeta (ident + 1)
+            (try
+               let (name, tyArgs), _ = searchFuncType t2 !fn_ctxt in
+               let tyArgsList = List.map snd tyArgs in
+               inversionR gamma delta_in []
+                 (TyApp (name, tyArgsList))
+                 psi zeta (ident + 1)
+             with Fail ->
+               inversionL ((x1, t2) :: gamma) delta_in xs t psi zeta (ident + 1))
             >>= fun (delta_out, e1) -> return (delta_out, Release (x, e1))
         | TyLinearToShared _ ->
             inversionL ((x, ty) :: gamma) delta_in xs t psi zeta (ident + 1)
@@ -669,6 +709,8 @@ and focusGamma gamma delta_in t psi zeta ident =
               inversionL gamma' delta' [ (x1, tRet) ] t psi zeta (ident + 1)
               >>= fun (delta_out, cutR) ->
               return (delta_out, Cut (cut_dirs, cutL, (x1, cutR)))
+        | TyLinearToShared _ ->
+            focusL' gamma' delta_in id ty t psi zeta (ident + 1)
         | _ -> Choice.fail
       in
       tm )
@@ -705,14 +747,28 @@ and focusR gamma delta_in t psi zeta ident =
           print_fail "focusR" ident;
           Choice.fail)
         else
-          focusR gamma delta_in t psi zeta (ident + 1)
+          let t1 = unfoldShared t in
+          (try
+             let (name, tyArgs), _ = searchFuncType t1 !fn_ctxt in
+             let tyArgsList = List.map snd tyArgs in
+             inversionR gamma delta_in []
+               (TyApp (name, tyArgsList))
+               psi zeta (ident + 1)
+           with Fail -> inversionR gamma delta_in [] t1 psi zeta (ident + 1))
           >>= fun (delta_out, e1) -> return (delta_out, Detach e1)
     | TyLinearToShared t ->
         if delta_in <> [] then (
           print_fail "focusR" ident;
           Choice.fail)
         else
-          decideFocus gamma delta_in t psi zeta (ident + 1)
+          let t1 = unfoldShared t in
+          (try
+             let (name, tyArgs), _ = searchFuncType t1 !fn_ctxt in
+             let tyArgsList = List.map snd tyArgs in
+             inversionR gamma delta_in []
+               (TyApp (name, tyArgsList))
+               psi zeta (ident + 1)
+           with Fail -> inversionR gamma delta_in [] t1 psi zeta (ident + 1))
           >>= fun (delta_out, e1) -> return (delta_out, Accept e1)
     | TyEnd ->
         if delta_in <> [] then (
@@ -889,9 +945,17 @@ and focusL' gamma delta_in id foc t psi zeta ident =
         >>= fun (delta_out, e1) ->
         return (delta_out, SendValueTo ((id, Var x), e1))
     | TyLinearToShared t1 ->
-        let x1 = fresh_binder_id () in
-        decideFocus gamma ((x1, t1) :: delta_in) t psi zeta (ident + 1)
-        >>= fun (delta_out, e1) -> return (delta_out, Accquire (id, (x1, e1)))
+        let t2 = unfoldShared t1 in
+        let x1 = fresh_channel_id () in
+        (try
+           let (name, tyArgs), _ = searchFuncType t2 !fn_ctxt in
+           let tyArgsList = List.map snd tyArgs in
+           inversionR gamma delta_in []
+             (TyApp (name, tyArgsList))
+             psi zeta (ident + 1)
+         with Fail ->
+           inversionR gamma delta_in [ (x1, t2) ] t psi zeta (ident + 1))
+        >>= fun (delta_out, e1) -> return (delta_out, Acquire (id, (x1, e1)))
     | _ -> inversionL gamma delta_in [ (id, foc) ] t psi zeta (ident + 1)
   in
   tm
