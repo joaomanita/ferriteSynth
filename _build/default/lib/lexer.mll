@@ -81,6 +81,8 @@ rule read = parse
   | "ReceiveValue"   { RECEIVEVALUE }
   | "SharedToLinear" { SHAREDTOLINEAR }
   | "LinearToShared" { LINEARTOSHARED }
+  | "Release"        { RELEASE }
+  | "Acquire"        { ACQUIRE}
   | "End"            { END }
   | "Rec"            { REC }
   | "Z"              { Z }

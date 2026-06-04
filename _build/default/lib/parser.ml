@@ -1570,7 +1570,7 @@ module Tables = struct
         let _endpos = _endpos__1_ in
         let _v : (Mini_ast.ty) = 
 # 69 "lib/parser.mly"
-                                                                         ( TyRelease )
+                                                                         ( TySharedToLinear(TyFixShared) )
 # 1575 "lib/parser.ml"
          in
         {
@@ -1595,7 +1595,7 @@ module Tables = struct
         let _endpos = _endpos__1_ in
         let _v : (Mini_ast.ty) = 
 # 70 "lib/parser.mly"
-                                                                         ( TyAcquire )
+                                                                         ( TyLinearToShared(TyFixShared) )
 # 1600 "lib/parser.ml"
          in
         {

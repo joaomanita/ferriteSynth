@@ -66,8 +66,8 @@ s_type:
   | SESSION; LT; t = s_type; GT                                          { TySession(t) }
   | REC; LT; t = s_type; GT                                              { TyRec(t) }
   | t = z_type                                                           { TyZ (t) }
-  | RELEASE                                                              { TyRelease }
-  | ACQUIRE                                                              { TyAcquire }
+  | RELEASE                                                              { TySharedToLinear(TyFixShared) }
+  | ACQUIRE                                                              { TyLinearToShared(TyFixShared) }
 
 labeled_type:
   | label = ID; COLON; t = s_type { (label, t) }

@@ -1,0 +1,11 @@
+use ferrite_session::{internal::protocol::Lock, prelude::*};
+
+type Counter = LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>;
+type Detached = ReceiveValue<u64, SharedToLinear<Counter>>;
+
+fn shared_provider_1(count: u64) -> Session<Counter> {
+    accept_shared_session(send_value(
+        count,
+        detach_shared_session(shared_provider_1(count)),
+    ))
+}

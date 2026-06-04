@@ -1,0 +1,18 @@
+use std::{
+  collections::VecDeque,
+  future::Future,
+  time::Duration,
+};
+
+use ferrite_session::prelude::*;
+use tokio::time::sleep;
+
+// Example implementation of Rust channels using shared channels
+
+type Receiver = Rec<ExternalChoice<Next: SendValue<Int, Z>, Close: End>>;
+
+type Channel = LinearToShared<ExternalChoice<ReceiveNext: ReceiveValue<Int, Release>, SendNext: SendValue<Int, Release>>>;
+
+fn make_receiver(chan: Channel) -> Session<Receiver> { @SYNTHESIZE }
+
+
