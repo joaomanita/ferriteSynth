@@ -351,9 +351,14 @@ let rec substShared replacement t =
       TyReceiveChannel (substShared replacement t1, substShared replacement t2)
   | TySendValue (v, t1) -> TySendValue (v, substShared replacement t1)
   | TyReceiveValue (v, t1) -> TyReceiveValue (v, substShared replacement t1)
-  | TySharedToLinear t1 -> TySharedToLinear (substShared replacement t1)
-  | TyLinearToShared t1 -> TyLinearToShared (substShared replacement t1)
-  | TyFixShared -> replacement
+  | TySharedToLinear t1 -> (
+      match t1 with
+      | TyFixShared -> TySharedToLinear replacement
+      | _ -> TySharedToLinear t1)
+  | TyLinearToShared t1 -> (
+      match t1 with
+      | TyFixShared -> TyLinearToShared replacement
+      | _ -> TyLinearToShared t1)
   | TySession t1 -> TySession (substShared replacement t1)
   | _ -> t
 
@@ -739,13 +744,15 @@ and focusR gamma delta_in t psi zeta ident =
         else
           let t2 = unfoldShared t in
           (try
-             if not (List.mem t1 psi) then raise Fail
-             else
-               let (name, tyArgs), _ = searchFuncType t1 !fn_ctxt in
-               let tyArgsList = List.map snd tyArgs in
-               inversionR gamma delta_in []
-                 (TyApp (name, tyArgsList))
-                 psi zeta (ident + 1)
+             print_psi psi;
+             if not (List.mem t1 psi) then raise Fail else log "%s" "boas1";
+             log "%s" (print_type t1);
+             let (name, tyArgs), _ = searchFuncType t1 !fn_ctxt in
+             log "%s" "boas2";
+             let tyArgsList = List.map snd tyArgs in
+             inversionR gamma delta_in []
+               (TyApp (name, tyArgsList))
+               psi zeta (ident + 1)
            with Fail ->
              inversionR gamma delta_in [] t2 (t :: psi) zeta (ident + 1))
           >>= fun (delta_out, e1) -> return (delta_out, Detach e1)
@@ -951,4 +958,8 @@ and focusL' gamma delta_in id foc t psi zeta ident =
 
 and print_zeta zeta =
   let elems = List.map (fun (id, n) -> Printf.sprintf "(%s, %d)" id n) zeta in
+  log "[%s]\n" (String.concat "; " elems)
+
+and print_psi psi =
+  let elems = List.map (fun t -> Printf.sprintf "(%s)" (print_type t)) psi in
   log "[%s]\n" (String.concat "; " elems)

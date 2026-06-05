@@ -1,67 +1,1099 @@
-< InversionR: FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>
- < InversionR: Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>
-  < InversionR: LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>
-   < inversionL: Empty with goal LinearToShared<SendValue<u64, SharedToLinear<FixShared>>> 
-   < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-    < decideFocus: LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>
-    < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-     < FocusR: LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>
-      < InversionR: SendValue<u64, SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>
-       < inversionL: Empty with goal SendValue<u64, SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>> 
-       < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-        < decideFocus: SendValue<u64, SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>
-        < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-         < FocusR: SendValue<u64, SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>
-          < FocusR: SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>
-           < InversionR: App<shared_provider_1, u64>
-            < InversionR: u64
-             < inversionL: Empty with goal u64 
-             < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-              < decideFocus: u64
-              < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-               < FocusR: u64
-                success
-               < FocusR: u64
-                success
-         < FocusR: SendValue<u64, SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>
-          < FocusR: SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>
-           < InversionR: App<shared_provider_1, u64>
-            < InversionR: u64
-             < inversionL: Empty with goal u64 
-             < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-              < decideFocus: u64
-              < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-               < FocusR: u64
-                success
-               < FocusR: u64
-                success
-     < FocusR: LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>
-      < InversionR: SendValue<u64, SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>
-       < inversionL: Empty with goal SendValue<u64, SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>> 
-       < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-        < decideFocus: SendValue<u64, SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>
-        < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-         < FocusR: SendValue<u64, SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>
-          < FocusR: SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>
-           < InversionR: App<shared_provider_1, u64>
-            < InversionR: u64
-             < inversionL: Empty with goal u64 
-             < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-              < decideFocus: u64
-              < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-               < FocusR: u64
-                success
-               < FocusR: u64
-                success
-         < FocusR: SendValue<u64, SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>
-          < FocusR: SharedToLinear<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>
-           < InversionR: App<shared_provider_1, u64>
-            < InversionR: u64
-             < inversionL: Empty with goal u64 
-             < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-              < decideFocus: u64
-              < [(shared_provider_1, FN<<shared_provider_1, count: u64>, Session<LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>>>), (count, u64), ] []
-               < FocusR: u64
-                success
-               < FocusR: u64
-                success
+< InversionR: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+ < InversionR: Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>
+  < InversionR: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+   < InversionR: End
+    < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+     < inversionL: Empty with goal End 
+     < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+      < decideFocus: End
+      < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+       < FocusR: End
+       < focusR: fail
+       < focusL: End
+       < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+       > 1
+        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+        < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+0
+         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+           < inversionL: End with goal End 
+            < inversionL: Empty with goal End 
+            < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+             < decideFocus: End
+             < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+              < FocusR: End
+               success
+           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+           < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+             < inversionL: Empty with goal End 
+             < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+              < decideFocus: End
+              < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+               < FocusR: End
+               < focusR: fail
+               < focusL: End
+               < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+               > 1
+                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+1
+                 < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                  < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                   < inversionL: End with goal End 
+                    < inversionL: Empty with goal End 
+                    < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                     < decideFocus: End
+                     < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                      < FocusR: End
+                       success
+                   < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                   < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                    < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                     < inversionL: Empty with goal End 
+                     < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                      < decideFocus: End
+                      < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       < FocusR: End
+                       < focusR: fail
+                       < focusL: End
+                       < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_2, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_2, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_2, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_2, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_2, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_2, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_2, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_2, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_2, String), (binder_1, String), (binder_0, String), ] [(binder_3, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_2, String), (binder_1, String), (binder_0, String), ] [(binder_3, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_2, String), (binder_1, String), (binder_0, String), ] [(binder_3, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_2, String), (binder_1, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_2, String), (binder_1, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_2, String), (binder_1, String), (binder_0, String), ] [(binder_3, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_2, String), (binder_1, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_2, String), (binder_1, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+                      < FocusR: End
+                       success
+                       < focusL: End
+                       < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_4, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_4, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_4, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_4, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_4, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_4, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_4, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_4, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_4, String), (binder_1, String), (binder_0, String), ] [(binder_5, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_4, String), (binder_1, String), (binder_0, String), ] [(binder_5, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_4, String), (binder_1, String), (binder_0, String), ] [(binder_5, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_4, String), (binder_1, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_4, String), (binder_1, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_4, String), (binder_1, String), (binder_0, String), ] [(binder_5, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_4, String), (binder_1, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_4, String), (binder_1, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+                      < FocusR: End
+                       success
+                       < focusL: End
+                       < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_6, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_6, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_6, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_6, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_6, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_6, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_6, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_6, String), (binder_1, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_6, String), (binder_1, String), (binder_0, String), ] [(binder_7, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_6, String), (binder_1, String), (binder_0, String), ] [(binder_7, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_6, String), (binder_1, String), (binder_0, String), ] [(binder_7, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_6, String), (binder_1, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_6, String), (binder_1, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_6, String), (binder_1, String), (binder_0, String), ] [(binder_7, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_6, String), (binder_1, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_6, String), (binder_1, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+              < FocusR: End
+               success
+               < focusL: End
+               < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+               > 1
+                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+1
+                 < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                  < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                   < inversionL: End with goal End 
+                    < inversionL: Empty with goal End 
+                    < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                     < decideFocus: End
+                     < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                      < FocusR: End
+                       success
+                   < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                   < [(binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                    < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                     < inversionL: Empty with goal End 
+                     < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                      < decideFocus: End
+                      < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       < FocusR: End
+                       < focusR: fail
+                       < focusL: End
+                       < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_9, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_9, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_9, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_9, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_9, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_9, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_9, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_9, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_9, String), (binder_8, String), (binder_0, String), ] [(binder_10, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_9, String), (binder_8, String), (binder_0, String), ] [(binder_10, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_9, String), (binder_8, String), (binder_0, String), ] [(binder_10, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_9, String), (binder_8, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_9, String), (binder_8, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_9, String), (binder_8, String), (binder_0, String), ] [(binder_10, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_9, String), (binder_8, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_9, String), (binder_8, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+                      < FocusR: End
+                       success
+                       < focusL: End
+                       < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_11, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_11, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_11, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_11, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_11, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_11, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_11, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_11, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_11, String), (binder_8, String), (binder_0, String), ] [(binder_12, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_11, String), (binder_8, String), (binder_0, String), ] [(binder_12, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_11, String), (binder_8, String), (binder_0, String), ] [(binder_12, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_11, String), (binder_8, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_11, String), (binder_8, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_11, String), (binder_8, String), (binder_0, String), ] [(binder_12, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_11, String), (binder_8, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_11, String), (binder_8, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+                      < FocusR: End
+                       success
+                       < focusL: End
+                       < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_13, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_13, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_13, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_13, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_13, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_13, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_13, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_13, String), (binder_8, String), (binder_0, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_13, String), (binder_8, String), (binder_0, String), ] [(binder_14, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_13, String), (binder_8, String), (binder_0, String), ] [(binder_14, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_13, String), (binder_8, String), (binder_0, String), ] [(binder_14, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_13, String), (binder_8, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_13, String), (binder_8, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_13, String), (binder_8, String), (binder_0, String), ] [(binder_14, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_13, String), (binder_8, String), (binder_0, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_13, String), (binder_8, String), (binder_0, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+       < focusL: End
+       < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+       > 1
+        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+        < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+0
+         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+           < inversionL: End with goal End 
+            < inversionL: Empty with goal End 
+            < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+             < decideFocus: End
+             < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+              < FocusR: End
+               success
+           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+           < [(read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+             < inversionL: Empty with goal End 
+             < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+              < decideFocus: End
+              < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+               < FocusR: End
+               < focusR: fail
+               < focusL: End
+               < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+               > 1
+                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+1
+                 < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                  < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                   < inversionL: End with goal End 
+                    < inversionL: Empty with goal End 
+                    < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                     < decideFocus: End
+                     < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                      < FocusR: End
+                       success
+                   < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                   < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                    < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                     < inversionL: Empty with goal End 
+                     < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                      < decideFocus: End
+                      < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       < FocusR: End
+                       < focusR: fail
+                       < focusL: End
+                       < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_17, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_17, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_17, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_17, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_17, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_17, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_17, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_17, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_17, String), (binder_16, String), (binder_15, String), ] [(binder_18, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_17, String), (binder_16, String), (binder_15, String), ] [(binder_18, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_17, String), (binder_16, String), (binder_15, String), ] [(binder_18, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_17, String), (binder_16, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_17, String), (binder_16, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_17, String), (binder_16, String), (binder_15, String), ] [(binder_18, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_17, String), (binder_16, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_17, String), (binder_16, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+                      < FocusR: End
+                       success
+                       < focusL: End
+                       < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_19, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_19, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_19, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_19, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_19, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_19, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_19, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_19, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_19, String), (binder_16, String), (binder_15, String), ] [(binder_20, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_19, String), (binder_16, String), (binder_15, String), ] [(binder_20, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_19, String), (binder_16, String), (binder_15, String), ] [(binder_20, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_19, String), (binder_16, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_19, String), (binder_16, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_19, String), (binder_16, String), (binder_15, String), ] [(binder_20, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_19, String), (binder_16, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_19, String), (binder_16, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+                      < FocusR: End
+                       success
+                       < focusL: End
+                       < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_21, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_21, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_21, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_21, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_21, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_21, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_21, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_21, String), (binder_16, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_21, String), (binder_16, String), (binder_15, String), ] [(binder_22, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_21, String), (binder_16, String), (binder_15, String), ] [(binder_22, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_21, String), (binder_16, String), (binder_15, String), ] [(binder_22, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_21, String), (binder_16, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_21, String), (binder_16, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_21, String), (binder_16, String), (binder_15, String), ] [(binder_22, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_21, String), (binder_16, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_21, String), (binder_16, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+              < FocusR: End
+               success
+               < focusL: End
+               < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+               > 1
+                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+1
+                 < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                  < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                   < inversionL: End with goal End 
+                    < inversionL: Empty with goal End 
+                    < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                     < decideFocus: End
+                     < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                      < FocusR: End
+                       success
+                   < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                   < [(binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                    < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                     < inversionL: Empty with goal End 
+                     < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                      < decideFocus: End
+                      < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       < FocusR: End
+                       < focusR: fail
+                       < focusL: End
+                       < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_24, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_24, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_24, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_24, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_24, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_24, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_24, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_24, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_24, String), (binder_23, String), (binder_15, String), ] [(binder_25, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_24, String), (binder_23, String), (binder_15, String), ] [(binder_25, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_24, String), (binder_23, String), (binder_15, String), ] [(binder_25, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_24, String), (binder_23, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_24, String), (binder_23, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_24, String), (binder_23, String), (binder_15, String), ] [(binder_25, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_24, String), (binder_23, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_24, String), (binder_23, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+                      < FocusR: End
+                       success
+                       < focusL: End
+                       < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_26, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_26, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_26, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_26, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_26, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_26, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_26, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_26, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_26, String), (binder_23, String), (binder_15, String), ] [(binder_27, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_26, String), (binder_23, String), (binder_15, String), ] [(binder_27, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_26, String), (binder_23, String), (binder_15, String), ] [(binder_27, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_26, String), (binder_23, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_26, String), (binder_23, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_26, String), (binder_23, String), (binder_15, String), ] [(binder_27, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_26, String), (binder_23, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_26, String), (binder_23, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success
+                      < FocusR: End
+                       success
+                       < focusL: End
+                       < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                       > 1
+                        < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                        < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+2
+                         < FocusL': InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>>
+                          < inversionL: InternalChoice<l: End, r: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>>> with goal End 
+                           < inversionL: End with goal End 
+                            < inversionL: Empty with goal End 
+                            < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                             < decideFocus: End
+                             < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                              < FocusR: End
+                               success
+                           < inversionL: SendValue<String, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>> with goal End 
+                           < [(binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+                            < inversionL: Rec<InternalChoice<l: End, r: SendValue<String, Z>>> with goal End 
+                             < inversionL: Empty with goal End 
+                             < [(binder_28, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                              < decideFocus: End
+                              < [(binder_28, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < FocusR: End
+                               < focusR: fail
+                               < focusL: End
+                               < [(binder_28, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               > 1
+                                < FocusL': Rec<InternalChoice<l: End, r: SendValue<String, Z>>>
+                                < [(binder_28, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] []
+3
+                                < focusL: fail
+                               < focusGamma: String
+                               < [(binder_28, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_28, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: String
+                               < [(binder_28, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                               < focusGamma: FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>
+                               < [(binder_28, String), (binder_23, String), (binder_15, String), (read_queue, FN<<read_queue, >, Session<ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>>>), ] [(chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                < InversionR: App<read_queue, >
+                                < inversionL: ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End> with goal End 
+                                 < inversionL: Empty with goal End 
+                                 < [(binder_28, String), (binder_23, String), (binder_15, String), ] [(binder_29, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                  < decideFocus: End
+                                  < [(binder_28, String), (binder_23, String), (binder_15, String), ] [(binder_29, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   < FocusR: End
+                                   < focusR: fail
+                                   < focusL: End
+                                   < [(binder_28, String), (binder_23, String), (binder_15, String), ] [(binder_29, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_28, String), (binder_23, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_28, String), (binder_23, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                                   < focusL: End
+                                   < [(binder_28, String), (binder_23, String), (binder_15, String), ] [(binder_29, ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>), (chan_0, Rec<InternalChoice<l: End, r: SendValue<String, Z>>>), ]
+                                   > 2
+                                    < FocusL': ReceiveChannel<Rec<InternalChoice<l: End, r: SendValue<String, Z>>>, End>
+                                     < inversionL: End with goal End 
+                                      < inversionL: Empty with goal End 
+                                      < [(binder_28, String), (binder_23, String), (binder_15, String), ] []
+                                       < decideFocus: End
+                                       < [(binder_28, String), (binder_23, String), (binder_15, String), ] []
+                                        < FocusR: End
+                                         success
+                                        < FocusR: End
+                                         success
+                              < FocusR: End
+                               success
+                              < FocusR: End
+                               success

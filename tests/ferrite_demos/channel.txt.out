@@ -5,34 +5,35 @@ use tokio::time::sleep;
 
 // Example implementation of Rust channels using shared channels
 
-type Receiver = Rec<ExternalChoice<Next: SendValue<Int, Z>, Close: End>>;
 
 type Channel = LinearToShared<
-    ExternalChoice<ReceiveNext: ReceiveValue<Int, Release>, SendNext: SendValue<Int, Release>>,
+    ExternalChoice<
+        ReceiveNext: ReceiveValue<Int, SharedToLinear<FixShared>>,
+        SendNext: SendValue<Int, SharedToLinear<FixShared>>,
+    >,
 >;
+
+fn make_channel(val: Int) -> Session<Channel> {
+    accept_shared_session(
+        offer_choice! { ReceiveNext: receive_value(|val_1| {detach_shared_session(make_channel(val_1))}), SendNext: send_value(val, detach_shared_session(make_channel(val))) },
+    )
+}
+
+type Receiver = Rec<ExternalChoice<Next: SendValue<Int, Z>, Close: End>>;
 
 fn make_receiver(
     chan: LinearToShared<
-        ExternalChoice<ReceiveNext: ReceiveValue<Int, Release>, SendNext: SendValue<Int, Release>>,
+        ExternalChoice<
+            ReceiveNext: ReceiveValue<Int, SharedToLinear<FixShared>>,
+            SendNext: SendValue<Int, SharedToLinear<FixShared>>,
+        >,
     >,
+    val: Int,
 ) -> Session<Receiver> {
     fix_session(
-        offer_choice! { Next: cut! { []; make_receiver(
-                                        accept_shared_session(offer_choice!
-                                        { ReceiveNext: receive_value(|val_1| 
-                                        {acquire_shared_session(chan, move |chan_2| 
-                                        {choose!(chan_2, SendNext, receive_value_from(chan_2, move |binder_5| {chan_2}))})}), 
-                                        SendNext: acquire_shared_session(chan, move |chan_3| 
-                                        {choose!(chan_3, SendNext, receive_value_from(chan_3, move |binder_7| 
-                                        {send_value(binder_7, chan_3)}))}) })); binder_8 => 
-                                        {unfix_session(binder_8, choose!(binder_8, Next, receive_value_from(binder_8, move |binder_74| 
-                                        {send_value(binder_74, make_receiver(unfix_session(binder_8, 
-                                        choose!(binder_8, Close, wait(binder_8, 
-                                        accept_shared_session(offer_choice!{ ReceiveNext: receive_value(|val_33| 
-                                        {acquire_shared_session(chan, move |chan_66| {choose!(chan_66, SendNext, 
-                                        receive_value_from(chan_66, move |binder_136| {chan_66}))})}), 
-                                        SendNext: acquire_shared_session(chan, move |chan_67| {choose!(chan_67, 
-                                        SendNext, receive_value_from(chan_67, move |binder_138| 
-                                        {send_value(binder_138, chan_67)}))}) }))))))})))}}, Close: terminate () },
+        offer_choice! { Next: send_value(val, 
+                            make_receiver(accept_shared_session(offer_choice!{ ReceiveNext: receive_value(|val_5| 
+                                {detach_shared_session(make_channel(val_5))}), SendNext: send_value(val, detach_shared_session(make_channel(val))) }), val)), 
+                                    Close: terminate () },
     )
 }

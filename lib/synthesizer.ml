@@ -351,9 +351,14 @@ let rec substShared replacement t =
       TyReceiveChannel (substShared replacement t1, substShared replacement t2)
   | TySendValue (v, t1) -> TySendValue (v, substShared replacement t1)
   | TyReceiveValue (v, t1) -> TyReceiveValue (v, substShared replacement t1)
-  | TySharedToLinear t1 -> TySharedToLinear (substShared replacement t1)
-  | TyLinearToShared t1 -> TyLinearToShared (substShared replacement t1)
-  | TyFixShared -> replacement
+  | TySharedToLinear t1 -> (
+      match t1 with
+      | TyFixShared -> TySharedToLinear replacement
+      | _ -> TySharedToLinear t1)
+  | TyLinearToShared t1 -> (
+      match t1 with
+      | TyFixShared -> TyLinearToShared replacement
+      | _ -> TyLinearToShared t1)
   | TySession t1 -> TySession (substShared replacement t1)
   | _ -> t
 
@@ -951,4 +956,8 @@ and focusL' gamma delta_in id foc t psi zeta ident =
 
 and print_zeta zeta =
   let elems = List.map (fun (id, n) -> Printf.sprintf "(%s, %d)" id n) zeta in
+  log "[%s]\n" (String.concat "; " elems)
+
+and print_psi psi =
+  let elems = List.map (fun t -> Printf.sprintf "(%s)" (print_type t)) psi in
   log "[%s]\n" (String.concat "; " elems)
