@@ -1,0 +1,10 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+type myType = ReceiveChannel<
+    ExternalChoice<l: ReceiveChannel<A, B>, r: ReceiveChannel<C, D>>,
+    ReceiveChannel<SendChannel<A, C>, SendChannel<B, D>>,
+>;
+
+// couldnt synthesize function

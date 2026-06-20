@@ -10,4 +10,4 @@ type Stream = Rec<
   >
 >;
 
-fn producer(arg1: String) -> Session<Stream> { @SYNTHESIZE }
+fn producer(arg1: String) -> Session<Stream> { @SYNTHESIZE  []}

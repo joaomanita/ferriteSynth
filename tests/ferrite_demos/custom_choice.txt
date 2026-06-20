@@ -2,6 +2,6 @@ use ferrite_session::prelude::*;
 
 type FooBarBaz = ExternalChoice<Foo: SendValue<String, End>, Bar: ReceiveValue<u64, End>, Baz: End, Quux: SendValue<i32, End>>;
 
-fn provider() -> Session<FooBarBaz> { @SYNTHESIZE }
+fn provider() -> Session<FooBarBaz> { @SYNTHESIZE  []}
 
-fn client() -> Session<ReceiveChannel<FooBarBaz, End>> { @SYNTHESIZE }
+fn client() -> Session<ReceiveChannel<FooBarBaz, End>> { @SYNTHESIZE  []}

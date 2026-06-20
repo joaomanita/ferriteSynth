@@ -1,0 +1,17 @@
+fn sender() -> ReceiveChannel<
+    A,
+    ReceiveChannel<A, ReceiveChannel<ReceiveChannel<A, ReceiveChannel<A, End>>, End>>,
+> {
+    receive_channel(|chan_0| {
+        receive_channel(|chan_1| {
+            receive_channel(|chan_2| {
+                send_channel_to(
+                    chan_2,
+                    chan_1,
+                    send_channel_to(chan_2, chan_0, wait(chan_2, terminate())),
+                )
+            })
+        })
+    })
+}
+// fn sender() -> ReceiveChannel<A, ReceiveChannel<A, ReceiveChannel<ReceiveChannel<A, ReceiveChannel<A, End>>, End>>> { receive_channel(|chan_0| {receive_channel(|chan_1| {receive_channel(|chan_2| {send_channel_to(chan_2, chan_0, send_channel_to(chan_2, chan_1, wait(chan_2, terminate ())))})})}) }

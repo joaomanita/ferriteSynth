@@ -1,5 +1,6 @@
 type token =
     Z
+  | USE
   | TYPE_KEYWORD
   | SYNTHESIZE
   | SHAREDTOLINEAR
@@ -8,6 +9,7 @@ type token =
   | SENDCHANNEL
   | SEMICOLON
   | S
+  | RSQUARE
   | RPAR
   | RELEASE
   | RECEIVEVALUE
@@ -17,6 +19,7 @@ type token =
   | RAW of string
   | MINUS
   | LT
+  | LSQUARE
   | LPAR
   | LINEARTOSHARED
   | LBRACE
@@ -35,10 +38,12 @@ type token =
   | ACQUIRE
 val menhir_begin_marker : int
 val xv_z_type : int
+val xv_used_funcs : string list
 val xv_type_def : Mini_ast.decl
 val xv_separated_nonempty_list_COMMA_labeled_type_ :
   (string * Mini_ast.ty) list
 val xv_separated_nonempty_list_COMMA_arg_ : (string * Mini_ast.ty) list
+val xv_separated_nonempty_list_COMMA_ID_ : string list
 val xv_separated_list_COMMA_labeled_type_ : (string * Mini_ast.ty) list
 val xv_separated_list_COMMA_arg_ : (string * Mini_ast.ty) list
 val xv_s_type : Mini_ast.ty

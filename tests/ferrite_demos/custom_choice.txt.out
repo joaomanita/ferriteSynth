@@ -16,7 +16,7 @@ fn client() -> Session<ReceiveChannel<FooBarBaz, End>> {
         choose!(
             chan_0,
             Quux,
-            receive_value_from(chan_0, move |binder_24| { wait(chan_0, terminate()) })
+            receive_value_from(chan_0, move |binder_11| { wait(chan_0, terminate()) })
         )
     })
 }

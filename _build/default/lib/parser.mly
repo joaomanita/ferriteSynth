@@ -13,6 +13,8 @@
 %token RPAR
 %token LBRACE
 %token RBRACE
+%token LSQUARE
+%token RSQUARE
 %token EQ
 %token COMMA
 %token COLON
@@ -36,6 +38,7 @@
 %token RELEASE
 %token ACQUIRE
 %token SYNTHESIZE
+%token USE
 %start <decl list> prog
 %%
 
@@ -73,10 +76,26 @@ labeled_type:
   | label = ID; COLON; t = s_type { (label, t) }
 
 func:
-  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE AT SYNTHESIZE RBRACE { Function(TyFunc((name, ars), ret)) }
+  | FUNC; name = ID;
+    LPAR; ars = separated_list(COMMA, arg); RPAR;
+    MINUS; GT; ret = s_type;
+    LBRACE;
+    AT; SYNTHESIZE;
+    LSQUARE;
+    funcs = used_funcs;
+    RSQUARE;
+    RBRACE
+    {
+      Function (TyFunc (((name, ars), ret), funcs))
+    }
+
+used_funcs:
+  |                             { [] }
+  | USE; ids = separated_nonempty_list(COMMA, ID); SEMICOLON
+                                { ids }
 
 closed_func:
-  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE; body = list(RAW); RBRACE { ClosedFunction(TyFunc((name, ars), ret), String.concat "" body) }
+  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE; body = list(RAW); RBRACE { ClosedFunction((TyFunc(((name, ars), ret), []), String.concat "" body)) }
 
 arg:
   | arg_name = ID; COLON; t = arg_type { (arg_name, t) }

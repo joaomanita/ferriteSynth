@@ -1,0 +1,6 @@
+fn sender() -> ReceiveChannel<A, ReceiveChannel<A,
+        ReceiveChannel<ReceiveChannel<A, ReceiveChannel<A, End>>,
+            End
+        >
+    >
+> { @SYNTHESIZE [] }

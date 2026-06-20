@@ -62,13 +62,14 @@ let rec resolve_type t =
   | TyLinearToShared t -> TyLinearToShared (resolve_type t)
   | TyFixShared -> t
   | TySession t -> TySession (resolve_type t)
-  | TyFunc ((name, argList), tRet) ->
+  | TyFunc (((name, argList), tRet), funcs) ->
       TyFunc
-        ( ( name,
-            List.map
-              (fun (argName, argType) -> (argName, resolve_type argType))
-              argList ),
-          resolve_type tRet )
+        ( ( ( name,
+              List.map
+                (fun (argName, argType) -> (argName, resolve_type argType))
+                argList ),
+            resolve_type tRet ),
+          funcs )
   | TyApp (func_name, tyArgs) ->
       TyApp (func_name, (List.map (fun tyArg -> resolve_type tyArg)) tyArgs)
   | TyRec t -> TyRec (resolve_type t)
@@ -163,7 +164,7 @@ let rec print_type t =
   | TyLinearToShared t -> "LinearToShared<" ^ print_type t ^ ">"
   | TyFixShared -> "FixShared"
   | TySession t -> "Session<" ^ print_type t ^ ">"
-  | TyFunc ((name, tyArgs), tyRet) ->
+  | TyFunc (((name, tyArgs), tyRet), _) ->
       "FN<<" ^ name ^ ", "
       ^ print_labeled_choices tyArgs print_type
       ^ ">, " ^ print_type tyRet ^ ">"
@@ -420,20 +421,27 @@ let rec prune_recursive_choices target ty =
 
 let process_closed_function closed =
   match closed with
-  | TyFunc ((name, argList), tRet), body ->
-      fn_ctxt := (name, TyFunc ((name, argList), tRet)) :: !fn_ctxt;
+  | TyFunc (((name, argList), tRet), funcs), body ->
+      fn_ctxt := (name, TyFunc (((name, argList), tRet), funcs)) :: !fn_ctxt;
       Func ((name, argList), (tRet, RawText body))
   | _ -> raise Fail
 
 let rec synthesize t =
-  let programs =
-    inversionR !fn_ctxt [] [] (resolve_type t) [] [] 0 >>= fun (delta_out, e) ->
-    if delta_out <> [] then (
-      print_fail "synthesize" 0;
-      Choice.fail)
-    else return (delta_out, e)
-  in
-  run_all programs
+  match t with
+  | TyFunc (_, allowed_funcs) ->
+      let gamma =
+        List.filter (fun (name, _) -> List.mem name allowed_funcs) !fn_ctxt
+      in
+      let programs =
+        inversionR gamma [] [] (resolve_type t) [] [] 0
+        >>= fun (delta_out, e) ->
+        if delta_out <> [] then (
+          print_fail "synthesize" 0;
+          Choice.fail)
+        else return (delta_out, e)
+      in
+      run_all programs
+  | _ -> raise Fail
 
 (* Apply all invertible/asynchronous rules to the goal t*)
 and inversionR gamma delta_in omega t psi zeta ident =
@@ -441,7 +449,7 @@ and inversionR gamma delta_in omega t psi zeta ident =
 
   let tm =
     match t with
-    | TyFunc ((name, argList), tRet) ->
+    | TyFunc (((name, argList), tRet), _) ->
         fn_ctxt := (name, t) :: !fn_ctxt;
         inversionR
           ((name, t) :: (argList @ gamma))
@@ -540,7 +548,7 @@ and inversionL gamma delta_in omega t psi zeta ident =
         match ty with
         | TyPrimitive _ ->
             inversionL ((x, ty) :: gamma) delta_in xs t psi zeta (ident + 1)
-        | TyFunc ((name, argList), tRet) ->
+        | TyFunc (((name, argList), tRet), _) ->
             if tRet <> t then (
               print_fail "inversionL" ident;
               Choice.fail)
@@ -677,7 +685,7 @@ and focusGamma gamma delta_in t psi zeta ident =
       let gamma' = removeWithId id ty gamma in
       let tm =
         match ty with
-        | TyFunc ((name, argList), TySession tRet) ->
+        | TyFunc (((name, argList), TySession tRet), _) ->
             if (not (ends_in tRet t)) && not (used_by_delta tRet delta_in) then
               Choice.fail
             else
@@ -824,7 +832,7 @@ and removeWithId id t = function
 
 and searchFuncType t = function
   | [] -> raise Fail
-  | (_, TyFunc ((func_id, argList), retType)) :: rest ->
+  | (_, TyFunc (((func_id, argList), retType), _)) :: rest ->
       if retType = TySession t then ((func_id, argList), retType)
       else searchFuncType t rest
   | _ -> raise Fail

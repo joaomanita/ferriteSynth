@@ -24,7 +24,9 @@ and ty =
   | TyLinearToShared of ty
   | TyFixShared
   | TySession of ty
-  | TyFunc of (string * (label * ty) list) * ty
+  | TyFunc of func_ty * string list
   | TyApp of (string * ty list)
   | TyRec of ty
   | TyZ of int
+
+and func_ty = (string * (label * ty) list) * ty

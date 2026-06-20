@@ -4,6 +4,6 @@ use ferrite_session::prelude::*;
 
 type HelloSession = ReceiveValue<String, SendValue<String, End>>;
 
-fn server() -> Session<HelloSession> { @SYNTHESIZE }
+fn server() -> Session<HelloSession> { @SYNTHESIZE []}
 
-fn client(arg1: String) -> ReceiveChannel<HelloSession, End> { @SYNTHESIZE }
+fn client(arg1: String) -> ReceiveChannel<HelloSession, End> { @SYNTHESIZE []}

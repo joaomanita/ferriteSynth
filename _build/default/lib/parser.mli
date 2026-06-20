@@ -3,6 +3,7 @@
 
 type token = 
   | Z
+  | USE
   | TYPE_KEYWORD
   | SYNTHESIZE
   | SHAREDTOLINEAR
@@ -11,6 +12,7 @@ type token =
   | SENDCHANNEL
   | SEMICOLON
   | S
+  | RSQUARE
   | RPAR
   | RELEASE
   | RECEIVEVALUE
@@ -20,6 +22,7 @@ type token =
   | RAW of (string)
   | MINUS
   | LT
+  | LSQUARE
   | LPAR
   | LINEARTOSHARED
   | LBRACE
@@ -57,6 +60,7 @@ module MenhirInterpreter : sig
   type _ terminal = 
     | T_error : unit terminal
     | T_Z : unit terminal
+    | T_USE : unit terminal
     | T_TYPE_KEYWORD : unit terminal
     | T_SYNTHESIZE : unit terminal
     | T_SHAREDTOLINEAR : unit terminal
@@ -65,6 +69,7 @@ module MenhirInterpreter : sig
     | T_SENDCHANNEL : unit terminal
     | T_SEMICOLON : unit terminal
     | T_S : unit terminal
+    | T_RSQUARE : unit terminal
     | T_RPAR : unit terminal
     | T_RELEASE : unit terminal
     | T_RECEIVEVALUE : unit terminal
@@ -74,6 +79,7 @@ module MenhirInterpreter : sig
     | T_RAW : (string) terminal
     | T_MINUS : unit terminal
     | T_LT : unit terminal
+    | T_LSQUARE : unit terminal
     | T_LPAR : unit terminal
     | T_LINEARTOSHARED : unit terminal
     | T_LBRACE : unit terminal
@@ -95,9 +101,11 @@ module MenhirInterpreter : sig
   
   type _ nonterminal = 
     | N_z_type : (int) nonterminal
+    | N_used_funcs : (string list) nonterminal
     | N_type_def : (Mini_ast.decl) nonterminal
     | N_separated_nonempty_list_COMMA_labeled_type_ : ((string * Mini_ast.ty) list) nonterminal
     | N_separated_nonempty_list_COMMA_arg_ : ((string * Mini_ast.ty) list) nonterminal
+    | N_separated_nonempty_list_COMMA_ID_ : (string list) nonterminal
     | N_s_type : (Mini_ast.ty) nonterminal
     | N_prog : (Mini_ast.decl list) nonterminal
     | N_loption_separated_nonempty_list_COMMA_labeled_type__ : ((string * Mini_ast.ty) list) nonterminal

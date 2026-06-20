@@ -61,15 +61,18 @@ rule read = parse
   }
 
   (* ---- STRUCTURED TOKENS ---- *)
-  | '<' { match !current_mode with | Raw -> RAW "<" | _ -> LT }
-  | '>' { match !current_mode with | Raw -> RAW ">" | _ -> GT }
-  | '(' { match !current_mode with | Raw -> RAW "(" | _ -> LPAR }
-  | ')' { match !current_mode with | Raw -> RAW ")" | _ -> RPAR }
-  | ':' { match !current_mode with | Raw -> RAW ":" | _ -> COLON }
-  | '=' { match !current_mode with | Raw -> RAW "=" | _ -> EQ }
-  | ',' { match !current_mode with | Raw -> RAW "," | _ -> COMMA }
-  | '-' { match !current_mode with | Raw -> RAW "-" | _ -> MINUS }
-  | '@' { match !current_mode with | Raw -> RAW "@" | _ -> AT }
+  | '<'   { match !current_mode with | Raw -> RAW "<" | _ -> LT }
+  | '>'   { match !current_mode with | Raw -> RAW ">" | _ -> GT }
+  | '('   { match !current_mode with | Raw -> RAW "(" | _ -> LPAR }
+  | ')'   { match !current_mode with | Raw -> RAW ")" | _ -> RPAR }
+  | ':'   { match !current_mode with | Raw -> RAW ":" | _ -> COLON }
+  | '='   { match !current_mode with | Raw -> RAW "=" | _ -> EQ }
+  | ','   { match !current_mode with | Raw -> RAW "," | _ -> COMMA }
+  | '-'   { match !current_mode with | Raw -> RAW "-" | _ -> MINUS }
+  | '@'   { match !current_mode with | Raw -> RAW "@" | _ -> AT }
+  | '['   { match !current_mode with | Raw -> RAW "[" | _ -> LSQUARE }
+  | ']'   { match !current_mode with | Raw -> RAW "]" | _ -> RSQUARE }
+  | "use" { match !current_mode with | Raw -> RAW "use" | _ -> USE }
 
   (* ---- KEYWORDS ---- *)
   | "Session"        { SESSION }

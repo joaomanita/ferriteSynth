@@ -6,4 +6,4 @@ type myType = ReceiveChannel<A, B>;
 
 fn myFunc(arg1: myType, arg2: A) -> Session<B> {}
 
-fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> { @SYNTHESIZE }
+fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> { @SYNTHESIZE [use myFunc;] }
