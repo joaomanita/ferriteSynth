@@ -9,9 +9,21 @@ use tokio::time::sleep;
 
 // Example implementation of Rust channels using shared channels
 
-type Receiver = Rec<ExternalChoice<Next: SendValue<Int, Z>, Close: End>>;
+define_choice! {
+    ActionsReceiver;
+    Next: SendValue<Int, Z>,
+    Close: End
+}
 
-type Channel = LinearToShared<ExternalChoice<ReceiveNext: ReceiveValue<Int, Release>, SendNext: SendValue<Int, Release>>>;
+define_choice! {
+    ActionsChannel;
+    ReceiveNext: ReceiveValue<Int, Release>,
+    SendNext: SendValue<int, Release>
+}
+
+type Receiver = Rec<ExternalChoice<ActionsReceiver>>;
+
+type Channel = LinearToShared<ExternalChoice<ActionsChannel>>;
 
 fn make_channel(val: Int) -> Session<Channel> { @SYNTHESIZE  []}
 

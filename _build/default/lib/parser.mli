@@ -31,9 +31,12 @@ type token =
   | GT
   | FUNC
   | EXTERNALCHOICE
+  | EXCLAMATION
   | EQ
   | EOF
   | END
+  | EITHER
+  | DEFINE_CHOICE
   | COMMA
   | COLON
   | ATOMIC of (string)
@@ -88,9 +91,12 @@ module MenhirInterpreter : sig
     | T_GT : unit terminal
     | T_FUNC : unit terminal
     | T_EXTERNALCHOICE : unit terminal
+    | T_EXCLAMATION : unit terminal
     | T_EQ : unit terminal
     | T_EOF : unit terminal
     | T_END : unit terminal
+    | T_EITHER : unit terminal
+    | T_DEFINE_CHOICE : unit terminal
     | T_COMMA : unit terminal
     | T_COLON : unit terminal
     | T_ATOMIC : (string) terminal
@@ -102,20 +108,22 @@ module MenhirInterpreter : sig
   type _ nonterminal = 
     | N_z_type : (int) nonterminal
     | N_used_funcs : (string list) nonterminal
+    | N_unit_ret_func : (Mini_ast.decl) nonterminal
     | N_type_def : (Mini_ast.decl) nonterminal
-    | N_separated_nonempty_list_COMMA_labeled_type_ : ((string * Mini_ast.ty) list) nonterminal
+    | N_separated_nonempty_list_COMMA_choice_branch_ : ((string * Mini_ast.ty) list) nonterminal
     | N_separated_nonempty_list_COMMA_arg_ : ((string * Mini_ast.ty) list) nonterminal
     | N_separated_nonempty_list_COMMA_ID_ : (string list) nonterminal
     | N_s_type : (Mini_ast.ty) nonterminal
     | N_prog : (Mini_ast.decl list) nonterminal
-    | N_loption_separated_nonempty_list_COMMA_labeled_type__ : ((string * Mini_ast.ty) list) nonterminal
     | N_loption_separated_nonempty_list_COMMA_arg__ : ((string * Mini_ast.ty) list) nonterminal
     | N_list_decl_ : (Mini_ast.decl list) nonterminal
     | N_list_RAW_ : (string list) nonterminal
-    | N_labeled_type : (string * Mini_ast.ty) nonterminal
     | N_func : (Mini_ast.decl) nonterminal
+    | N_define_choice : (Mini_ast.choice) nonterminal
     | N_decl : (Mini_ast.decl) nonterminal
     | N_closed_func : (Mini_ast.decl) nonterminal
+    | N_choice_branch : (string * Mini_ast.ty) nonterminal
+    | N_choice : (Mini_ast.choice) nonterminal
     | N_arg_type : (Mini_ast.ty) nonterminal
     | N_arg : (string * Mini_ast.ty) nonterminal
   

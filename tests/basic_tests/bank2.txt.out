@@ -1,18 +1,19 @@
 use ferrite_session::prelude::*;
 
-type BankOps = ExternalChoice<
+define_choice! {
+    BankOps;
     deposit: ReceiveValue<Int, End>,
     withdraw: SendValue<Int, ReceiveValue<Int, End>>,
-    terminate: End,
->;
+    Terminate: End
+}
 
 fn bankops(arg1: Int) -> Session<BankOps> {
-    offer_choice! { deposit: receive_value(|val_0| {terminate ()}), withdraw: send_value(arg1, receive_value(|val_2| {terminate ()})), terminate: terminate () }
+    offer_choice! { deposit: receive_value(|val_0| {terminate ()}), withdraw: send_value(arg1, receive_value(|val_2| {terminate ()})), Terminate: terminate () }
 }
 
 fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, BankOps>> {
     receive_value(|val_3| {
-        offer_choice! { deposit: receive_value(|val_4| {terminate ()}), withdraw: send_value(withdraw_value, receive_value(|val_6| {terminate ()})), terminate: terminate () }
+        offer_choice! { deposit: receive_value(|val_4| {terminate ()}), withdraw: send_value(withdraw_value, receive_value(|val_6| {terminate ()})), Terminate: terminate () }
     })
 }
 
@@ -24,7 +25,7 @@ fn client_session(
         send_value_to(
             chan_0,
             myId,
-            choose!(chan_0, terminate, wait(chan_0, terminate())),
+            choose!(chan_0, Terminate, wait(chan_0, terminate())),
         )
     })
 }

@@ -2,6 +2,6 @@ use std::format;
 
 use ferrite_session::prelude::*;
 
-type myType = ReceiveChannel< ExternalChoice<l: ReceiveChannel<A, B>, r: ReceiveChannel<C, D>>, ReceiveChannel< SendChannel<A, C>, SendChannel<B, D>>>;
+type myType = ReceiveChannel< ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<C, D>>>, ReceiveChannel< SendChannel<A, C>, SendChannel<B, D>>>;
 
 fn myFunc() -> myType { @SYNTHESIZE [] }

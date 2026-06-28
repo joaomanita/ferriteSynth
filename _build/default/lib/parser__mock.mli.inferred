@@ -28,9 +28,12 @@ type token =
   | GT
   | FUNC
   | EXTERNALCHOICE
+  | EXCLAMATION
   | EQ
   | EOF
   | END
+  | EITHER
+  | DEFINE_CHOICE
   | COMMA
   | COLON
   | ATOMIC of string
@@ -39,25 +42,25 @@ type token =
 val menhir_begin_marker : int
 val xv_z_type : int
 val xv_used_funcs : string list
+val xv_unit_ret_func : Mini_ast.decl
 val xv_type_def : Mini_ast.decl
-val xv_separated_nonempty_list_COMMA_labeled_type_ :
+val xv_separated_nonempty_list_COMMA_choice_branch_ :
   (string * Mini_ast.ty) list
 val xv_separated_nonempty_list_COMMA_arg_ : (string * Mini_ast.ty) list
 val xv_separated_nonempty_list_COMMA_ID_ : string list
-val xv_separated_list_COMMA_labeled_type_ : (string * Mini_ast.ty) list
 val xv_separated_list_COMMA_arg_ : (string * Mini_ast.ty) list
 val xv_s_type : Mini_ast.ty
 val xv_prog : Mini_ast.decl list
-val xv_loption_separated_nonempty_list_COMMA_labeled_type__ :
-  (string * Mini_ast.ty) list
 val xv_loption_separated_nonempty_list_COMMA_arg__ :
   (string * Mini_ast.ty) list
 val xv_list_decl_ : Mini_ast.decl list
 val xv_list_RAW_ : string list
-val xv_labeled_type : string * Mini_ast.ty
 val xv_func : Mini_ast.decl
+val xv_define_choice : Mini_ast.choice
 val xv_decl : Mini_ast.decl
 val xv_closed_func : Mini_ast.decl
+val xv_choice_branch : string * Mini_ast.ty
+val xv_choice : Mini_ast.choice
 val xv_arg_type : Mini_ast.ty
 val xv_arg : string * Mini_ast.ty
 val menhir_end_marker : int

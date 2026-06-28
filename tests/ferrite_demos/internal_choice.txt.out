@@ -1,14 +1,14 @@
 use ferrite_session::{either::*, prelude::*};
 
-type Choice = InternalChoice<l: SendValue<String, End>, r: ReceiveValue<u64, End>>;
+type Choice = Either<SendValue<String, End>, ReceiveValue<u64, End>>;
 
 fn client(arg1: u64) -> Session<ReceiveChannel<Choice, End>> {
     receive_channel(|chan_0| {
-        case! { chan_0 ; l: receive_value_from(chan_0, move |binder_0| {wait(chan_0, terminate ())}), r: send_value_to(chan_0, arg1, wait(chan_0, terminate ())) }
+        case! { chan_0 ; Left: receive_value_from(chan_0, move |binder_0| {wait(chan_0, terminate ())}), Right: send_value_to(chan_0, arg1, wait(chan_0, terminate ())) }
     })
 }
 
 fn provider(arg2: String) -> Session<Choice> {
-    offer_case!(r, receive_value(|val_0| { terminate() }))
+    offer_case!(Right, receive_value(|val_0| { terminate() }))
 }
-// fn provider(arg2: String) -> Session<Choice> { offer_case!(l, send_value(arg2, terminate ())) }
+// fn provider(arg2: String) -> Session<Choice> { offer_case!(Left, send_value(arg2, terminate ())) }

@@ -1,11 +1,12 @@
 use ferrite_session::prelude::*;
 
-type FooBarBaz = ExternalChoice<
+define_choice! {
+    FooBarBaz;
     Foo: SendValue<String, End>,
     Bar: ReceiveValue<u64, End>,
     Baz: End,
-    Quux: SendValue<i32, End>,
->;
+    Quux: SendValue<i32, End>
+}
 
 fn provider() -> Session<FooBarBaz> {
     offer_choice! { Foo: cut! { []; provider(); binder_0 => {choose!(binder_0, Foo, receive_value_from(binder_0, move |binder_2| {wait(binder_0, send_value(binder_2, terminate ()))}))}}, Bar: receive_value(|val_0| {terminate ()}), Baz: terminate (), Quux: cut! { []; provider(); binder_3 => {choose!(binder_3, Quux, receive_value_from(binder_3, move |binder_7| {wait(binder_3, send_value(binder_7, terminate ()))}))}} }
@@ -22,3 +23,18 @@ fn client() -> Session<ReceiveChannel<FooBarBaz, End>> {
 }
 // fn client() -> Session<ReceiveChannel<FooBarBaz, End>> { receive_channel(|chan_0| {choose!(chan_0, Baz, wait(chan_0, terminate ()))}) }
 // fn client() -> Session<ReceiveChannel<FooBarBaz, End>> { receive_channel(|chan_0| {choose!(chan_0, Foo, receive_value_from(chan_0, move |binder_9| {wait(chan_0, terminate ())}))}) }
+
+fn client() {
+    run_session(apply_channel(client(), provider())).await()
+}
+// fn main() { run_session(cut! { [R]; provider(); binder_212 => {cut! { [R]; client(); binder_433 => {choose!(binder_212, Quux, receive_value_from(binder_212, move |binder_484| {wait(binder_212, cut! { [R]; provider(); binder_489 => {send_channel_to(binder_433, binder_489, wait(binder_433, terminate ()))}})}))}}}}).await() }
+// fn main() { run_session(cut! { [R]; provider(); binder_212 => {cut! { [R]; client(); binder_433 => {choose!(binder_212, Baz, wait(binder_212, cut! { [R]; provider(); binder_471 => {send_channel_to(binder_433, binder_471, wait(binder_433, terminate ()))}}))}}}}).await() }
+// fn main() { run_session(cut! { [R]; provider(); binder_212 => {cut! { [R]; client(); binder_433 => {choose!(binder_212, Foo, receive_value_from(binder_212, move |binder_434| {wait(binder_212, cut! { [R]; provider(); binder_439 => {send_channel_to(binder_433, binder_439, wait(binder_433, terminate ()))}})}))}}}}).await() }
+// fn main() { run_session(cut! { [R]; provider(); binder_212 => {cut! { [R]; client(); binder_433 => {send_channel_to(binder_433, binder_212, wait(binder_433, terminate ()))}}}}).await() }
+// fn main() { run_session(cut! { [R]; provider(); binder_212 => {choose!(binder_212, Quux, receive_value_from(binder_212, move |binder_396| {wait(binder_212, cut! { []; client(); binder_415 => {cut! { [R]; provider(); binder_420 => {send_channel_to(binder_415, binder_420, wait(binder_415, terminate ()))}}}})}))}}).await() }
+// fn main() { run_session(cut! { [R]; provider(); binder_212 => {choose!(binder_212, Baz, wait(binder_212, cut! { []; client(); binder_378 => {cut! { [R]; provider(); binder_383 => {send_channel_to(binder_378, binder_383, wait(binder_378, terminate ()))}}}}))}}).await() }
+// fn main() { run_session(cut! { [R]; provider(); binder_212 => {choose!(binder_212, Foo, receive_value_from(binder_212, move |binder_250| {wait(binder_212, cut! { []; client(); binder_269 => {cut! { [R]; provider(); binder_274 => {send_channel_to(binder_269, binder_274, wait(binder_269, terminate ()))}}}})}))}}).await() }
+// fn main() { run_session(cut! { [R]; client(); binder_87 => {cut! { [R]; provider(); binder_125 => {send_channel_to(binder_87, binder_125, wait(binder_87, terminate ()))}}}}).await() }
+// fn main() { run_session(cut! { [R]; client(); binder_87 => {cut! { [R]; provider(); binder_125 => {choose!(binder_125, Quux, receive_value_from(binder_125, move |binder_194| {wait(binder_125, cut! { [R]; provider(); binder_199 => {send_channel_to(binder_87, binder_199, wait(binder_87, terminate ()))}})}))}}}}).await() }
+// fn main() { run_session(cut! { [R]; client(); binder_87 => {cut! { [R]; provider(); binder_125 => {choose!(binder_125, Baz, wait(binder_125, cut! { [R]; provider(); binder_181 => {send_channel_to(binder_87, binder_181, wait(binder_87, terminate ()))}}))}}}}).await() }
+// fn main() { run_session(cut! { [R]; client(); binder_87 => {cut! { [R]; provider(); binder_125 => {choose!(binder_125, Foo, receive_value_from(binder_125, move |binder_144| {wait(binder_125, cut! { [R]; provider(); binder_149 => {send_channel_to(binder_87, binder_149, wait(binder_87, terminate ()))}})}))}}}}).await() }

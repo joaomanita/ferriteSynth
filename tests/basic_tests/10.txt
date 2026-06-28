@@ -4,8 +4,8 @@ use ferrite_session::prelude::*;
 
 type myType = Rec<
     ExternalChoice<
-      l: SendValue<Int, Z>,
-      r: End
+      Either<SendValue<Int, Z>,
+      End>
     >
   >;
 

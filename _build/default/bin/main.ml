@@ -27,6 +27,25 @@ let () =
     | decl :: xs ->
         (match decl with
         | Raw t -> Printf.fprintf out_channel "%s" t
+        | ChoiceDef c -> (
+            match c with
+            | TyEither _ ->
+                Printf.fprintf out_channel
+                  "// shouldnt be an Either in a ChoiceDef\n"
+            | TyDefineChoice (name, branches) ->
+                Synthesizer.append_define_choice c;
+                Printf.fprintf out_channel "define_choice! {\n";
+                Printf.fprintf out_channel "    %s;\n" name;
+
+                List.iteri
+                  (fun i (lbl, ty) ->
+                    Printf.fprintf out_channel "    %s: %s" lbl
+                      (Synthesizer.print_type ty);
+                    if i < List.length branches - 1 then
+                      Printf.fprintf out_channel ",";
+                    Printf.fprintf out_channel "\n")
+                  branches;
+                Printf.fprintf out_channel "}\n")
         | TypeDef v ->
             Printf.fprintf out_channel "type %s = %s;" v.name
               (Synthesizer.print_type v.body);

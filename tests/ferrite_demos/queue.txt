@@ -9,6 +9,6 @@ use ferrite_session::{
 };
 use tokio::time::sleep;
 
-type StringQueue = Rec<InternalChoice<l: End, r: SendValue<String, Z>>>;
+type StringQueue = Rec<InternalChoice<Either<End, SendValue<String, Z>>>>;
 
 fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> { @SYNTHESIZE []}

@@ -3,13 +3,13 @@ use std::{future::Future, time::Duration};
 use ferrite_session::{either::*, prelude::*};
 use tokio::time::sleep;
 
-type StringQueue = Rec<InternalChoice<l: End, r: SendValue<String, Z>>>;
+type StringQueue = Rec<Either<End, SendValue<String, Z>>>;
 
 fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> {
     receive_channel(|chan_0| {
         unfix_session(
             chan_0,
-            case! { chan_0 ; l: wait(chan_0, terminate ()), r: receive_value_from(chan_0, move |binder_15| {unfix_session(chan_0, case!{ chan_0 ; l: wait(chan_0, terminate ()), r: receive_value_from(chan_0, move |binder_23| {unfix_session(chan_0, case!{ chan_0 ; l: wait(chan_0, terminate ()), r: receive_value_from(chan_0, move |binder_28| {cut! { [R]; read_queue(); binder_29 => {send_channel_to(binder_29, chan_0, wait(binder_29, terminate ()))}}}) })}) })}) },
+            case! { chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_15| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_23| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_28| {cut! { [R]; read_queue(); binder_29 => {send_channel_to(binder_29, chan_0, wait(binder_29, terminate ()))}}}) })}) })}) },
         )
     })
 }

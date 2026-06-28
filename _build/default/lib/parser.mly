@@ -39,6 +39,9 @@
 %token ACQUIRE
 %token SYNTHESIZE
 %token USE
+%token DEFINE_CHOICE
+%token EITHER
+%token EXCLAMATION
 %start <decl list> prog
 %%
 
@@ -48,7 +51,9 @@ prog:
 decl:
   | text = RAW { Raw(text) }
   | tdef = type_def { tdef }
+  | cdef = define_choice { ChoiceDef(cdef) }
   | f = func { f }
+  | f = unit_ret_func { f }
   | closed_f = closed_func { closed_f }
 
 type_def:
@@ -57,8 +62,10 @@ type_def:
 s_type:
   | id = ID                                                              { TyPrimitive(id) }
   | uppercaseid = ATOMIC                                                 { TyAtomic(uppercaseid) }
-  | INTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyInternalChoice(xs) }
-  | EXTERNALCHOICE; LT; xs = separated_list(COMMA, labeled_type); GT     { TyExternalChoice(xs) }
+  | INTERNALCHOICE; LT; c = choice; GT                                   { TyInternalChoice(c) }
+  | EXTERNALCHOICE; LT; c = choice; GT                                   { TyExternalChoice(c) }
+  | INTERNALCHOICE; LT; id = ID; GT                                      { TyInternalChoiceId(id) }
+  | EXTERNALCHOICE; LT; id = ID; GT                                      { TyExternalChoiceId(id) }
   | SENDCHANNEL; LT; t = s_type; COMMA; cont = s_type; GT                { TySendChannel(t, cont) }
   | RECEIVECHANNEL; LT; t = s_type; COMMA; cont = s_type; GT             { TyReceiveChannel(t, cont) }
   | SENDVALUE; LT; v = ID; COMMA; cont = s_type; GT                      { TySendValue(v, cont) }
@@ -72,8 +79,24 @@ s_type:
   | RELEASE                                                              { TySharedToLinear(TyFixShared) }
   | ACQUIRE                                                              { TyLinearToShared(TyFixShared) }
 
-labeled_type:
-  | label = ID; COLON; t = s_type { (label, t) }
+choice:
+  | EITHER LT t1 = s_type COMMA t2 = s_type GT
+      { (TyEither (t1, t2)) }
+
+choice_branch:
+  | lbl = ID COLON ty = s_type
+    {
+      (lbl, ty)
+    }
+
+define_choice:
+  | DEFINE_CHOICE EXCLAMATION LBRACE
+    name = ID SEMICOLON
+    branches = separated_nonempty_list(COMMA, choice_branch)
+    RBRACE
+    {
+      (TyDefineChoice (name, branches))
+    }
 
 func:
   | FUNC; name = ID;
@@ -87,6 +110,19 @@ func:
     RBRACE
     {
       Function (TyFunc (((name, ars), ret), funcs))
+    }
+
+unit_ret_func:
+  | FUNC; name = ID;
+    LPAR; ars = separated_list(COMMA, arg); RPAR;
+    LBRACE;
+    AT; SYNTHESIZE;
+    LSQUARE;
+    funcs = used_funcs;
+    RSQUARE;
+    RBRACE
+    {
+      Function (TyUnitRetFunc ((name, ars), funcs))
     }
 
 used_funcs:

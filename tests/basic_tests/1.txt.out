@@ -3,14 +3,14 @@ use std::format;
 use ferrite_session::prelude::*;
 
 type myType = ReceiveChannel<
-    ExternalChoice<l: ReceiveChannel<A, B>, r: ReceiveChannel<A, C>>,
-    ReceiveChannel<A, ExternalChoice<l: B, r: C>>,
+    Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>,
+    ReceiveChannel<A, Either<B, C>>,
 >;
 
 fn myFunc() -> myType {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
-            offer_choice! { l: choose!(chan_0, l, send_channel_to(chan_0, chan_1, forward(chan_0))), r: choose!(chan_0, r, send_channel_to(chan_0, chan_1, forward(chan_0))) }
+            offer_choice! { Left: choose!(chan_0, Left, send_channel_to(chan_0, chan_1, forward(chan_0))), Right: choose!(chan_0, Right, send_channel_to(chan_0, chan_1, forward(chan_0))) }
         })
     })
 }

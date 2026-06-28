@@ -5,8 +5,8 @@ use ferrite_session::prelude::*;
 fn myFunc() -> Session<
   Rec<
     ExternalChoice<
-      l: ReceiveValue<Int, End>,
-      r: Z
+      Either<ReceiveValue<Int, End>,
+      Z>
     >
   >
 > { @SYNTHESIZE [] }

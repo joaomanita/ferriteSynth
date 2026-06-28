@@ -8,6 +8,7 @@ type mode =
   | Raw
   | TypeMode
   | Func
+  | ChoiceDefMode
 
 let current_mode = ref Raw
 }
@@ -27,6 +28,11 @@ rule read = parse
       TYPE_KEYWORD
     }
 
+  | "define_choice" {
+      current_mode := ChoiceDefMode;
+      DEFINE_CHOICE
+    }
+
   | "fn" {
       current_mode := Func;
       FUNC
@@ -36,6 +42,7 @@ rule read = parse
   | ';' {
       (match !current_mode with
        | TypeMode -> current_mode := Raw; SEMICOLON
+       | ChoiceDefMode
        | Func -> SEMICOLON
        | Raw -> RAW ";");
     }
@@ -51,6 +58,8 @@ rule read = parse
     match !current_mode with
     | Raw ->
         RAW "}"
+
+    | ChoiceDefMode
 
     | Func ->
         current_mode := Raw;
@@ -73,6 +82,7 @@ rule read = parse
   | '['   { match !current_mode with | Raw -> RAW "[" | _ -> LSQUARE }
   | ']'   { match !current_mode with | Raw -> RAW "]" | _ -> RSQUARE }
   | "use" { match !current_mode with | Raw -> RAW "use" | _ -> USE }
+  | "!"   { match !current_mode with | Raw -> RAW "!" | _ -> EXCLAMATION }
 
   (* ---- KEYWORDS ---- *)
   | "Session"        { SESSION }
@@ -91,6 +101,7 @@ rule read = parse
   | "Z"              { Z }
   | "S"              { S }
   | "SYNTHESIZE"     { SYNTHESIZE }
+  | "Either"         { EITHER }
 
   (* ---- IDENTIFIERS ---- *)
   | uppercaseid as id_s {

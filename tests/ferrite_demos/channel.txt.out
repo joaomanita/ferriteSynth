@@ -5,31 +5,31 @@ use tokio::time::sleep;
 
 // Example implementation of Rust channels using shared channels
 
-type Receiver = Rec<ExternalChoice<Next: SendValue<Int, Z>, Close: End>>;
-
-type Channel = LinearToShared<
-    ExternalChoice<
-        ReceiveNext: ReceiveValue<Int, SharedToLinear<FixShared>>,
-        SendNext: SendValue<Int, SharedToLinear<FixShared>>,
-    >,
->;
-
-fn make_channel(val: Int) -> Session<Channel> {
-    accept_shared_session(
-        offer_choice! { ReceiveNext: receive_value(|val_1| {detach_shared_session(make_channel(val_1))}), SendNext: send_value(val, detach_shared_session(make_channel(val))) },
-    )
+define_choice! {
+    ActionsReceiver;
+    Next: SendValue<Int, Z>,
+    Close: End
 }
 
-fn make_receiver(
-    chan: LinearToShared<
-        ExternalChoice<
-            ReceiveNext: ReceiveValue<Int, SharedToLinear<FixShared>>,
-            SendNext: SendValue<Int, SharedToLinear<FixShared>>,
-        >,
-    >,
-    val: Int,
-) -> Session<Receiver> {
+define_choice! {
+    ActionsChannel;
+    ReceiveNext: ReceiveValue<Int, SharedToLinear<FixShared>>,
+    SendNext: SendValue<int, SharedToLinear<FixShared>>
+}
+
+type Receiver = Rec<TyExternalChoiceId>;
+
+type Channel = LinearToShared<TyExternalChoiceId>;
+
+fn make_channel(val: Int) -> Session<LinearToShared<ActionsChannel>> {
+    accept_shared_session(offer_case!(
+        ReceiveNext,
+        receive_value(|val_3| { detach_shared_session(make_channel(val_3)) })
+    ))
+}
+
+fn make_receiver(chan: LinearToShared<ActionsChannel>, val: Int) -> Session<Rec<ActionsReceiver>> {
     fix_session(
-        offer_choice! { Next: send_value(val, make_receiver(accept_shared_session(offer_choice!{ ReceiveNext: receive_value(|val_5| {detach_shared_session(make_channel(val_5))}), SendNext: send_value(val, detach_shared_session(make_channel(val))) }), val)), Close: terminate () },
+        offer_choice! { Next: send_value(val, make_receiver(accept_shared_session(offer_case!(ReceiveNext, receive_value(|val_11| {detach_shared_session(make_channel(val_11))}))), val)), Close: terminate () },
     )
 }
