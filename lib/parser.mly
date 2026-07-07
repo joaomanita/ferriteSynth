@@ -55,6 +55,7 @@ decl:
   | f = func { f }
   | f = unit_ret_func { f }
   | closed_f = closed_func { closed_f }
+  | f = scheme_func { f }
 
 type_def:
   | TYPE_KEYWORD; _name = ID; EQ; t = s_type; SEMICOLON { TypeDef({name = _name; body = t}) }
@@ -68,8 +69,10 @@ s_type:
   | EXTERNALCHOICE; LT; id = ID; GT                                      { TyExternalChoiceId(id) }
   | SENDCHANNEL; LT; t = s_type; COMMA; cont = s_type; GT                { TySendChannel(t, cont) }
   | RECEIVECHANNEL; LT; t = s_type; COMMA; cont = s_type; GT             { TyReceiveChannel(t, cont) }
-  | SENDVALUE; LT; v = ID; COMMA; cont = s_type; GT                      { TySendValue(v, cont) }
-  | RECEIVEVALUE; LT; v  = ID; COMMA; cont = s_type; GT                  { TyReceiveValue(v, cont) }
+  | SENDVALUE; LT; id = ID; COMMA; cont = s_type; GT                     { TySendValue(TyPrimitive id, cont) }
+  | SENDVALUE; LT; a = ATOMIC; COMMA; cont = s_type; GT                  { TySendValue(TyAtomic a, cont) }
+  | RECEIVEVALUE; LT; id  = ID; COMMA; cont = s_type; GT                 { TyReceiveValue(TyPrimitive id, cont) }
+  | RECEIVEVALUE; LT; a = ATOMIC; COMMA; cont = s_type; GT               { TyReceiveValue(TyAtomic a, cont) }
   | END                                                                  { TyEnd }
   | SHAREDTOLINEAR; LT; t = s_type; GT                                   { TySharedToLinear(t) }
   | LINEARTOSHARED; LT; t = s_type; GT                                   { TyLinearToShared(t) }
@@ -132,6 +135,28 @@ used_funcs:
 
 closed_func:
   | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE; body = list(RAW); RBRACE { ClosedFunction((TyFunc(((name, ars), ret), []), String.concat "" body)) }
+
+scheme_args:
+  | ts = separated_nonempty_list(COMMA, ATOMIC)
+      { List.map (fun t -> TyAtomic t) ts }
+
+scheme_func:
+  | FUNC; name = ID;
+    LT; tList = scheme_args; GT;
+    LPAR; ars = separated_list(COMMA, arg); RPAR;
+    MINUS; GT; ret = s_type;
+    LBRACE;
+    AT; SYNTHESIZE;
+    LSQUARE;
+    funcs = used_funcs;
+    RSQUARE;
+    RBRACE
+    {
+      Function
+        (TySchemeFunc
+           (tList,
+            (((name, ars), ret), funcs)))
+    }
 
 arg:
   | arg_name = ID; COLON; t = arg_type { (arg_name, t) }

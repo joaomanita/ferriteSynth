@@ -5,7 +5,6 @@ open Stdlib
 
 let debug_enabled = true
 let debug_out = if debug_enabled then Some (open_out "debug.log") else None
-let stopper = ref 0
 
 let log fmt =
   match debug_out with
@@ -29,6 +28,18 @@ let fresh_binder_id =
   fun () ->
     incr unique;
     "binder_" ^ string_of_int !unique
+
+let fresh_atomic_id id =
+  let unique = ref (-1) in
+  fun () ->
+    incr unique;
+    id ^ "_" ^ string_of_int !unique
+
+let fresh_existential_id =
+  let unique = ref (-1) in
+  fun () ->
+    incr unique;
+    string_of_int !unique
 
 exception Fail
 
@@ -69,6 +80,7 @@ let rec resolve_type t =
       | Some real_t -> resolve_type real_t
       | None -> t)
   | TyAtomic _ -> t
+  | TyExistential _ -> t
   | TyInternalChoice c -> TyInternalChoice (apply_func_choice c resolve_type)
   | TyExternalChoice c -> TyExternalChoice (apply_func_choice c resolve_type)
   | TyInternalChoiceId id ->
@@ -84,8 +96,8 @@ let rec resolve_type t =
   | TySendChannel (t1, t2) -> TySendChannel (resolve_type t1, resolve_type t2)
   | TyReceiveChannel (t1, t2) ->
       TyReceiveChannel (resolve_type t1, resolve_type t2)
-  | TySendValue (t1, t2) -> TySendValue (t1, resolve_type t2)
-  | TyReceiveValue (t1, t2) -> TyReceiveValue (t1, resolve_type t2)
+  | TySendValue (t1, t2) -> TySendValue (resolve_type t1, resolve_type t2)
+  | TyReceiveValue (t1, t2) -> TyReceiveValue (resolve_type t1, resolve_type t2)
   | TyEnd -> t
   | TySharedToLinear t -> TySharedToLinear (resolve_type t)
   | TyLinearToShared t -> TyLinearToShared (resolve_type t)
@@ -110,6 +122,16 @@ let rec resolve_type t =
               (fun (argName, argType) -> (argName, resolve_type argType))
               argList ),
           funcs )
+  | TyScheme (tList, tau) -> TyScheme (tList, resolve_type tau)
+  | TySchemeFunc (tList, (((name, argList), tRet), funcs)) ->
+      TySchemeFunc
+        ( tList,
+          ( ( ( name,
+                List.map
+                  (fun (argName, argType) -> (argName, resolve_type argType))
+                  argList ),
+              resolve_type tRet ),
+            funcs ) )
 
 let rec rev_resolve_type t =
   match rev_resolve_atomic t !type_ctxt with
@@ -124,8 +146,10 @@ let rec rev_resolve_type t =
           TySendChannel (rev_resolve_type t1, rev_resolve_type t2)
       | TyReceiveChannel (t1, t2) ->
           TyReceiveChannel (rev_resolve_type t1, rev_resolve_type t2)
-      | TySendValue (v, t1) -> TySendValue (v, rev_resolve_type t1)
-      | TyReceiveValue (v, t1) -> TyReceiveValue (v, rev_resolve_type t1)
+      | TySendValue (t1, t2) ->
+          TySendValue (rev_resolve_type t1, rev_resolve_type t2)
+      | TyReceiveValue (t1, t2) ->
+          TyReceiveValue (rev_resolve_type t1, rev_resolve_type t2)
       | TySharedToLinear t1 -> TySharedToLinear (rev_resolve_type t1)
       | TyLinearToShared t1 -> TyLinearToShared (rev_resolve_type t1)
       | TySession t1 -> TySession (rev_resolve_type t1)
@@ -170,6 +194,7 @@ type tm =
   | UnitRetFunc of (id * (id * ty) list) * tm
   | RunSession of tm
   | ApplyChannel of tm * tm
+  | SchemeFunc of ty list * ((id * (id * ty) list) * (ty * tm))
 
 and side = L | R
 
@@ -189,16 +214,19 @@ and print_type t =
   match t with
   | TyPrimitive t -> t
   | TyAtomic a -> a
-  | TyInternalChoice c -> print_choice c
-  | TyExternalChoice c -> print_choice c
+  | TyExistential a -> "?" ^ a
+  | TyInternalChoice c -> "TyInternalChoice<" ^ print_choice c ^ ">"
+  | TyExternalChoice c -> "TyExternalChoice<" ^ print_choice c ^ ">"
   | TyInternalChoiceId _ -> "TyInternalChoiceId"
   | TyExternalChoiceId _ -> "TyExternalChoiceId"
   | TySendChannel (t1, t2) ->
       "SendChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
   | TyReceiveChannel (t1, t2) ->
       "ReceiveChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
-  | TySendValue (t1, t2) -> "SendValue<" ^ t1 ^ ", " ^ print_type t2 ^ ">"
-  | TyReceiveValue (t1, t2) -> "ReceiveValue<" ^ t1 ^ ", " ^ print_type t2 ^ ">"
+  | TySendValue (t1, t2) ->
+      "SendValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TyReceiveValue (t1, t2) ->
+      "ReceiveValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
   | TyEnd -> "End"
   | TySharedToLinear t -> "SharedToLinear<" ^ print_type t ^ ">"
   | TyLinearToShared t -> "LinearToShared<" ^ print_type t ^ ">"
@@ -216,6 +244,16 @@ and print_type t =
   | TyZ i -> print_peano i
   | TyUnitRetFunc ((name, argList), _) ->
       "FN<<" ^ name ^ ", " ^ print_labeled_choices argList print_type ^ ">, >"
+  | TyScheme (tList, tau) ->
+      "Scheme<<"
+      ^ String.concat ", " (List.map print_type tList)
+      ^ ">, " ^ print_type tau ^ ">"
+  | TySchemeFunc (tList, (((name, tyArgs), tyRet), _)) ->
+      "SCHEMEFN<<" ^ name ^ "<"
+      ^ String.concat ", " (List.map print_type tList)
+      ^ ">, "
+      ^ print_labeled_choices tyArgs print_type
+      ^ ">, " ^ print_type tyRet ^ ">"
 
 and print_peano i =
   match i with 0 -> "Z" | x -> "S<" ^ print_peano (x - 1) ^ ">"
@@ -306,9 +344,54 @@ let rec print_exp e =
   | RunSession tm -> sprintf "run_session(%s).await()" (print_exp tm)
   | ApplyChannel (tm1, tm2) ->
       sprintf "apply_channel(%s, %s)" (print_exp tm1) (print_exp tm2)
+  | SchemeFunc (tList, ((name, argList), (t, tm))) ->
+      let args_str =
+        argList
+        |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
+        |> String.concat ", "
+      in
+      sprintf "fn %s<%s>(%s) -> %s { %s }" name
+        (String.concat ", " (List.map print_type tList))
+        args_str (print_type t) (print_exp tm)
+
+(* Substitutes x in type t1 with replacement *)
+let rec substT x replacement t1 =
+  if x = t1 then replacement
+  else
+    match t1 with
+    | TyAtomic a -> if TyAtomic a = x then replacement else t1
+    | TyInternalChoice c ->
+        TyInternalChoice (apply_func_choice c (substT x replacement))
+    | TyExternalChoice c ->
+        TyExternalChoice (apply_func_choice c (substT x replacement))
+    | TySendChannel (t1, t2) ->
+        TySendChannel (substT x replacement t1, substT x replacement t2)
+    | TyReceiveChannel (t1, t2) ->
+        TyReceiveChannel (substT x replacement t1, substT x replacement t2)
+    | TySendValue (t1, t2) ->
+        TySendValue (substT x replacement t1, substT x replacement t2)
+    | TyReceiveValue (t1, t2) ->
+        TyReceiveValue (substT x replacement t1, substT x replacement t2)
+    | TySharedToLinear t -> TySharedToLinear (substT x replacement t)
+    | TyLinearToShared t -> TyLinearToShared (substT x replacement t)
+    | TySession t -> TySession (substT x replacement t)
+    | TyRec t -> TyRec (substT x replacement t)
+    | TyFunc (((n, args), ret), fs) ->
+        TyFunc
+          ( ( (n, List.map (fun (l, t) -> (l, substT x replacement t)) args),
+              substT x replacement ret ),
+            fs )
+    | TyScheme (ts, tau) -> TyScheme (ts, substT x replacement tau)
+    | TySchemeFunc (ts, (((n, args), ret), fs)) ->
+        TySchemeFunc
+          ( ts,
+            ( ( (n, List.map (fun (l, t) -> (l, substT x replacement t)) args),
+                substT x replacement ret ),
+              fs ) )
+    | _ -> t1
 
 (* Substitutes name x in expression e1 with expression e2 *)
-(* let rec subst e1 x e2 =
+let rec subst e1 x e2 =
   match e1 with
   | Var y -> if x = y then e2 else e1
   | Offer (label, tm) -> Offer (label, subst tm x e2)
@@ -341,15 +424,21 @@ let rec print_exp e =
   | Acquire (chan, (binder, tm)) ->
       if x <> binder then Acquire (chan, (binder, subst tm x e2)) else e1
   | Forward chan -> if chan = x then e2 else e1
-  | Cut (session_tm, (binder, tm)) ->
-      if x <> binder then Cut (session_tm, (binder, subst tm x e2)) else e1
+  | Cut (sideList, session_tm, (binder, tm)) ->
+      if x <> binder then Cut (sideList, session_tm, (binder, subst tm x e2))
+      else e1
   | Func ((name, argList), (t, tm)) ->
       let binders = List.map fst argList in
       if List.mem x binders then e1
       else Func ((name, argList), (t, subst tm x e2))
   | App (func_tm, arg_tmList) ->
       App (subst func_tm x e2, List.map (fun tm -> subst tm x e2) arg_tmList)
-*)
+  | Fix tm -> Fix (subst tm x e2)
+  | Unfix (id, tm) ->
+      if x <> id then Unfix (id, subst tm x e2) else Unfix (id, tm)
+  | RunSession tm -> RunSession (subst tm x e2)
+  | ApplyChannel (tm1, tm2) -> ApplyChannel (subst tm1 x e2, subst tm2 x e2)
+  | _ -> e1
 
 let rec shift d t =
   match t with
@@ -359,30 +448,32 @@ let rec shift d t =
   | TyExternalChoice c -> TyExternalChoice (apply_func_choice c (shift d))
   | TySendChannel (t1, t2) -> TySendChannel (shift d t1, shift d t2)
   | TyReceiveChannel (t1, t2) -> TyReceiveChannel (shift d t1, shift d t2)
-  | TySendValue (v, t1) -> TySendValue (v, shift d t1)
-  | TyReceiveValue (v, t1) -> TyReceiveValue (v, shift d t1)
+  | TySendValue (t1, t2) -> TySendValue (shift d t1, shift d t2)
+  | TyReceiveValue (t1, t2) -> TyReceiveValue (shift d t1, shift d t2)
   | TySharedToLinear t1 -> TySharedToLinear (shift d t1)
   | TyLinearToShared t1 -> TyLinearToShared (shift d t1)
   | TySession t1 -> TySession (shift d t1)
   | _ -> t
 
-let rec subst k replacement t =
+let rec substRec k replacement t =
   match t with
   | TyZ n -> if n = k then replacement else if n > k then TyZ (n - 1) else TyZ n
-  | TyRec t1 -> TyRec (subst (k + 1) replacement t1)
+  | TyRec t1 -> TyRec (substRec (k + 1) replacement t1)
   | TyInternalChoice c ->
-      TyInternalChoice (apply_func_choice c (subst k replacement))
+      TyInternalChoice (apply_func_choice c (substRec k replacement))
   | TyExternalChoice c ->
-      TyExternalChoice (apply_func_choice c (subst k replacement))
+      TyExternalChoice (apply_func_choice c (substRec k replacement))
   | TySendChannel (t1, t2) ->
-      TySendChannel (subst k replacement t1, subst k replacement t2)
+      TySendChannel (substRec k replacement t1, substRec k replacement t2)
   | TyReceiveChannel (t1, t2) ->
-      TyReceiveChannel (subst k replacement t1, subst k replacement t2)
-  | TySendValue (v, t1) -> TySendValue (v, subst k replacement t1)
-  | TyReceiveValue (v, t1) -> TyReceiveValue (v, subst k replacement t1)
-  | TySharedToLinear t1 -> TySharedToLinear (subst k replacement t1)
-  | TyLinearToShared t1 -> TyLinearToShared (subst k replacement t1)
-  | TySession t1 -> TySession (subst k replacement t1)
+      TyReceiveChannel (substRec k replacement t1, substRec k replacement t2)
+  | TySendValue (t1, t2) ->
+      TySendValue (substRec k replacement t1, substRec k replacement t2)
+  | TyReceiveValue (t1, t2) ->
+      TyReceiveValue (substRec k replacement t1, substRec k replacement t2)
+  | TySharedToLinear t1 -> TySharedToLinear (substRec k replacement t1)
+  | TyLinearToShared t1 -> TyLinearToShared (substRec k replacement t1)
+  | TySession t1 -> TySession (substRec k replacement t1)
   | _ -> t
 
 let rec substShared replacement t =
@@ -396,8 +487,10 @@ let rec substShared replacement t =
       TySendChannel (substShared replacement t1, substShared replacement t2)
   | TyReceiveChannel (t1, t2) ->
       TyReceiveChannel (substShared replacement t1, substShared replacement t2)
-  | TySendValue (v, t1) -> TySendValue (v, substShared replacement t1)
-  | TyReceiveValue (v, t1) -> TyReceiveValue (v, substShared replacement t1)
+  | TySendValue (t1, t2) ->
+      TySendValue (substShared replacement t1, substShared replacement t2)
+  | TyReceiveValue (t1, t2) ->
+      TyReceiveValue (substShared replacement t1, substShared replacement t2)
   | TySharedToLinear t1 -> (
       match t1 with
       | TyFixShared -> TySharedToLinear replacement
@@ -409,7 +502,7 @@ let rec substShared replacement t =
   | TySession t1 -> TySession (substShared replacement t1)
   | _ -> t
 
-let unfold t = match t with TyRec t1 -> subst 0 (TyRec t1) t1 | _ -> t
+let unfold t = match t with TyRec t1 -> substRec 0 (TyRec t1) t1 | _ -> t
 
 let unfoldShared t =
   match t with
@@ -474,6 +567,126 @@ let rec prune_recursive_choices target ty =
   | TyApp (f, tys) -> TyApp (f, List.map (prune_recursive_choices target) tys)
   | _ -> ty
 
+let rec apply_all_subst ty l =
+  match l with
+  | [] -> ty
+  | (old_t, fresh_t) :: xs -> apply_all_subst (substT old_t fresh_t ty) xs
+
+let rec instantiate ty =
+  match ty with
+  | TyScheme (tList, tau) ->
+      let subst =
+        List.map (fun tv -> (tv, TyExistential (fresh_existential_id ()))) tList
+      in
+      instantiate (apply_all_subst tau subst)
+  | TySchemeFunc (tList, (((name, argList), tRet), funcs)) ->
+      let subst =
+        List.map (fun tv -> (tv, TyExistential (fresh_existential_id ()))) tList
+      in
+      let argList =
+        List.map
+          (fun (id, ty) -> (id, instantiate (apply_all_subst ty subst)))
+          argList
+      in
+      let tRet = instantiate (apply_all_subst tRet subst) in
+      TyFunc (((name, argList), tRet), funcs)
+  | TySendChannel (t1, t2) -> TySendChannel (instantiate t1, instantiate t2)
+  | TyReceiveChannel (t1, t2) ->
+      TyReceiveChannel (instantiate t1, instantiate t2)
+  | TySendValue (t1, t2) -> TySendValue (instantiate t1, instantiate t2)
+  | TyReceiveValue (t1, t2) -> TyReceiveValue (instantiate t1, instantiate t2)
+  | TyInternalChoice c -> TyInternalChoice (apply_func_choice c instantiate)
+  | TyExternalChoice c -> TyExternalChoice (apply_func_choice c instantiate)
+  | TySharedToLinear t -> TySharedToLinear (instantiate t)
+  | TyLinearToShared t -> TyLinearToShared (instantiate t)
+  | TySession t -> TySession (instantiate t)
+  | TyRec t -> TyRec (instantiate t)
+  | TyFunc (((name, argList), tRet), funcs) ->
+      TyFunc
+        ( ( (name, List.map (fun (id, ty) -> (id, instantiate ty)) argList),
+            instantiate tRet ),
+          funcs )
+  | TyUnitRetFunc ((name, argList), funcs) ->
+      TyUnitRetFunc
+        ((name, List.map (fun (id, ty) -> (id, instantiate ty)) argList), funcs)
+  | TyApp (f, tys) -> TyApp (f, List.map instantiate tys)
+  | _ -> ty
+
+let instantiateSubst subst ty = apply_all_subst ty subst
+
+let rec occurs x ty =
+  match ty with
+  | TyExistential y -> x = y
+  | TySendChannel (t1, t2)
+  | TyReceiveChannel (t1, t2)
+  | TySendValue (t1, t2)
+  | TyReceiveValue (t1, t2) ->
+      occurs x t1 || occurs x t2
+  | TySession t | TyRec t | TySharedToLinear t | TyLinearToShared t ->
+      occurs x t
+  | TyInternalChoice c | TyExternalChoice c -> (
+      match c with
+      | TyDefineChoice (_, l) ->
+          if List.exists (fun (_, ty) -> occurs x ty) l then true else false
+      | TyEither (t1, t2) -> occurs x t1 || occurs x t2)
+  | _ -> false
+
+exception CannotUnify
+
+let fresh_instantiation vars =
+  List.map (fun tv -> (tv, TyExistential (fresh_existential_id ()))) vars
+
+let rec unify_choice subst c1 c2 =
+  match (c1, c2) with
+  | TyEither (l1, r1), TyEither (l2, r2) ->
+      let subst = unifyT subst l1 l2 in
+      unifyT subst r1 r2
+  | TyDefineChoice (_, l1), TyDefineChoice (_, l2) ->
+      if List.length l1 <> List.length l2 then raise CannotUnify;
+
+      List.fold_left2
+        (fun subst (_, ty1) (_, ty2) -> unifyT subst ty1 ty2)
+        subst l1 l2
+  | _ -> raise CannotUnify
+
+and unifyT subst t1 t2 =
+  let t1 = apply_all_subst t1 subst in
+  let t2 = apply_all_subst t2 subst in
+
+  if t1 = t2 then subst
+  else
+    match (t1, t2) with
+    | TyExistential x, t | t, TyExistential x ->
+        if occurs x t then raise CannotUnify else (TyExistential x, t) :: subst
+    | TyPrimitive a, TyPrimitive b when a = b -> subst
+    | TyAtomic a, TyAtomic b when a = b -> subst
+    | TySession a, TySession b -> unifyT subst a b
+    | TyRec a, TyRec b -> unifyT subst a b
+    | TySendChannel (a1, a2), TySendChannel (b1, b2)
+    | TyReceiveChannel (a1, a2), TyReceiveChannel (b1, b2)
+    | TySendValue (a1, a2), TySendValue (b1, b2)
+    | TyReceiveValue (a1, a2), TyReceiveValue (b1, b2) ->
+        let subst = unifyT subst a1 b1 in
+        unifyT subst a2 b2
+    | TySharedToLinear a, TySharedToLinear b
+    | TyLinearToShared a, TyLinearToShared b ->
+        unifyT subst a b
+    | TyInternalChoice c1, TyInternalChoice c2 -> unify_choice subst c1 c2
+    | TyExternalChoice c1, TyExternalChoice c2 -> unify_choice subst c1 c2
+    | _ -> raise CannotUnify
+
+let unify constr theta =
+  let existential, real = constr in
+  if
+    List.exists
+      (fun (e, r) -> if e = existential && r <> real then true else false)
+      theta
+  then failwith "can't unify"
+  else if
+    List.exists (fun (e, _) -> if e = existential then true else false) theta
+  then theta
+  else constr :: theta
+
 let process_closed_function closed =
   match closed with
   | TyFunc (((name, argList), tRet), funcs), body ->
@@ -483,39 +696,67 @@ let process_closed_function closed =
 
 let rec synthesize t =
   match t with
-  | TyFunc (_, allowed_funcs) | TyUnitRetFunc ((_, _), allowed_funcs) ->
+  | TyFunc (((name, _), _), allowed_funcs)
+  | TyUnitRetFunc ((name, _), allowed_funcs)
+  | TySchemeFunc (_, (((name, _), _), allowed_funcs)) ->
       let gamma =
         List.filter (fun (name, _) -> List.mem name allowed_funcs) !fn_ctxt
       in
+      let t_resolved = resolve_type t in
+      fn_ctxt := (name, t_resolved) :: !fn_ctxt;
       let programs =
-        inversionR gamma [] [] (resolve_type t) [] [] 0
-        >>= fun (delta_out, e) ->
+        inversionR ((name, t_resolved) :: gamma) [] [] t_resolved [] [] [] 0
+        >>= fun ((delta_out, theta_out), e) ->
         if delta_out <> [] then (
           print_fail "synthesize" 0;
           Choice.fail)
-        else return (delta_out, e)
+        else return ((delta_out, theta_out), e)
       in
       run_all programs
   | _ -> raise Fail
 
 (* Apply all invertible/asynchronous rules to the goal t*)
-and inversionR gamma delta_in omega t psi zeta ident =
+and inversionR gamma delta_in omega t psi zeta theta ident =
   print_func_entry "InversionR" t ident;
 
   let tm =
     match t with
     | TyFunc (((name, argList), tRet), _) ->
-        fn_ctxt := (name, t) :: !fn_ctxt;
-        inversionR
-          ((name, t) :: (argList @ gamma))
-          delta_in [] tRet psi zeta (ident + 1)
-        >>= fun (delta_out, e) ->
-        return (delta_out, Func ((name, argList), (rev_resolve_type tRet, e)))
+        inversionR (argList @ gamma) delta_in [] tRet psi zeta theta (ident + 1)
+        >>= fun ((delta_out, theta_out), e) ->
+        return
+          ( (delta_out, theta_out),
+            Func ((name, argList), (rev_resolve_type tRet, e)) )
+    | TySchemeFunc (tList, (((name, argList), tRet), funcs)) -> (
+        let _tList =
+          List.map
+            (function
+              | TyAtomic a -> (TyAtomic a, TyAtomic (fresh_atomic_id a ()))
+              | _ -> failwith "Scheme parameters must be atomic")
+            tList
+        in
+        let _argList =
+          List.map (fun (id, ty) -> (id, apply_all_subst ty _tList)) argList
+        in
+        let _tRet = apply_all_subst tRet _tList in
+        inversionR gamma delta_in omega
+          (TyFunc (((name, _argList), _tRet), funcs))
+          psi zeta theta ident
+        >>= fun ((delta_out, theta_out), e) ->
+        match e with
+        | Func ((_, _), (_, e1)) ->
+            return
+              ( (delta_out, theta_out),
+                SchemeFunc (tList, ((name, argList), (tRet, e1))) )
+        | _ -> raise Fail)
     | TyUnitRetFunc ((name, argList), _) ->
         mplus
-          ( inversionR (argList @ gamma) gamma [] TyEnd psi zeta (ident + 1)
-          >>= fun (delta_out, e) ->
-            return (delta_out, UnitRetFunc ((name, argList), RunSession e)) )
+          ( inversionR (argList @ gamma) gamma [] TyEnd psi zeta theta
+              (ident + 1)
+          >>= fun ((delta_out, theta_out), e) ->
+            return
+              ( (delta_out, theta_out),
+                UnitRetFunc ((name, argList), RunSession e) ) )
           ( of_list gamma >>= fun (_, ty) ->
             match ty with
             | TyFunc
@@ -525,74 +766,81 @@ and inversionR gamma delta_in omega t psi zeta ident =
                   let (name2, argList2), _ = searchFuncType tChan gamma in
                   inversionR gamma delta_in omega
                     (TyApp (name, List.map snd argList))
-                    psi zeta ident
-                  >>= fun (delta_out, e1) ->
+                    psi zeta theta ident
+                  >>= fun ((delta_out, theta_out), e1) ->
                   inversionR gamma delta_out omega
                     (TyApp (name2, List.map snd argList2))
-                    psi zeta ident
-                  >>= fun (delta_out2, e2) ->
+                    psi zeta theta_out ident
+                  >>= fun ((delta_out2, theta_out2), e2) ->
                   return
-                    ( delta_out2,
+                    ( (delta_out2, theta_out2),
                       UnitRetFunc
                         ((name, argList), RunSession (ApplyChannel (e1, e2))) )
                 with Fail -> Choice.fail)
             | TyFunc _ -> Choice.fail
             | _ -> Choice.fail )
     | TyApp (func_name, tyArgList) ->
-        let rec synth_args delta args =
+        let rec synth_args delta theta args =
           match args with
-          | [] -> return (delta, [])
+          | [] -> return ((delta, theta), [])
           | t :: rest ->
-              inversionR gamma delta omega t psi zeta (ident + 1)
-              >>= fun (delta', arg_tm) ->
-              synth_args delta' rest >>= fun (delta'', arg_tms) ->
-              return (delta'', arg_tm :: arg_tms)
+              inversionR gamma delta omega t psi zeta theta (ident + 1)
+              >>= fun ((delta', theta'), arg_tm) ->
+              synth_args delta' theta' rest
+              >>= fun ((delta'', theta''), arg_tms) ->
+              return ((delta'', theta''), arg_tm :: arg_tms)
         in
-        synth_args delta_in tyArgList >>= fun (delta_after_args, arg_tm_list) ->
-        return (delta_after_args, App (Var func_name, arg_tm_list))
+        synth_args delta_in theta tyArgList
+        >>= fun ((delta_after_args, theta_out), arg_tm_list) ->
+        return ((delta_after_args, theta_out), App (Var func_name, arg_tm_list))
     | TyRec _ ->
         if List.mem t psi then
-          let (name, tyArgs), _ = searchFuncType t !fn_ctxt in
+          let (name, tyArgs), _ = searchFuncType t gamma in
 
           let tyArgsList = List.map snd tyArgs in
 
           inversionR gamma delta_in omega
             (TyApp (name, tyArgsList))
-            psi zeta (ident + 1)
+            psi zeta theta (ident + 1)
         else
           let unfolded_t = unfold t in
-          inversionR gamma delta_in omega unfolded_t (t :: psi) zeta (ident + 1)
-          >>= fun (delta_out, e) -> return (delta_out, Fix e)
+          inversionR gamma delta_in omega unfolded_t (t :: psi) zeta theta
+            (ident + 1)
+          >>= fun ((delta_out, theta_out), e) ->
+          return ((delta_out, theta_out), Fix e)
     | TySession t ->
-        inversionR gamma delta_in omega t psi zeta (ident + 1)
-        >>= fun (delta_out, e) ->
+        inversionR gamma delta_in omega t psi zeta theta (ident + 1)
+        >>= fun ((delta_out, theta_out), e) ->
         if delta_out <> [] then (
           print_fail "InversionR" ident;
           Choice.fail)
-        else return (delta_out, e)
+        else return ((delta_out, theta_out), e)
     | TyReceiveChannel (tChan, tCont) ->
         let x = fresh_channel_id () in
-        inversionR gamma delta_in ((x, tChan) :: omega) tCont psi zeta
+        inversionR gamma delta_in ((x, tChan) :: omega) tCont psi zeta theta
           (ident + 1)
-        >>= fun (delta_out, e1) -> return (delta_out, ReceiveChannel (x, e1))
+        >>= fun ((delta_out, theta_out), e1) ->
+        return ((delta_out, theta_out), ReceiveChannel (x, e1))
     | TyReceiveValue (tau, tCont) ->
         let x = fresh_val_id () in
-        inversionR
-          ((x, TyPrimitive tau) :: gamma)
-          delta_in omega tCont psi zeta (ident + 1)
-        >>= fun (delta_out, e1) -> return (delta_out, ReceiveValue (x, e1))
+        inversionR ((x, tau) :: gamma) delta_in omega tCont psi zeta theta
+          (ident + 1)
+        >>= fun ((delta_out, theta_out), e1) ->
+        return ((delta_out, theta_out), ReceiveValue (x, e1))
     | TyExternalChoice c -> (
         let l = choice_to_list c in
         let branches =
           List.map
             (fun (label, t) ->
-              inversionR gamma delta_in omega t psi zeta (ident + 1)
+              inversionR gamma delta_in omega t psi zeta theta (ident + 1)
               >>= fun res -> Choice.return (label, res))
             l
         in
         sequence branches >>= fun branches ->
         let out_ctxts =
-          List.map (fun (_, (delta_out, _)) -> delta_out) branches
+          List.map
+            (fun (_, ((delta_out, theta_out), _)) -> (delta_out, theta_out))
+            branches
         in
         if not (all_equal out_ctxts) then (
           print_fail "InversionR" ident;
@@ -602,12 +850,12 @@ and inversionR gamma delta_in omega t psi zeta ident =
           | [] ->
               print_fail "InversionR" ident;
               Choice.fail
-          | delta_out :: _ ->
+          | (delta_out, theta_out) :: _ ->
               let choices =
                 List.map (fun (label, (_, tm)) -> (label, tm)) branches
               in
-              Choice.return (delta_out, OfferChoice choices))
-    | _ -> inversionL gamma delta_in omega t psi zeta (ident + 1)
+              Choice.return ((delta_out, theta_out), OfferChoice choices))
+    | _ -> inversionL gamma delta_in omega t psi zeta theta (ident + 1)
   in
   tm
 
@@ -618,63 +866,66 @@ and sequence lst =
       x >>= fun v ->
       sequence xs >>= fun vs -> Choice.return (v :: vs)
 
-and inversionL gamma delta_in omega t psi zeta ident =
+and inversionL gamma delta_in omega t psi zeta theta ident =
   match omega with
   | [] ->
       print_func_entry_withgoal "inversionL" (TyPrimitive "Empty") ident t;
       print_ctxts_with_ident gamma delta_in ident;
-      let tm = decideFocus gamma delta_in t psi zeta (ident + 1) in
+      let tm = decideFocus gamma delta_in t psi zeta theta (ident + 1) in
       tm
   | (x, ty) :: xs ->
       print_func_entry_withgoal "inversionL" ty ident t;
       let tm =
         match ty with
         | TyPrimitive _ ->
-            inversionL ((x, ty) :: gamma) delta_in xs t psi zeta (ident + 1)
+            inversionL ((x, ty) :: gamma) delta_in xs t psi zeta theta
+              (ident + 1)
         | TyFunc (((name, argList), tRet), _) ->
             if tRet <> t then (
               print_fail "inversionL" ident;
               Choice.fail)
             else
-              let rec sequence_inversion gamma delta = function
-                | [] -> return (delta, [])
+              let rec sequence_inversion gamma delta theta = function
+                | [] -> return ((delta, theta), [])
                 | (_, t1) :: xs ->
-                    inversionR gamma delta [] t1 psi zeta (ident + 1)
-                    >>= fun (delta', e) ->
-                    sequence_inversion gamma delta' xs
-                    >>= fun (delta'', rest) -> return (delta'', e :: rest)
+                    inversionR gamma delta [] t1 psi zeta theta (ident + 1)
+                    >>= fun ((delta', theta'), e) ->
+                    sequence_inversion gamma delta' theta' xs
+                    >>= fun ((delta'', theta''), rest) ->
+                    return ((delta'', theta''), e :: rest)
               in
-              sequence_inversion gamma delta_in argList
-              >>= fun (delta_out, tm_list) ->
-              return (delta_out, App (Var name, tm_list))
+              sequence_inversion gamma delta_in theta argList
+              >>= fun ((delta_out, theta_out), tm_list) ->
+              return ((delta_out, theta_out), App (Var name, tm_list))
         | TySendChannel (tyChan, tyCont) ->
             let binder = fresh_binder_id () in
             inversionL gamma delta_in
               ((x, tyCont) :: (binder, tyChan) :: xs)
-              t psi zeta (ident + 1)
-            >>= fun (delta_out, e1) ->
-            return (delta_out, ReceiveChannelFrom (x, (binder, e1)))
+              t psi zeta theta (ident + 1)
+            >>= fun ((delta_out, theta_out), e1) ->
+            return ((delta_out, theta_out), ReceiveChannelFrom (x, (binder, e1)))
         | TySendValue (tau, tyCont) ->
             print_ctxts_with_ident gamma delta_in ident;
             let binder = fresh_binder_id () in
-            inversionL
-              ((binder, TyPrimitive tau) :: gamma)
-              delta_in ((x, tyCont) :: xs) t psi zeta (ident + 1)
-            >>= fun (delta_out, e1) ->
-            return (delta_out, ReceiveValueFrom ((x, binder), e1))
+            inversionL ((binder, tau) :: gamma) delta_in ((x, tyCont) :: xs) t
+              psi zeta theta (ident + 1)
+            >>= fun ((delta_out, theta_out), e1) ->
+            return ((delta_out, theta_out), ReceiveValueFrom ((x, binder), e1))
         | TyInternalChoice c -> (
             let l = choice_to_list c in
             let branches =
               List.map
                 (fun (label, t1) ->
-                  inversionL gamma delta_in ((x, t1) :: xs) t psi zeta
+                  inversionL gamma delta_in ((x, t1) :: xs) t psi zeta theta
                     (ident + 1)
                   >>= fun res -> Choice.return (label, res))
                 l
             in
             sequence branches >>= fun branches ->
             let out_ctxts =
-              List.map (fun (_, (delta_out, _)) -> delta_out) branches
+              List.map
+                (fun (_, ((delta_out, theta_out), _)) -> (delta_out, theta_out))
+                branches
             in
             if not (all_equal out_ctxts) then (
               print_fail "InversionL" ident;
@@ -684,26 +935,32 @@ and inversionL gamma delta_in omega t psi zeta ident =
               | [] ->
                   print_fail "InversionL" ident;
                   Choice.fail
-              | delta_out :: _ ->
+              | (delta_out, theta_out) :: _ ->
                   return
-                    ( delta_out,
+                    ( (delta_out, theta_out),
                       Case
                         ( x,
                           List.map
                             (fun (label, (_, tm)) -> (label, tm))
                             branches ) ))
         | TyEnd ->
-            inversionL gamma delta_in xs t psi zeta (ident + 1)
-            >>= fun (delta_out, e1) -> return (delta_out, Wait (x, e1))
+            inversionL gamma delta_in xs t psi zeta theta (ident + 1)
+            >>= fun ((delta_out, theta_out), e1) ->
+            return ((delta_out, theta_out), Wait (x, e1))
         | TySharedToLinear _ ->
             let t2 = unfoldShared ty in
             let x1 = fresh_channel_id () in
-            inversionL ((x1, t2) :: gamma) delta_in xs t psi zeta (ident + 1)
-            >>= fun (delta_out, e1) -> return (delta_out, Release (x, e1))
+            inversionL ((x1, t2) :: gamma) delta_in xs t psi zeta theta
+              (ident + 1)
+            >>= fun ((delta_out, theta_out), e1) ->
+            return ((delta_out, theta_out), Release (x, e1))
         | TyLinearToShared _ ->
-            inversionL ((x, ty) :: gamma) delta_in xs t psi zeta (ident + 1)
+            inversionL ((x, ty) :: gamma) delta_in xs t psi zeta theta
+              (ident + 1)
         | TyZ _ -> Choice.fail (* If a TyZ has't been unfolded it should fail *)
-        | _ -> inversionL gamma ((x, ty) :: delta_in) xs t psi zeta (ident + 1)
+        | _ ->
+            inversionL gamma ((x, ty) :: delta_in) xs t psi zeta theta
+              (ident + 1)
       in
       tm
 
@@ -734,10 +991,12 @@ and ends_in ty goal =
   | TyExternalChoice c | TyInternalChoice c ->
       let branches = choice_to_list c in
       List.exists (fun (_, t) -> ends_in t goal) branches
-  | TyRec _ -> ends_in (unfold ty) goal
+  | TyRec _ ->
+      true
+      (* avoid infinite recursion if we have a TyRec with polymorphic types*)
   | _ -> false
 
-and decideFocus gamma delta_in t psi zeta ident =
+and decideFocus gamma delta_in t psi zeta theta ident =
   print_func_entry "decideFocus" t ident;
   print_ctxts_with_ident gamma delta_in ident;
 
@@ -747,20 +1006,24 @@ and decideFocus gamma delta_in t psi zeta ident =
         Choice.fail
         (* Building TyRec on the rigt is already dealt with in inversionR*)
     | _ -> (
-        match focusGamma gamma delta_in t psi zeta (ident + 1) with
+        match focusGamma gamma delta_in t psi zeta theta (ident + 1) with
         | None -> Choice.fail
         | Some c -> return c)
   in
 
-  let r = delay (fun () -> focusR gamma delta_in t psi zeta (ident + 1)) in
+  let r =
+    delay (fun () -> focusR gamma delta_in t psi zeta theta (ident + 1))
+  in
 
   if not (is_empty r) then r
   else
-    let l = delay (fun () -> focusL gamma delta_in t psi zeta (ident + 1)) in
+    let l =
+      delay (fun () -> focusL gamma delta_in t psi zeta theta (ident + 1))
+    in
 
     if not (is_empty l) then l else try_focus_gamma ()
 
-and focusGamma gamma delta_in t psi zeta ident =
+and focusGamma gamma delta_in t psi zeta theta ident =
   let focus_options = of_list gamma in
 
   run_one
@@ -769,11 +1032,11 @@ and focusGamma gamma delta_in t psi zeta ident =
       print_ctxts_with_ident gamma delta_in ident;
       let gamma' = removeWithId id ty gamma in
       match ty with
-      | TyFunc _ | TyLinearToShared _ ->
-          focusL' gamma' delta_in id ty t psi zeta (ident + 1)
+      | TyFunc _ | TyLinearToShared _ | TySchemeFunc _ ->
+          focusL' gamma' delta_in id ty t psi zeta theta (ident + 1)
       | _ -> Choice.fail )
 
-and focusR gamma delta_in t psi zeta ident =
+and focusR gamma delta_in t psi zeta theta ident =
   print_func_entry "FocusR" t ident;
 
   let tm =
@@ -783,21 +1046,30 @@ and focusR gamma delta_in t psi zeta ident =
         let choices = of_list l in
 
         choices >>= fun (label, t1) ->
-        focusR gamma delta_in t1 psi zeta (ident + 1) >>= fun (delta_out, e) ->
-        return (delta_out, Offer (label, e))
+        focusR gamma delta_in t1 psi zeta theta (ident + 1)
+        >>= fun ((delta_out, theta_out), e) ->
+        return ((delta_out, theta_out), Offer (label, e))
     | TySendChannel (t1, t2) -> (
         try
           let id, ctxt_out = searchAndRemove t1 delta_in in
-          focusR gamma ctxt_out t2 psi zeta (ident + 1)
-          >>= fun (delta_out, e1) -> return (delta_out, SendChannelFrom (id, e1))
-        with Fail ->
-          print_fail "focusR" ident;
-          Choice.fail)
+          focusR gamma ctxt_out t2 psi zeta theta (ident + 1)
+          >>= fun ((delta_out, theta_out), e1) ->
+          return ((delta_out, theta_out), SendChannelFrom (id, e1))
+        with Fail -> (
+          try
+            let id, gamma_out = search t1 gamma in
+            focusR gamma_out delta_in t2 psi zeta theta (ident + 1)
+            >>= fun ((delta_out, theta_out), e1) ->
+            return ((delta_out, theta_out), SendChannelFrom (id, e1))
+          with Fail ->
+            print_fail "focusR" ident;
+            Choice.fail))
     | TySendValue (tau, t2) -> (
         try
-          let id, ctxt_out = search (TyPrimitive tau) gamma in
-          focusR ctxt_out delta_in t2 psi zeta (ident + 1)
-          >>= fun (delta_out, e1) -> return (delta_out, SendValue (Var id, e1))
+          let id, ctxt_out = search tau gamma in
+          focusR ctxt_out delta_in t2 psi zeta theta (ident + 1)
+          >>= fun ((delta_out, theta_out), e1) ->
+          return ((delta_out, theta_out), SendValue (Var id, e1))
         with Fail ->
           print_fail "focusR" ident;
           Choice.fail)
@@ -810,13 +1082,15 @@ and focusR gamma delta_in t psi zeta ident =
           (try
              if not (List.mem t1 psi) then raise Fail
              else
-               let (name, tyArgs), _ = searchFuncType t1 !fn_ctxt in
+               let (name, tyArgs), _ = searchFuncType t1 gamma in
                let tyArgsList = List.map snd tyArgs in
-               inversionR gamma delta_in []
+               inversionR
+                 (removeWithId name t1 gamma)
+                 delta_in []
                  (TyApp (name, tyArgsList))
-                 psi zeta (ident + 1)
+                 psi zeta theta (ident + 1)
            with Fail ->
-             inversionR gamma delta_in [] t2 (t :: psi) zeta (ident + 1))
+             inversionR gamma delta_in [] t2 (t :: psi) zeta theta (ident + 1))
           >>= fun (delta_out, e1) -> return (delta_out, Detach e1)
     | TyLinearToShared t1 ->
         if delta_in <> [] then (
@@ -827,13 +1101,15 @@ and focusR gamma delta_in t psi zeta ident =
           (try
              if not (List.mem t1 psi) then raise Fail
              else
-               let (name, tyArgs), _ = searchFuncType t1 !fn_ctxt in
+               let (name, tyArgs), _ = searchFuncType t1 gamma in
                let tyArgsList = List.map snd tyArgs in
-               inversionR gamma delta_in []
+               inversionR
+                 (removeWithId name t1 gamma)
+                 delta_in []
                  (TyApp (name, tyArgsList))
-                 psi zeta (ident + 1)
+                 psi zeta theta (ident + 1)
            with Fail ->
-             inversionR gamma delta_in [] t2 (t :: psi) zeta (ident + 1))
+             inversionR gamma delta_in [] t2 (t :: psi) zeta theta (ident + 1))
           >>= fun (delta_out, e1) -> return (delta_out, Accept e1)
     | TyEnd ->
         if delta_in <> [] then (
@@ -841,24 +1117,46 @@ and focusR gamma delta_in t psi zeta ident =
           Choice.fail)
         else (
           log "%s success\n" (String.make ident ' ');
-          return (delta_in, Terminate))
+          return ((delta_in, theta), Terminate))
     | TyAtomic _ -> (
         try
           let id, ctxt_out = searchAndRemove t delta_in in
           log "%s success\n" (String.make ident ' ');
-          return (ctxt_out, Forward id)
-        with Fail ->
-          print_fail "focusR" ident;
-          Choice.fail)
+          return ((ctxt_out, theta), Forward id)
+        with Fail -> (
+          try
+            let id, _ = search t gamma in
+            log "%s success\n" (String.make ident ' ');
+            return ((delta_in, theta), Forward id)
+          with Fail ->
+            print_fail "focusR" ident;
+            Choice.fail))
     | TyPrimitive _ -> (
         try
           let id, _ = search t gamma in
           log "%s success\n" (String.make ident ' ');
-          return (delta_in, Var id)
+          return ((delta_in, theta), Var id)
         with Fail ->
           print_fail "focusR" ident;
           Choice.fail)
-    | _ -> inversionR gamma delta_in [] t psi zeta (ident + 1)
+    | TyExistential _ -> (
+        try
+          let options = of_list delta_in in
+          options >>= fun (id, ty) ->
+          let theta_out = unify (t, ty) theta in
+          log "%s success\n" (String.make ident ' ');
+          return ((delta_in, theta_out), Forward id)
+        with Fail -> (
+          try
+            let options = of_list gamma in
+            options >>= fun (id, ty) ->
+            let theta_out = unify (t, ty) theta in
+            log "%s success\n" (String.make ident ' ');
+            return ((delta_in, theta_out), Forward id)
+          with Fail ->
+            print_fail "focusR" ident;
+            Choice.fail))
+    | _ -> inversionR gamma delta_in [] t psi zeta theta (ident + 1)
   in
   tm
 
@@ -896,7 +1194,22 @@ and searchFuncType t = function
   | (_, TyFunc (((func_id, argList), retType), _)) :: rest ->
       if retType = TySession t then ((func_id, argList), retType)
       else searchFuncType t rest
-  | _ -> raise Fail
+  | (_, TySchemeFunc (vars, (((name, argList), retType), _))) :: rest -> (
+      let inst = fresh_instantiation vars in
+      let retType = instantiateSubst inst retType in
+      try
+        let subst = unifyT [] retType (TySession t) in
+        let argList =
+          List.map
+            (fun (id, ty) ->
+              (id, apply_all_subst (instantiateSubst inst ty) subst))
+            argList
+        in
+        ((name, argList), apply_all_subst retType subst)
+      with CannotUnify ->
+        print_endline "cannot unify";
+        searchFuncType t rest)
+  | _ :: rest -> searchFuncType t rest
 
 and searchZeta id = function
   | [] -> false
@@ -913,7 +1226,7 @@ and incTimesUsedZeta id acc = function
       if id1 = id then List.rev_append acc ((id1, timesUsed + 1) :: rest)
       else incTimesUsedZeta id ((id1, timesUsed) :: acc) rest
 
-and focusL gamma delta_in t psi zeta ident =
+and focusL gamma delta_in t psi zeta theta ident =
   let focus_options = of_list delta_in in
 
   print_func_entry "focusL" t ident;
@@ -921,30 +1234,35 @@ and focusL gamma delta_in t psi zeta ident =
   log "%s> %d\n" (String.make ident ' ') (List.length (to_list focus_options));
   focus_options >>= fun (id, ty) ->
   let delta_in' = removeWithId id ty delta_in in
-  focusL' gamma delta_in' id ty t psi zeta (ident + 1)
+  focusL' gamma delta_in' id ty t psi zeta theta (ident + 1)
 
-and focusL' gamma delta_in id foc t psi zeta ident =
+and focusL' gamma delta_in id foc t psi zeta theta ident =
   print_func_entry "FocusL'" foc ident;
 
   let tm =
     match foc with
     | TyAtomic _ ->
         if foc = t && delta_in = [] then (
+          let theta_out = unify (foc, t) theta in
           log "%s success\n" (String.make ident ' ');
-          return (delta_in, Forward id))
+          return ((delta_in, theta_out), Forward id))
         else (
           print_fail "focusL" ident;
           Choice.fail)
+    | TyExistential _ ->
+        let theta_out = unify (foc, t) theta in
+        focusL' gamma delta_in id t t psi zeta theta_out ident
     | TyPrimitive _ ->
         if foc = t && delta_in <> [] then (
+          let theta_out = unify (foc, t) theta in
           log "%s success\n" (String.make ident ' ');
-          return (delta_in, Var id))
+          return ((delta_in, theta_out), Var id))
         else (
           print_fail "focusL" ident;
           Choice.fail)
     | TySession t1 ->
         let x1 = fresh_binder_id () in
-        inversionR gamma delta_in [ (x1, t1) ] t psi zeta (ident + 1)
+        inversionR gamma delta_in [ (x1, t1) ] t psi zeta theta (ident + 1)
         >>= fun (delta_out, e) ->
         let cut_dirs = List.map (fun (_, _) -> R) delta_in in
         return (delta_out, Cut ([ L ] @ cut_dirs, Var id, (x1, e)))
@@ -956,8 +1274,8 @@ and focusL' gamma delta_in id foc t psi zeta ident =
 
           inversionR gamma delta_in []
             (TyApp (name, tArgList))
-            psi zeta (ident + 1)
-          >>= fun (delta', cutL) ->
+            psi zeta theta (ident + 1)
+          >>= fun ((delta', theta'), cutL) ->
           let cut_dirs =
             List.map
               (fun (id, ty) ->
@@ -969,9 +1287,11 @@ and focusL' gamma delta_in id foc t psi zeta ident =
 
           let x1 = fresh_binder_id () in
 
-          inversionL gamma delta' [ (x1, tRet) ] t psi zeta (ident + 1)
-          >>= fun (delta_out, cutR) ->
-          return (delta_out, Cut (cut_dirs, cutL, (x1, cutR)))
+          inversionL gamma delta' [ (x1, tRet) ] t psi zeta theta' (ident + 1)
+          >>= fun ((delta_out, theta_out), cutR) ->
+          return ((delta_out, theta_out), Cut (cut_dirs, cutL, (x1, cutR)))
+    | TySchemeFunc _ ->
+        focusL' gamma delta_in id (instantiate foc) t psi zeta theta ident
     | TyRec _ ->
         print_ctxts_with_ident gamma delta_in ident;
 
@@ -986,8 +1306,9 @@ and focusL' gamma delta_in id foc t psi zeta ident =
           let unfolded_foc = unfold foc in
           focusL' gamma delta_in id unfolded_foc t psi
             (incTimesUsedZeta id [] zeta)
-            (ident + 1)
-          >>= fun (delta_out, e) -> return (delta_out, Unfix (id, e))
+            theta (ident + 1)
+          >>= fun ((delta_out, theta_out), e) ->
+          return ((delta_out, theta_out), Unfix (id, e))
         else
           let unfolded_foc = unfold foc in
 
@@ -1000,51 +1321,56 @@ and focusL' gamma delta_in id foc t psi zeta ident =
           in
 
           let try_no_unfolding =
-            focusL' gamma delta_in id pruned_foc t psi zeta_for_pruned
+            focusL' gamma delta_in id pruned_foc t psi zeta_for_pruned theta
               (ident + 1)
           in
 
           if is_empty try_no_unfolding then
             focusL' gamma delta_in id unfolded_foc t psi
               (incTimesUsedZeta id [] zeta)
-              (ident + 1)
-            >>= fun (delta_out, e) -> return (delta_out, Unfix (id, e))
+              theta (ident + 1)
+            >>= fun ((delta_out, theta_out), e) ->
+            return ((delta_out, theta_out), Unfix (id, e))
           else
-            try_no_unfolding >>= fun (delta_out, e) ->
-            return (delta_out, Unfix (id, e))
+            try_no_unfolding >>= fun ((delta_out, theta_out), e) ->
+            return ((delta_out, theta_out), Unfix (id, e))
     | TyReceiveChannel (tChan, tCont) ->
-        let possible_channels =
+        let possible_channels_delta_in =
           List.filter (fun (_, ty) -> ty = tChan) delta_in
+        in
+        let possible_channels =
+          possible_channels_delta_in
+          @ List.filter (fun (_, ty) -> ty = tChan) gamma
         in
         of_list possible_channels >>= fun (x, ty) ->
         inversionL gamma
-          (removeWithId x ty delta_in)
+          (try removeWithId x ty delta_in with Fail -> delta_in)
           [ (id, tCont) ]
-          t psi zeta (ident + 1)
-        >>= fun (delta_out, e1) ->
-        return (delta_out, SendChannelTo ((id, x), e1))
+          t psi zeta theta (ident + 1)
+        >>= fun ((delta_out, theta_out), e1) ->
+        return ((delta_out, theta_out), SendChannelTo ((id, x), e1))
     | TyExternalChoice c ->
         let l = choice_to_list c in
         print_ctxts_with_ident gamma delta_in ident;
         let branches = of_list l in
         branches >>= fun (label, ty) ->
-        inversionR gamma delta_in [ (id, ty) ] t psi zeta (ident + 1)
-        >>= fun (delta_out, e1) -> return (delta_out, Choose (id, (label, e1)))
+        inversionR gamma delta_in [ (id, ty) ] t psi zeta theta (ident + 1)
+        >>= fun ((delta_out, theta_out), e1) ->
+        return ((delta_out, theta_out), Choose (id, (label, e1)))
     | TyReceiveValue (t1, t2) ->
         print_ctxts_with_ident gamma delta_in ident;
-        let possible_values =
-          List.filter (fun (_, ty) -> ty = TyPrimitive t1) gamma
-        in
+        let possible_values = List.filter (fun (_, ty) -> ty = t1) gamma in
         of_list possible_values >>= fun (x, _) ->
-        focusL' gamma delta_in id t2 t psi zeta (ident + 1)
-        >>= fun (delta_out, e1) ->
-        return (delta_out, SendValueTo ((id, Var x), e1))
+        focusL' gamma delta_in id t2 t psi zeta theta (ident + 1)
+        >>= fun ((delta_out, theta_out), e1) ->
+        return ((delta_out, theta_out), SendValueTo ((id, Var x), e1))
     | TyLinearToShared _ ->
         let t2 = unfoldShared foc in
         let x1 = fresh_channel_id () in
-        inversionR gamma delta_in [ (x1, t2) ] t psi zeta (ident + 1)
-        >>= fun (delta_out, e1) -> return (delta_out, Acquire (id, (x1, e1)))
-    | _ -> inversionL gamma delta_in [ (id, foc) ] t psi zeta (ident + 1)
+        inversionR gamma delta_in [ (x1, t2) ] t psi zeta theta (ident + 1)
+        >>= fun ((delta_out, theta_out), e1) ->
+        return ((delta_out, theta_out), Acquire (id, (x1, e1)))
+    | _ -> inversionL gamma delta_in [ (id, foc) ] t psi zeta theta (ident + 1)
   in
   tm
 

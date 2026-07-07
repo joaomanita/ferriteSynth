@@ -20,8 +20,8 @@ and ty =
   | TyExternalChoiceId of string
   | TySendChannel of (ty * ty)
   | TyReceiveChannel of (ty * ty)
-  | TySendValue of (value * ty)
-  | TyReceiveValue of (value * ty)
+  | TySendValue of (ty * ty)
+  | TyReceiveValue of (ty * ty)
   | TyEnd
   | TySharedToLinear of ty
   | TyLinearToShared of ty
@@ -32,9 +32,13 @@ and ty =
   | TyApp of (string * ty list)
   | TyRec of ty
   | TyZ of int
+  | TyScheme of ty list * ty
+  | TySchemeFunc of ty list * (func_ty * string list)
+  | TyExistential of string
 
 and choice =
   | TyDefineChoice of (label * (label * ty) list)
   | TyEither of (ty * ty)
 
 and func_ty = (string * (label * ty) list) * ty
+and subst = ty * ty

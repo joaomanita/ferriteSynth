@@ -1,0 +1,8 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+fn chooser<A, B>(arg1: A, arg2: B) -> Session<Rec<InternalChoice<Either< SendValue<A, Z>, SendValue<B, Z>>>>> { @SYNTHESIZE [] }
+
+fn repeater() -> Session<ReceiveValue<Int, ReceiveValue<String, Rec<InternalChoice<Either< SendValue<Int, Z>, SendValue<String, Z>>>>>>> { @SYNTHESIZE [use chooser;]}
+

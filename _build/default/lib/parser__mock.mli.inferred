@@ -48,7 +48,10 @@ val xv_separated_nonempty_list_COMMA_choice_branch_ :
   (string * Mini_ast.ty) list
 val xv_separated_nonempty_list_COMMA_arg_ : (string * Mini_ast.ty) list
 val xv_separated_nonempty_list_COMMA_ID_ : string list
+val xv_separated_nonempty_list_COMMA_ATOMIC_ : string list
 val xv_separated_list_COMMA_arg_ : (string * Mini_ast.ty) list
+val xv_scheme_func : Mini_ast.decl
+val xv_scheme_args : Mini_ast.ty list
 val xv_s_type : Mini_ast.ty
 val xv_prog : Mini_ast.decl list
 val xv_loption_separated_nonempty_list_COMMA_arg__ :
