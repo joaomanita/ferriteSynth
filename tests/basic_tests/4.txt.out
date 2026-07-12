@@ -6,9 +6,9 @@ type myType = ReceiveChannel<
 fn myFunc2() -> myType {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
-            accept_shared_session(acquire_shared_session(chan_0, move |chan_4| {
-                acquire_shared_session(chan_1, move |chan_5| {
-                    send_channel_to(chan_4, chan_5, forward(chan_4))
+            accept_shared_session(acquire_shared_session(chan_0, move |chan_11| {
+                acquire_shared_session(chan_1, move |chan_13| {
+                    send_channel_to(chan_11, chan_13, forward(chan_11))
                 })
             }))
         })

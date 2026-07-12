@@ -7,11 +7,10 @@ fn chooser<A, B>(
     arg2: B,
 ) -> Session<Rec<TyInternalChoice<Either<SendValue<A, Z>, SendValue<B, Z>>>>> {
     fix_session(offer_case!(
-        Right,
-        send_value(arg2, chooser(forward(arg1), forward(arg2)))
+        Left,
+        send_value(arg1, chooser(forward(arg1), forward(arg2)))
     ))
 }
-// fn chooser<A, B>(arg1: A, arg2: B) -> Session<Rec<TyInternalChoice<Either<SendValue<A, Z>, SendValue<B, Z>>>>> { fix_session(offer_case!(Left, send_value(arg1, chooser(forward(arg1), forward(arg2))))) }
 
 fn repeater() -> Session<
     ReceiveValue<

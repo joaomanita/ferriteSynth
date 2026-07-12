@@ -11,19 +11,22 @@ type RecBankOps = Rec<TyExternalChoiceId>;
 
 fn bankops(arg1: Int) -> Session<Rec<TyExternalChoice<BankOps>>> {
     fix_session(
-        offer_choice! { deposit: receive_value(|val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(|val_2| {bankops(val_2)})), Terminate: terminate () },
+        offer_choice! { deposit: receive_value(|val_3| {bankops(val_3)}), withdraw: send_value(arg1, receive_value(|val_5| {bankops(val_5)})), Terminate: terminate () },
     )
 }
 
 fn bank_session(
     withdraw_value: Int,
 ) -> Session<ReceiveValue<String, Rec<TyExternalChoice<BankOps>>>> {
-    receive_value(|val_3| {
+    receive_value(|val_6| {
         fix_session(
-            offer_choice! { deposit: receive_value(|val_4| {bankops(val_4)}), withdraw: send_value(withdraw_value, receive_value(|val_6| {bankops(val_6)})), Terminate: terminate () },
+            offer_choice! { deposit: receive_value(|val_10| {bankops(val_10)}), withdraw: send_value(withdraw_value, receive_value(|val_12| {bankops(val_12)})), Terminate: cut! { []; bankops(withdraw_value); binder_3 => {unfix_session(binder_3, choose!(binder_3, Terminate, wait(binder_3, terminate ())))}} },
         )
     })
 }
+// fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, Rec<TyExternalChoice<BankOps>>>> { receive_value(|val_6| {fix_session(offer_choice!{ deposit: receive_value(|val_10| {bankops(val_10)}), withdraw: send_value(withdraw_value, receive_value(|val_12| {bankops(val_12)})), Terminate: cut! { []; bankops(withdraw_value); binder_3 => {unfix_session(binder_3, choose!(binder_3, withdraw, receive_value_from(binder_3, move |binder_4| {send_value_to(binder_3, withdraw_value, unfix_session(binder_3, choose!(binder_3, Terminate, wait(binder_3, terminate ()))))})))}} })}) }
+// fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, Rec<TyExternalChoice<BankOps>>>> { receive_value(|val_6| {fix_session(offer_choice!{ deposit: receive_value(|val_10| {bankops(val_10)}), withdraw: send_value(withdraw_value, receive_value(|val_12| {bankops(val_12)})), Terminate: cut! { []; bankops(withdraw_value); binder_3 => {unfix_session(binder_3, choose!(binder_3, withdraw, receive_value_from(binder_3, move |binder_4| {send_value_to(binder_3, binder_4, unfix_session(binder_3, choose!(binder_3, Terminate, wait(binder_3, terminate ()))))})))}} })}) }
+// fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, Rec<TyExternalChoice<BankOps>>>> { receive_value(|val_6| {fix_session(offer_choice!{ deposit: receive_value(|val_10| {bankops(val_10)}), withdraw: send_value(withdraw_value, receive_value(|val_12| {bankops(val_12)})), Terminate: cut! { []; bankops(withdraw_value); binder_3 => {unfix_session(binder_3, choose!(binder_3, deposit, send_value_to(binder_3, withdraw_value, unfix_session(binder_3, choose!(binder_3, Terminate, wait(binder_3, terminate ()))))))}} })}) }
 
 fn client_session(
     myId: String,
@@ -40,6 +43,6 @@ fn client_session(
         )
     })
 }
-// fn client_session(myId: String, depositAmt: Int) -> Session<ReceiveChannel<ReceiveValue<String, Rec<TyExternalChoice<BankOps>>>, End>> { receive_channel(|chan_0| {send_value_to(chan_0, myId, unfix_session(chan_0, choose!(chan_0, withdraw, receive_value_from(chan_0, move |binder_0| {send_value_to(chan_0, depositAmt, unfix_session(chan_0, choose!(chan_0, Terminate, wait(chan_0, terminate ()))))}))))}) }
-// fn client_session(myId: String, depositAmt: Int) -> Session<ReceiveChannel<ReceiveValue<String, Rec<TyExternalChoice<BankOps>>>, End>> { receive_channel(|chan_0| {send_value_to(chan_0, myId, unfix_session(chan_0, choose!(chan_0, withdraw, receive_value_from(chan_0, move |binder_0| {send_value_to(chan_0, binder_0, unfix_session(chan_0, choose!(chan_0, Terminate, wait(chan_0, terminate ()))))}))))}) }
+// fn client_session(myId: String, depositAmt: Int) -> Session<ReceiveChannel<ReceiveValue<String, Rec<TyExternalChoice<BankOps>>>, End>> { receive_channel(|chan_0| {send_value_to(chan_0, myId, unfix_session(chan_0, choose!(chan_0, withdraw, receive_value_from(chan_0, move |binder_5| {send_value_to(chan_0, depositAmt, unfix_session(chan_0, choose!(chan_0, Terminate, wait(chan_0, terminate ()))))}))))}) }
+// fn client_session(myId: String, depositAmt: Int) -> Session<ReceiveChannel<ReceiveValue<String, Rec<TyExternalChoice<BankOps>>>, End>> { receive_channel(|chan_0| {send_value_to(chan_0, myId, unfix_session(chan_0, choose!(chan_0, withdraw, receive_value_from(chan_0, move |binder_5| {send_value_to(chan_0, binder_5, unfix_session(chan_0, choose!(chan_0, Terminate, wait(chan_0, terminate ()))))}))))}) }
 // fn client_session(myId: String, depositAmt: Int) -> Session<ReceiveChannel<ReceiveValue<String, Rec<TyExternalChoice<BankOps>>>, End>> { receive_channel(|chan_0| {send_value_to(chan_0, myId, unfix_session(chan_0, choose!(chan_0, deposit, send_value_to(chan_0, depositAmt, unfix_session(chan_0, choose!(chan_0, Terminate, wait(chan_0, terminate ())))))))}) }

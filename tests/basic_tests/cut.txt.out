@@ -6,5 +6,5 @@ use tokio::time::sleep;
 type Producer = SendValue<String, End>;
 
 fn client() -> Session<SendValue<String, Producer>> {
-    cut! { []; client(); binder_0 => {receive_value_from(binder_0, move |binder_1| {receive_value_from(binder_0, move |binder_2| {wait(binder_0, send_value(binder_2, send_value(binder_2, terminate ())))})})}}
+    cut! { []; client(); binder_3 => {receive_value_from(binder_3, move |binder_4| {receive_value_from(binder_3, move |binder_5| {wait(binder_3, send_value(binder_5, send_value(binder_5, terminate ())))})})}}
 }

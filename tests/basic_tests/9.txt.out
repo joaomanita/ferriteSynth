@@ -3,5 +3,5 @@ use std::format;
 use ferrite_session::prelude::*;
 
 fn myFunc() -> Session<Rec<TyExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> {
-    fix_session(offer_choice! { Left: receive_value(|val_0| {terminate ()}), Right: myFunc() })
+    fix_session(offer_choice! { Left: receive_value(|val_1| {terminate ()}), Right: myFunc() })
 }
