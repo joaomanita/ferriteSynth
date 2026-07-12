@@ -1,6 +1,6 @@
 use ferrite_session::{either::*, prelude::*};
 
-type Choice = Either<SendValue<String, End>, ReceiveValue<u64, End>>;
+type Choice = TyInternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>;
 
 fn client(arg1: u64) -> Session<ReceiveChannel<Choice, End>> {
     receive_channel(|chan_0| {

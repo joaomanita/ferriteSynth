@@ -8,11 +8,11 @@ define_choice! {
     Quux: SendValue<i32, End>
 }
 
-fn provider() -> Session<FooBarBaz> {
+fn provider() -> Session<TyExternalChoice<FooBarBaz>> {
     offer_choice! { Foo: cut! { []; provider(); binder_0 => {choose!(binder_0, Foo, receive_value_from(binder_0, move |binder_2| {wait(binder_0, send_value(binder_2, terminate ()))}))}}, Bar: receive_value(|val_0| {terminate ()}), Baz: terminate (), Quux: cut! { []; provider(); binder_3 => {choose!(binder_3, Quux, receive_value_from(binder_3, move |binder_7| {wait(binder_3, send_value(binder_7, terminate ()))}))}} }
 }
 
-fn client() -> Session<ReceiveChannel<FooBarBaz, End>> {
+fn client() -> Session<ReceiveChannel<TyExternalChoice<FooBarBaz>, End>> {
     receive_channel(|chan_0| {
         choose!(
             chan_0,
@@ -21,8 +21,8 @@ fn client() -> Session<ReceiveChannel<FooBarBaz, End>> {
         )
     })
 }
-// fn client() -> Session<ReceiveChannel<FooBarBaz, End>> { receive_channel(|chan_0| {choose!(chan_0, Baz, wait(chan_0, terminate ()))}) }
-// fn client() -> Session<ReceiveChannel<FooBarBaz, End>> { receive_channel(|chan_0| {choose!(chan_0, Foo, receive_value_from(chan_0, move |binder_9| {wait(chan_0, terminate ())}))}) }
+// fn client() -> Session<ReceiveChannel<TyExternalChoice<FooBarBaz>, End>> { receive_channel(|chan_0| {choose!(chan_0, Baz, wait(chan_0, terminate ()))}) }
+// fn client() -> Session<ReceiveChannel<TyExternalChoice<FooBarBaz>, End>> { receive_channel(|chan_0| {choose!(chan_0, Foo, receive_value_from(chan_0, move |binder_9| {wait(chan_0, terminate ())}))}) }
 
 fn client() {
     run_session(apply_channel(client(), provider())).await()

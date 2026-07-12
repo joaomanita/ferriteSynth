@@ -3,8 +3,8 @@ use std::format;
 use ferrite_session::prelude::*;
 
 type myType = ReceiveChannel<
-    Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>,
-    ReceiveChannel<A, Either<B, C>>,
+    TyExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
+    ReceiveChannel<A, TyExternalChoice<Either<B, C>>>,
 >;
 
 fn myFunc() -> myType {

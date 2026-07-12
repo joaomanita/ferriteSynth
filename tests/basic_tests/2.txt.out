@@ -1,4 +1,4 @@
-type myType1 = ReceiveChannel<Either<A, A>, A>;
+type myType1 = ReceiveChannel<TyExternalChoice<Either<A, A>>, A>;
 
 fn myFunc2() -> myType1 {
     receive_channel(|chan_0| choose!(chan_0, Right, forward(chan_0)))

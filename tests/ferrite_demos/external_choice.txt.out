@@ -1,10 +1,13 @@
 use ferrite_session::{either::*, prelude::*};
 
-fn provider(arg1: String) -> Either<SendValue<String, End>, ReceiveValue<u64, End>> {
+fn provider(
+    arg1: String,
+) -> TyExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>> {
     offer_choice! { Left: send_value(arg1, terminate ()), Right: receive_value(|val_0| {terminate ()}) }
 }
 
-fn client() -> ReceiveChannel<Either<SendValue<String, End>, ReceiveValue<u64, End>>, End> {
+fn client(
+) -> ReceiveChannel<TyExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>, End> {
     receive_channel(|chan_0| {
         choose!(
             chan_0,

@@ -2,7 +2,7 @@ use std::format;
 
 use ferrite_session::prelude::*;
 
-type myType = Rec<Either<SendValue<Int, Z>, End>>;
+type myType = Rec<TyExternalChoice<Either<SendValue<Int, Z>, End>>>;
 
 fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> {
     receive_channel(|chan_0| {

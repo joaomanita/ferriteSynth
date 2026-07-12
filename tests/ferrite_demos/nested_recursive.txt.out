@@ -2,13 +2,13 @@ use ferrite_session::{either::*, prelude::*};
 
 define_choice! {
     StreamChoice;
-    rec1: Rec<Either<SendValue<String, Z>, S<Z>>>,
+    rec1: Rec<TyInternalChoice<Either<SendValue<String, Z>, S<Z>>>>,
     end1: ReceiveValue<String, End>
 }
 
 type Stream = Rec<TyExternalChoiceId>;
 
-fn producer(arg1: String) -> Session<Rec<StreamChoice>> {
+fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> {
     fix_session(
         offer_choice! { rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {terminate ()}) },
     )

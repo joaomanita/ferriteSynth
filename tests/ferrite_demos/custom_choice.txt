@@ -13,3 +13,4 @@ fn provider() -> Session<ExternalChoice<FooBarBaz>> { @SYNTHESIZE  []}
 fn client() -> Session<ReceiveChannel<ExternalChoice<FooBarBaz>, End>> { @SYNTHESIZE  []}
 
 fn main() { @SYNTHESIZE [use provider, client;] }
+
