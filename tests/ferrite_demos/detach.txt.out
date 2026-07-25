@@ -1,6 +1,6 @@
 use ferrite_session::{internal::protocol::Lock, prelude::*};
 
-type Counter = LinearToShared<SendValue<u64, SharedToLinear<FixShared>>>;
+type Counter = LinearToShared<SendValue<u64, FixShared>>;
 
 fn shared_provider_1(count: u64) -> Session<Counter> {
     accept_shared_session(send_value(
@@ -11,9 +11,9 @@ fn shared_provider_1(count: u64) -> Session<Counter> {
 
 fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> {
     receive_channel(|chan_0| {
-        acquire_shared_session(chan_0, move |chan_3| {
-            receive_value_from(chan_3, move |binder_1| {
-                release_shared_session(chan_3, send_value(binder_1, terminate()))
+        acquire_shared_session(chan_0, move |chan_4| {
+            receive_value_from(chan_4, move |binder_1| {
+                release_shared_session(chan_4, send_value(binder_1, terminate()))
             })
         })
     })

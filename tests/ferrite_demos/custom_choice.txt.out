@@ -12,11 +12,13 @@ fn provider(arg1: String) -> Session<TyExternalChoice<FooBarBaz>> {
 }
 
 fn client() -> Session<ReceiveChannel<TyExternalChoice<FooBarBaz>, End>> {
-    receive_channel(|chan_0| choose!(chan_0, Baz, wait(chan_0, terminate())))
+    receive_channel(|chan_0| {
+        choose!(
+            chan_0,
+            Foo,
+            receive_value_from(chan_0, move |binder_1| { wait(chan_0, terminate()) })
+        )
+    })
 }
-// fn client() -> Session<ReceiveChannel<TyExternalChoice<FooBarBaz>, End>> { receive_channel(|chan_0| {choose!(chan_0, Foo, receive_value_from(chan_0, move |binder_1| {wait(chan_0, terminate ())}))}) }
 
-fn main(arg1: String) {
-    run_session(cut! { [R]; provider(arg1); binder_17 => {cut! { [R]; client(); binder_27 => {send_channel_to(binder_27, binder_17, wait(binder_27, terminate ()))}}}}).await()
-}
-// fn main(arg1: String) { run_session(cut! { [R]; client(); binder_10 => {cut! { [R]; provider(arg1); binder_14 => {send_channel_to(binder_10, binder_14, wait(binder_10, terminate ()))}}}}).await() }
+// couldnt synthesize function

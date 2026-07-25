@@ -23,8 +23,8 @@ and ty =
   | TySendValue of (ty * ty)
   | TyReceiveValue of (ty * ty)
   | TyEnd
-  | TySharedToLinear of ty
-  | TyLinearToShared of ty
+  | TySharedToLinear of ty * int
+  | TyLinearToShared of ty * int
   | TyFixShared
   | TySession of ty
   | TyFunc of func_ty * string list

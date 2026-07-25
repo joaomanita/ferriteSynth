@@ -1,0 +1,9 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+fn combiner<A, B>(arg1: A, arg2: B) -> Session<TyExternalChoice<Either<A, B>>> {
+    offer_choice! { Left: forward(arg1), Right: forward(arg2) }
+}
+
+// couldnt synthesize function

@@ -23,6 +23,7 @@ run_all() {
     find \
         "$TEST_ROOT/basic_tests" \
         "$TEST_ROOT/ferrite_demos" \
+        "$TEST_ROOT/advanced_tests" \
         -type f -name "*.txt" |
     sort |
     while read -r file; do

@@ -13,8 +13,8 @@ define_choice! {
 
 define_choice! {
     ActionsChannel;
-    ReceiveNext: ReceiveValue<Int, SharedToLinear<FixShared>>,
-    SendNext: SendValue<Int, SharedToLinear<FixShared>>
+    ReceiveNext: ReceiveValue<Int, FixShared>,
+    SendNext: SendValue<Int, FixShared>
 }
 
 type Receiver = Rec<TyExternalChoiceId>;

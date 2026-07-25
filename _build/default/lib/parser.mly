@@ -74,13 +74,13 @@ s_type:
   | RECEIVEVALUE; LT; id  = ID; COMMA; cont = s_type; GT                 { TyReceiveValue(TyPrimitive id, cont) }
   | RECEIVEVALUE; LT; a = ATOMIC; COMMA; cont = s_type; GT               { TyReceiveValue(TyAtomic a, cont) }
   | END                                                                  { TyEnd }
-  | SHAREDTOLINEAR; LT; t = s_type; GT                                   { TySharedToLinear(t) }
-  | LINEARTOSHARED; LT; t = s_type; GT                                   { TyLinearToShared(t) }
+  | SHAREDTOLINEAR; LT; t = s_type; GT                                   { TySharedToLinear(t, 0) }
+  | LINEARTOSHARED; LT; t = s_type; GT                                   { TyLinearToShared(t, 0) }
   | SESSION; LT; t = s_type; GT                                          { TySession(t) }
   | REC; LT; t = s_type; GT                                              { TyRec(t) }
   | t = z_type                                                           { TyZ (t) }
-  | RELEASE                                                              { TySharedToLinear(TyFixShared) }
-  | ACQUIRE                                                              { TyLinearToShared(TyFixShared) }
+  | RELEASE                                                              { TyFixShared }
+  | ACQUIRE                                                              { TyFixShared }
 
 choice:
   | EITHER LT t1 = s_type COMMA t2 = s_type GT
@@ -135,6 +135,19 @@ used_funcs:
 
 closed_func:
   | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE; body = list(RAW); RBRACE { ClosedFunction((TyFunc(((name, ars), ret), []), String.concat "" body)) }
+  | FUNC; name = ID;
+    LT; tList = scheme_args; GT;
+    LPAR; ars = separated_list(COMMA, arg); RPAR;
+    MINUS; GT; ret = s_type;
+    LBRACE;
+    body = list(RAW);
+    RBRACE
+    {
+      ClosedFunction
+        ((TySchemeFunc
+           (tList,
+            (((name, ars), ret), []))), String.concat "" body)
+    }
 
 scheme_args:
   | ts = separated_nonempty_list(COMMA, ATOMIC)

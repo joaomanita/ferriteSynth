@@ -11,16 +11,12 @@ fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>
             choose!(
                 chan_0,
                 Left,
-                receive_value_from(chan_0, move |binder_181| {
+                receive_value_from(chan_0, move |binder_1| {
                     unfix_session(
                         chan_0,
-                        choose!(
+                        wait(
                             chan_0,
-                            Right,
-                            wait(
-                                chan_0,
-                                send_value(binder_181, send_value(binder_181, terminate()))
-                            )
+                            send_value(binder_1, send_value(binder_1, terminate())),
                         ),
                     )
                 })
@@ -28,5 +24,3 @@ fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>
         )
     })
 }
-// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_181| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_317| {unfix_session(chan_0, choose!(chan_0, Right, wait(chan_0, send_value(binder_317, send_value(binder_317, terminate ())))))})))})))}) }
-// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_181| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_317| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_351| {cut! { [R]; myFunc(); binder_357 => {send_channel_to(binder_357, chan_0, receive_value_from(binder_357, move |binder_360| {receive_value_from(binder_357, move |binder_361| {wait(binder_357, send_value(binder_361, send_value(binder_361, terminate ())))})}))}}})))})))})))}) }

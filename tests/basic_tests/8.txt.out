@@ -9,9 +9,11 @@ fn myFunc(arg1: myType, arg2: A) -> Session<B> {}
 fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
-            cut! { [L, L]; myFunc(receive_channel(|chan_6| {send_channel_to(chan_0, chan_1, forward(chan_0))}), forward(chan_6)); binder_5 => {send_channel_from(binder_5, terminate ())}}
+            send_channel_to(
+                chan_0,
+                chan_1,
+                cut! { [L]; myFunc(receive_channel(|chan_5| {forward(chan_0)}), forward(chan_5)); binder_3 => {send_channel_from(binder_3, terminate ())}},
+            )
         })
     })
 }
-// fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> { receive_channel(|chan_0| {receive_channel(|chan_1| {cut! { [L, L]; myFunc(receive_channel(|chan_6| {send_channel_to(chan_0, chan_6, forward(chan_0))}), forward(chan_1)); binder_4 => {send_channel_from(binder_4, terminate ())}}})}) }
-// fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> { receive_channel(|chan_0| {receive_channel(|chan_1| {send_channel_to(chan_0, chan_1, cut! { [L]; myFunc(receive_channel(|chan_5| {forward(chan_0)}), forward(chan_5)); binder_3 => {send_channel_from(binder_3, terminate ())}})})}) }

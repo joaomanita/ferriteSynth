@@ -1,0 +1,7 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+fn combiner<A, B>(arg1: A, arg2: B) -> Session<ExternalChoice<Either<A, B>>> { @SYNTHESIZE [] }
+
+fn chooser() -> Session<ReceiveValue<String, ReceiveValue<Int, SendValue<Int, End>>>> { @SYNTHESIZE [use combiner;]}

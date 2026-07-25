@@ -27,4 +27,3 @@ fn repeater() -> Session<
         })
     })
 }
-// fn repeater() -> Session<ReceiveValue<Int, ReceiveValue<String, Rec<TyInternalChoice<Either<SendValue<Int, Z>, SendValue<String, Z>>>>>>> { receive_value(|val_0| {receive_value(|val_1| {fix_session(offer_case!(Left, send_value(val_0, chooser(val_0, val_1))))})}) }

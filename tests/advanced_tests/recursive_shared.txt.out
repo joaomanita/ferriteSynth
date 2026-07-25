@@ -1,0 +1,59 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+type SharedService = LinearToShared<
+    TyExternalChoice<Either<SendValue<String, FixShared>, ReceiveValue<String, FixShared>>>,
+>;
+
+fn shared_provider(arg1: String) -> Session<SharedService> {
+    accept_shared_session(
+        offer_choice! { Left: send_value(arg1, detach_shared_session(shared_provider(arg1))), Right: receive_value(|val_1| {detach_shared_session(shared_provider(val_1))}) },
+    )
+}
+
+fn rec_provider(
+    arg1: String,
+) -> Session<Rec<TyExternalChoice<Either<SendChannel<SharedService, Z>, End>>>> {
+    cut! { []; shared_provider(arg1); binder_11 => {fix_session(offer_choice!{ Left: send_channel_from(binder_11, rec_provider(arg1)), Right: acquire_shared_session(binder_11, move |chan_35| {choose!(chan_35, Left, receive_value_from(chan_35, move |binder_19| {release_shared_session(chan_35, terminate ())}))}) })}}
+}
+
+fn user() -> Session<
+    ReceiveChannel<
+        Rec<TyExternalChoice<Either<SendChannel<SharedService, Z>, End>>>,
+        SendValue<String, SendValue<String, End>>,
+    >,
+> {
+    receive_channel(|chan_40| {
+        unfix_session(
+            chan_40,
+            choose!(
+                chan_40,
+                Left,
+                receive_channel_from(chan_40, |binder_25| {
+                    acquire_shared_session(binder_25, move |chan_56| {
+                        choose!(
+                            chan_56,
+                            Left,
+                            receive_value_from(chan_56, move |binder_29| {
+                                release_shared_session(
+                                    chan_56,
+                                    unfix_session(
+                                        chan_40,
+                                        wait(
+                                            chan_40,
+                                            send_value(
+                                                binder_29,
+                                                send_value(binder_29, terminate()),
+                                            ),
+                                        ),
+                                    ),
+                                )
+                            })
+                        )
+                    })
+                })
+            ),
+        )
+    })
+}
