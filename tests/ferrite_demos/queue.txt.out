@@ -5,4 +5,11 @@ use tokio::time::sleep;
 
 type StringQueue = Rec<TyInternalChoice<Either<End, SendValue<String, Z>>>>;
 
-// couldnt synthesize function
+fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> {
+    receive_channel(|chan_0| {
+        cut! { [R]; read_queue(); binder_148 => {send_channel_to(binder_148, chan_0, wait(binder_148, terminate ()))}}
+    })
+}
+// fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> { receive_channel(|chan_0| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_2| {cut! { [R]; read_queue(); binder_80 => {send_channel_to(binder_80, chan_0, wait(binder_80, terminate ()))}}}) })}) }
+// fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> { receive_channel(|chan_0| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_2| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_9| {cut! { [R]; read_queue(); binder_30 => {send_channel_to(binder_30, chan_0, wait(binder_30, terminate ()))}}}) })}) })}) }
+// fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> { receive_channel(|chan_0| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_2| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_9| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_10| {cut! { [R]; read_queue(); binder_16 => {send_channel_to(binder_16, chan_0, wait(binder_16, terminate ()))}}}) })}) })}) })}) }

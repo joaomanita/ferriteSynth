@@ -4,4 +4,4 @@ use ferrite_session::prelude::*;
 
 type myType = ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<B, C>>>>;
 
-fn myFunc() -> myType { @SYNTHESIZE [] }
+fn myFunc() -> Session<myType> { @SYNTHESIZE [] }

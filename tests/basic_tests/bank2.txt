@@ -9,6 +9,6 @@ define_choice! {
 
 fn bankops(arg1: Int) -> Session<ExternalChoice<BankOps>> { @SYNTHESIZE []}
 
-fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, ExternalChoice<BankOps>>> { @SYNTHESIZE [use bankops;] }
+fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, ExternalChoice<BankOps>>> { @SYNTHESIZE [] }
 
 fn client_session(myId: String, depositAmt: Int) -> Session< ReceiveChannel< ReceiveValue<String, ExternalChoice<BankOps>>, End>> { @SYNTHESIZE [] }

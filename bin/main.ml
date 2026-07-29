@@ -1,5 +1,7 @@
 open FerriteSynth
 open Mini_ast
+open Synthesizer
+open Utils
 
 let () =
   Printexc.record_backtrace false;
@@ -39,8 +41,7 @@ let () =
 
                 List.iteri
                   (fun i (lbl, ty) ->
-                    Printf.fprintf out_channel "    %s: %s" lbl
-                      (Synthesizer.print_type ty);
+                    Printf.fprintf out_channel "    %s: %s" lbl (print_type ty);
                     if i < List.length branches - 1 then
                       Printf.fprintf out_channel ",";
                     Printf.fprintf out_channel "\n")
@@ -48,7 +49,7 @@ let () =
                 Printf.fprintf out_channel "}\n")
         | TypeDef v ->
             Printf.fprintf out_channel "type %s = %s;" v.name
-              (Synthesizer.print_type v.body);
+              (print_type v.body);
             Synthesizer.append_type_ctxt v.name v.body
         | Function fType -> (
             let results = Synthesizer.synthesize fType in
@@ -59,18 +60,16 @@ let () =
                 Printf.fprintf out_channel "// couldnt synthesize function\n"
             | tm :: rest ->
                 (* print first term normally *)
-                Printf.fprintf out_channel "%s\n" (Synthesizer.print_exp tm);
+                Printf.fprintf out_channel "%s\n" (print_exp tm);
 
                 (* print rest as commented terms *)
                 List.iter
                   (fun tm ->
-                    Printf.fprintf out_channel "// %s\n"
-                      (Synthesizer.print_exp tm))
+                    Printf.fprintf out_channel "// %s\n" (print_exp tm))
                   rest)
         | ClosedFunction (fType, body) ->
             Printf.fprintf out_channel "%s\n"
-              (Synthesizer.print_exp
-                 (Synthesizer.process_closed_function (fType, body))));
+              (print_exp (Synthesizer.process_closed_function (fType, body))));
 
         print_prog xs
   in

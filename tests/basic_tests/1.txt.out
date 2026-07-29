@@ -7,7 +7,7 @@ type myType = ReceiveChannel<
     ReceiveChannel<A, TyExternalChoice<Either<B, C>>>,
 >;
 
-fn myFunc() -> myType {
+fn myFunc() -> Session<myType> {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
             offer_choice! { Left: choose!(chan_0, Left, send_channel_to(chan_0, chan_1, forward(chan_0))), Right: choose!(chan_0, Right, send_channel_to(chan_0, chan_1, forward(chan_0))) }

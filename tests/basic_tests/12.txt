@@ -1,6 +1,6 @@
-fn sender() -> ReceiveChannel<A, ReceiveChannel<A,
+fn sender() -> Session<ReceiveChannel<A, ReceiveChannel<A,
         ReceiveChannel<ReceiveChannel<A, ReceiveChannel<A, End>>,
             End
         >
     >
-> { @SYNTHESIZE [] }
+> >{ @SYNTHESIZE [] }

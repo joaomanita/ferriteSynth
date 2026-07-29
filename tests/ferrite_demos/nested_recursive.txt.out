@@ -9,7 +9,10 @@ define_choice! {
 type Stream = Rec<TyExternalChoiceId>;
 
 fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> {
-    fix_session(
-        offer_choice! { rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_1| {terminate ()}) },
-    )
+    producer(arg1)
 }
+// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { producer(arg1) }
+// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {terminate ()}) }) }
+// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {terminate ()}) }) }
+// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {terminate ()}) }) }
+// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {terminate ()}) }) }

@@ -8,10 +8,14 @@ define_choice! {
 }
 
 fn bankops(arg1: Int) -> Session<TyExternalChoice<BankOps>> {
-    offer_choice! { deposit: receive_value(|val_0| {terminate ()}), withdraw: send_value(arg1, receive_value(|val_4| {terminate ()})), Terminate: terminate () }
+    offer_choice! { deposit: receive_value(|val_0| {terminate ()}), withdraw: send_value(arg1, receive_value(|val_12| {terminate ()})), Terminate: terminate () }
 }
 
-// couldnt synthesize function
+fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, TyExternalChoice<BankOps>>> {
+    receive_value(|val_13| {
+        offer_choice! { deposit: receive_value(|val_14| {terminate ()}), withdraw: send_value(withdraw_value, receive_value(|val_46| {terminate ()})), Terminate: terminate () }
+    })
+}
 
 fn client_session(
     myId: String,
@@ -29,3 +33,4 @@ fn client_session(
         )
     })
 }
+// fn client_session(myId: String, depositAmt: Int) -> Session<ReceiveChannel<ReceiveValue<String, TyExternalChoice<BankOps>>, End>> { receive_channel(|chan_0| {send_value_to(chan_0, myId, choose!(chan_0, withdraw, receive_value_from(chan_0, move |binder_13| {send_value_to(chan_0, binder_13, wait(chan_0, terminate ()))})))}) }

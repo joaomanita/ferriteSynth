@@ -12,13 +12,8 @@ fn provider(arg1: String) -> Session<TyExternalChoice<FooBarBaz>> {
 }
 
 fn client() -> Session<ReceiveChannel<TyExternalChoice<FooBarBaz>, End>> {
-    receive_channel(|chan_0| {
-        choose!(
-            chan_0,
-            Foo,
-            receive_value_from(chan_0, move |binder_1| { wait(chan_0, terminate()) })
-        )
-    })
+    receive_channel(|chan_0| choose!(chan_0, Baz, wait(chan_0, terminate())))
 }
+// fn client() -> Session<ReceiveChannel<TyExternalChoice<FooBarBaz>, End>> { receive_channel(|chan_0| {choose!(chan_0, Foo, receive_value_from(chan_0, move |binder_0| {wait(chan_0, terminate ())}))}) }
 
 // couldnt synthesize function

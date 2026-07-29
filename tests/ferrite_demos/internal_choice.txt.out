@@ -9,5 +9,7 @@ fn client(arg1: u64) -> Session<ReceiveChannel<Choice, End>> {
 }
 
 fn provider(arg2: String) -> Session<Choice> {
-    offer_case!(Right, receive_value(|val_1| { terminate() }))
+    provider(arg2)
 }
+// fn provider(arg2: String) -> Session<Choice> { provider(arg2) }
+// fn provider(arg2: String) -> Session<Choice> { offer_case!(Right, receive_value(|val_0| {terminate ()})) }

@@ -1,7 +1,7 @@
 type myType =
     ReceiveChannel<ReceiveChannel<A, ReceiveChannel<B, C>>, ReceiveChannel<SendChannel<A, B>, C>>;
 
-fn myFunc2() -> myType {
+fn myFunc2() -> Session<myType> {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
             receive_channel_from(chan_1, |binder_0| {
