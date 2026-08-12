@@ -6,18 +6,14 @@ type myType = ReceiveChannel<
 fn myFunc2() -> Session<myType> {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
-            accept_shared_session(acquire_shared_session(chan_1, move |chan_6| {
-                acquire_shared_session(chan_0, move |chan_7| {
-                    send_channel_to(chan_7, chan_6, forward(chan_7))
+            accept_shared_session(acquire_shared_session(chan_0, move |chan_12| {
+                acquire_shared_session(chan_1, move |chan_14| {
+                    send_channel_to(chan_12, chan_14, forward(chan_12))
                 })
             }))
         })
     })
 }
-// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {accept_shared_session(acquire_shared_session(chan_0, move |chan_2| {acquire_shared_session(chan_1, move |chan_3| {send_channel_to(chan_2, chan_3, forward(chan_2))})}))})}) }
-// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {acquire_shared_session(chan_1, move |chan_25| {accept_shared_session(acquire_shared_session(chan_0, move |chan_26| {send_channel_to(chan_26, chan_25, forward(chan_26))}))})})}) }
-// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {acquire_shared_session(chan_1, move |chan_25| {acquire_shared_session(chan_0, move |chan_27| {accept_shared_session(send_channel_to(chan_27, chan_25, forward(chan_27)))})})})}) }
-// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {acquire_shared_session(chan_1, move |chan_25| {acquire_shared_session(chan_0, move |chan_27| {send_channel_to(chan_27, chan_25, accept_shared_session(forward(chan_27)))})})})}) }
-// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {acquire_shared_session(chan_0, move |chan_18| {accept_shared_session(acquire_shared_session(chan_1, move |chan_19| {send_channel_to(chan_18, chan_19, forward(chan_18))}))})})}) }
-// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {acquire_shared_session(chan_0, move |chan_18| {acquire_shared_session(chan_1, move |chan_20| {accept_shared_session(send_channel_to(chan_18, chan_20, forward(chan_18)))})})})}) }
-// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {acquire_shared_session(chan_0, move |chan_18| {acquire_shared_session(chan_1, move |chan_20| {send_channel_to(chan_18, chan_20, accept_shared_session(forward(chan_18)))})})})}) }
+// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {accept_shared_session(acquire_shared_session(chan_1, move |chan_15| {acquire_shared_session(chan_0, move |chan_17| {send_channel_to(chan_17, chan_15, forward(chan_17))})}))})}) }
+// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {acquire_shared_session(chan_0, move |chan_29| {acquire_shared_session(chan_1, move |chan_33| {accept_shared_session(send_channel_to(chan_29, chan_33, forward(chan_29)))})})})}) }
+// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {acquire_shared_session(chan_0, move |chan_29| {acquire_shared_session(chan_1, move |chan_33| {send_channel_to(chan_29, chan_33, accept_shared_session(forward(chan_29)))})})})}) }

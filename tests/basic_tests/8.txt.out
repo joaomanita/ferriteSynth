@@ -9,7 +9,7 @@ fn myFunc(arg1: myType, arg2: A) -> Session<B> {}
 fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
-            cut! { [L, L]; myFunc(chan_0, chan_1); binder_0 => {send_channel_from(binder_0, terminate ())}}
+            cut! { [L, L]; myFunc(chan_0, chan_1); binder_9 => {send_channel_from(binder_9, terminate ())}}
         })
     })
 }

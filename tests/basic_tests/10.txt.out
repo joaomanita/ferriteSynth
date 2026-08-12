@@ -11,12 +11,12 @@ fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>
             choose!(
                 chan_0,
                 Left,
-                receive_value_from(chan_0, move |binder_0| {
+                receive_value_from(chan_0, move |binder_79| {
                     unfix_session(
                         chan_0,
                         wait(
                             chan_0,
-                            send_value(binder_0, send_value(binder_0, terminate())),
+                            send_value(binder_79, send_value(binder_79, terminate())),
                         ),
                     )
                 })
@@ -24,5 +24,4 @@ fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>
         )
     })
 }
-// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_0| {send_value(binder_0, unfix_session(chan_0, wait(chan_0, send_value(binder_0, terminate ()))))})))}) }
-// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_0| {unfix_session(chan_0, wait(chan_0, send_value(binder_0, send_value(binder_0, terminate ()))))})))}) }
+// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_79| {unfix_session(chan_0, wait(chan_0, send_value(binder_79, send_value(binder_79, terminate ()))))})))}) }

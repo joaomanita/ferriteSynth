@@ -1,1 +1,1 @@
-lib/synthesizer.ml: Choice GoalKey List Memo Mini_ast Printf Stdlib String Table Utils
+lib/synthesizer.ml: Choice List Memo Mini_ast Printf Stdlib String Table Utils

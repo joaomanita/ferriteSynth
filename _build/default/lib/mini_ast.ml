@@ -29,7 +29,7 @@ and ty =
   | TySession of ty
   | TyFunc of func_ty * string list
   | TyUnitRetFunc of (string * (label * ty) list) * string list
-  | TyApp of (string * ty list)
+  | TyApp of ty
   | TyRec of ty
   | TyZ of int
   | TyScheme of ty list * ty

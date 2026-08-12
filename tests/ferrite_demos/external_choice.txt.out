@@ -5,15 +5,13 @@ fn provider(
 ) -> Session<TyExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>> {
     offer_choice! { Left: send_value(arg1, terminate ()), Right: receive_value(|val_0| {terminate ()}) }
 }
+// fn provider(arg1: String) -> Session<TyExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>> { offer_choice!{ Left: send_value(arg1, terminate ()), Right: receive_value(|val_0| {terminate ()}) } }
 
 fn client() -> Session<
     ReceiveChannel<TyExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>, End>,
 > {
     receive_channel(|chan_0| {
-        choose!(
-            chan_0,
-            Left,
-            receive_value_from(chan_0, move |binder_0| { wait(chan_0, terminate()) })
-        )
+        cut! { [R]; client(); binder_18 => {send_channel_to(binder_18, chan_0, wait(binder_18, terminate ()))}}
     })
 }
+// fn client() -> Session<ReceiveChannel<TyExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>, End>> { receive_channel(|chan_0| {choose!(chan_0, Left, receive_value_from(chan_0, move |binder_5| {wait(chan_0, terminate ())}))}) }

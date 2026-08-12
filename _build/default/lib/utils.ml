@@ -76,10 +76,7 @@ and print_type t =
       "FN<<" ^ name ^ ", "
       ^ print_labeled_choices tyArgs print_type
       ^ ">, " ^ print_type tyRet ^ ">"
-  | TyApp (func_name, tyArgs) ->
-      "App<" ^ func_name ^ ", "
-      ^ String.concat ", " (List.map print_type tyArgs)
-      ^ ">"
+  | TyApp func_ty -> "App<" ^ print_type func_ty ^ ">"
   | TyRec t -> "Rec<" ^ print_type t ^ ">"
   | TyZ i -> print_peano i
   | TyUnitRetFunc ((name, argList), _) ->
@@ -125,10 +122,7 @@ and equal_type t1 t2 =
       name1 = name2 && equal_labeled_types args1 args2 && equal_type ret1 ret2
   | TyUnitRetFunc ((name1, args1), _), TyUnitRetFunc ((name2, args2), _) ->
       name1 = name2 && equal_labeled_types args1 args2
-  | TyApp (f1, args1), TyApp (f2, args2) ->
-      f1 = f2
-      && List.length args1 = List.length args2
-      && List.for_all2 equal_type args1 args2
+  | TyApp f1, TyApp f2 -> equal_type f1 f2
   | TyRec t1, TyRec t2 -> equal_type t1 t2
   | TyZ n1, TyZ n2 -> n1 = n2
   | TyScheme (ts1, tau1), TyScheme (ts2, tau2) ->

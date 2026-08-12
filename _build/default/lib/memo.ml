@@ -34,4 +34,5 @@ end
 
 module Table = Hashtbl.Make (GoalKey)
 
-let cache : bool Table.t = Table.create 1007
+let cacheGamma : bool Table.t = Table.create 1007
+let cacheDelta : bool Table.t = Table.create 1007
