@@ -6,22 +6,9 @@ type myType = Rec<TyExternalChoice<Either<SendValue<Int, Z>, End>>>;
 
 fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> {
     receive_channel(|chan_0| {
-        unfix_session(
-            chan_0,
-            choose!(
-                chan_0,
-                Left,
-                receive_value_from(chan_0, move |binder_79| {
-                    unfix_session(
-                        chan_0,
-                        wait(
-                            chan_0,
-                            send_value(binder_79, send_value(binder_79, terminate())),
-                        ),
-                    )
-                })
-            ),
-        )
+        cut! { [R]; myFunc(); binder_925 => {send_channel_to(binder_925, chan_0, receive_value_from(binder_925, move |binder_975| {receive_value_from(binder_925, move |binder_976| {wait(binder_925, send_value(binder_976, send_value(binder_976, terminate ())))})}))}}
     })
 }
-// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_79| {unfix_session(chan_0, wait(chan_0, send_value(binder_79, send_value(binder_79, terminate ()))))})))}) }
+// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {cut! { [R]; myFunc(); binder_925 => {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_977| {send_channel_to(binder_925, chan_0, receive_value_from(binder_925, move |binder_992| {receive_value_from(binder_925, move |binder_993| {wait(binder_925, send_value(binder_993, send_value(binder_993, terminate ())))})}))})))}}}) }
+// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_421| {send_value(cut! { [R]; myFunc(); binder_461 => {send_channel_to(binder_461, chan_0, receive_value_from(binder_461, move |binder_464| {receive_value_from(binder_461, move |binder_465| {wait(binder_461, binder_465)})}))}}, send_value(binder_421, terminate ()))})))}) }
+// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_421| {send_value(cut! { [R]; myFunc(); binder_461 => {send_channel_to(binder_461, chan_0, receive_value_from(binder_461, move |binder_464| {receive_value_from(binder_461, move |binder_465| {wait(binder_461, binder_465)})}))}}, send_value(binder_421, terminate ()))})))}) }

@@ -1295,7 +1295,8 @@ and focusL gamma delta_in t psi zeta theta focus_ctx ident =
           (run_n 2
              ( focus_options >>= fun (id, ty) ->
                let delta_in' = removeWithId id ty filtered_delta in
-               focusL' gamma delta_in' id ty t psi zeta theta focus_ctx
+               let focus_ctx' = searchAndRemoveFocusCtx focus_ctx id ty in
+               focusL' gamma delta_in' id ty t psi zeta theta focus_ctx'
                  (ident + 1) )))
   in
   if not (is_empty r) then (
@@ -1373,7 +1374,7 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
 
         log "%s\n" (string_of_int (searchTimesUsedZeta id zeta));
 
-        if searchTimesUsedZeta id zeta > 2 then (
+        if searchTimesUsedZeta id zeta > 1 then (
           print_fail "focusL" ident;
           Choice.fail)
         else if searchTimesUsedZeta id zeta = 0 then

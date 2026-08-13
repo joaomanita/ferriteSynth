@@ -7,8 +7,7 @@ type StringQueue = Rec<TyInternalChoice<Either<End, SendValue<String, Z>>>>;
 
 fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> {
     receive_channel(|chan_0| {
-        cut! { [R]; read_queue(); binder_1298 => {send_channel_to(binder_1298, chan_0, wait(binder_1298, terminate ()))}}
+        cut! { [R]; read_queue(); binder_30 => {send_channel_to(binder_30, chan_0, wait(binder_30, terminate ()))}}
     })
 }
-// fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> { receive_channel(|chan_0| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_385| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_441| {cut! { [R]; read_queue(); binder_485 => {send_channel_to(binder_485, chan_0, wait(binder_485, terminate ()))}}}) })}) })}) }
-// fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> { receive_channel(|chan_0| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_385| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_441| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_447| {cut! { [R]; read_queue(); binder_451 => {send_channel_to(binder_451, chan_0, wait(binder_451, terminate ()))}}}) })}) })}) })}) }
+// fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> { receive_channel(|chan_0| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_7| {cut! { [R]; read_queue(); binder_11 => {send_channel_to(binder_11, chan_0, wait(binder_11, terminate ()))}}}) })}) }

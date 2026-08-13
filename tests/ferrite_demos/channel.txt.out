@@ -22,11 +22,14 @@ type Receiver = Rec<TyExternalChoiceId>;
 type Channel = LinearToShared<TyExternalChoiceId>;
 
 fn make_channel(val: Int) -> Session<LinearToShared<TyExternalChoice<ActionsChannel>>> {
-    accept_shared_session(
-        offer_choice! { ReceiveNext: receive_value(|val_0| {detach_shared_session(make_channel(val_0))}), SendNext: send_value(val, detach_shared_session(make_channel(val))) },
-    )
+    make_channel(val)
 }
+// fn make_channel(val: Int) -> Session<LinearToShared<TyExternalChoice<ActionsChannel>>> { accept_shared_session(offer_choice!{ ReceiveNext: receive_value(|val_0| {detach_shared_session(make_channel(val_0))}), SendNext: send_value(val, detach_shared_session(make_channel(val))) }) }
 
 fn make_receiver(val: Int) -> Session<Rec<TyExternalChoice<ActionsReceiver>>> {
-    fix_session(offer_choice! { Next: send_value(val, make_receiver(val)), Close: terminate () })
+    make_receiver(val)
 }
+// fn make_receiver(val: Int) -> Session<Rec<TyExternalChoice<ActionsReceiver>>> { fix_session(offer_choice!{ Next: send_value(val, make_receiver(val)), Close: cut! { []; make_receiver(val); binder_17 => {unfix_session(binder_17, choose!(binder_17, Close, wait(binder_17, terminate ())))}} }) }
+// fn make_receiver(val: Int) -> Session<Rec<TyExternalChoice<ActionsReceiver>>> { fix_session(offer_choice!{ Next: send_value(val, make_receiver(val)), Close: terminate () }) }
+// fn make_receiver(val: Int) -> Session<Rec<TyExternalChoice<ActionsReceiver>>> { fix_session(offer_choice!{ Next: send_value(val, make_receiver(val)), Close: cut! { []; make_receiver(val); binder_17 => {unfix_session(binder_17, choose!(binder_17, Close, wait(binder_17, terminate ())))}} }) }
+// fn make_receiver(val: Int) -> Session<Rec<TyExternalChoice<ActionsReceiver>>> { fix_session(offer_choice!{ Next: send_value(val, make_receiver(val)), Close: terminate () }) }

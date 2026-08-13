@@ -3,21 +3,16 @@ use ferrite_session::{internal::protocol::Lock, prelude::*};
 type Counter = LinearToShared<SendValue<u64, FixShared>>;
 
 fn shared_provider_1(count: u64) -> Session<Counter> {
-    accept_shared_session(send_value(
-        count,
-        detach_shared_session(shared_provider_1(count)),
-    ))
+    shared_provider_1(count)
 }
+// fn shared_provider_1(count: u64) -> Session<Counter> { accept_shared_session(send_value(count, detach_shared_session(shared_provider_1(count)))) }
 
 fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> {
     receive_channel(|chan_0| {
-        send_value(
-            acquire_shared_session(chan_0, move |chan_2| {
-                receive_value_from(chan_2, move |binder_1| binder_1)
-            }),
-            terminate(),
-        )
+        cut! { [R]; shared_client(); binder_33 => {send_channel_to(binder_33, chan_0, receive_value_from(binder_33, move |binder_39| {wait(binder_33, send_value(binder_39, terminate ()))}))}}
     })
 }
+// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {cut! { [R]; shared_client(); binder_33 => {send_channel_to(binder_33, chan_0, receive_value_from(binder_33, move |binder_39| {wait(binder_33, send_value(binder_39, terminate ()))}))}}}) }
+// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {send_value(acquire_shared_session(chan_0, move |chan_2| {receive_value_from(chan_2, move |binder_1| {binder_1})}), terminate ())}) }
 // fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {acquire_shared_session(chan_0, move |chan_6| {receive_value_from(chan_6, move |binder_11| {send_value(binder_11, terminate ())})})}) }
 // fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {acquire_shared_session(chan_0, move |chan_6| {receive_value_from(chan_6, move |binder_11| {send_value(binder_11, terminate ())})})}) }

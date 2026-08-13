@@ -9,8 +9,10 @@ fn combiner<A, B>(arg1: A, arg2: B) -> Session<TyExternalChoice<Either<A, B>>> {
 fn chooser() -> Session<ReceiveValue<String, ReceiveValue<Int, SendValue<Int, End>>>> {
     receive_value(|val_0| {
         receive_value(|val_1| {
-            cut! { []; combiner(val_0, val_0); binder_25 => {choose!(binder_25, Left, receive_value_from(binder_25, move |binder_29| {wait(binder_25, send_value(binder_29, terminate ()))}))}}
+            cut! { [R]; chooser(); binder_589 => {cut! { [L]; combiner(binder_589, val_0); binder_617 => {choose!(binder_617, Left, receive_value_from(binder_617, move |binder_621| {wait(binder_617, send_value(binder_621, terminate ()))}))}}}}
         })
     })
 }
-// fn chooser() -> Session<ReceiveValue<String, ReceiveValue<Int, SendValue<Int, End>>>> { receive_value(|val_0| {receive_value(|val_1| {cut! { []; combiner(val_0, val_0); binder_25 => {choose!(binder_25, Left, receive_value_from(binder_25, move |binder_29| {wait(binder_25, send_value(binder_29, terminate ()))}))}}})}) }
+// fn chooser() -> Session<ReceiveValue<String, ReceiveValue<Int, SendValue<Int, End>>>> { receive_value(|val_0| {receive_value(|val_1| {cut! { [R]; chooser(); binder_589 => {cut! { [L]; combiner(binder_589, val_0); binder_617 => {choose!(binder_617, Left, receive_value_from(binder_617, move |binder_621| {wait(binder_617, send_value(binder_621, terminate ()))}))}}}}})}) }
+// fn chooser() -> Session<ReceiveValue<String, ReceiveValue<Int, SendValue<Int, End>>>> { receive_value(|val_0| {receive_value(|val_1| {cut! { []; combiner(val_0, val_0); binder_197 => {choose!(binder_197, Left, receive_value_from(binder_197, move |binder_345| {wait(binder_197, send_value(binder_345, terminate ()))}))}}})}) }
+// fn chooser() -> Session<ReceiveValue<String, ReceiveValue<Int, SendValue<Int, End>>>> { receive_value(|val_0| {receive_value(|val_1| {cut! { []; combiner(val_0, val_0); binder_197 => {choose!(binder_197, Left, receive_value_from(binder_197, move |binder_345| {wait(binder_197, send_value(binder_345, cut! { []; chooser(); binder_355 => {send_value_to(binder_355, val_0, send_value_to(binder_355, binder_345, receive_value_from(binder_355, move |binder_357| {wait(binder_355, terminate ())})))}}))}))}}})}) }

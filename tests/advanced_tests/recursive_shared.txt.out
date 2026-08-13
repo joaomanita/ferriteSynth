@@ -7,17 +7,16 @@ type SharedService = LinearToShared<
 >;
 
 fn shared_provider(arg1: String) -> Session<SharedService> {
-    accept_shared_session(
-        offer_choice! { Left: send_value(arg1, detach_shared_session(shared_provider(arg1))), Right: receive_value(|val_0| {detach_shared_session(shared_provider(val_0))}) },
-    )
+    shared_provider(arg1)
 }
+// fn shared_provider(arg1: String) -> Session<SharedService> { accept_shared_session(offer_choice!{ Left: send_value(arg1, detach_shared_session(shared_provider(arg1))), Right: receive_value(|val_0| {detach_shared_session(shared_provider(val_0))}) }) }
 
 fn rec_provider(
     arg1: String,
 ) -> Session<Rec<TyExternalChoice<Either<SendChannel<SharedService, Z>, End>>>> {
-    cut! { []; shared_provider(arg1); binder_73 => {acquire_shared_session(binder_73, move |chan_283| {choose!(chan_283, Right, send_value_to(chan_283, arg1, release_shared_session(chan_283, fix_session(offer_choice!{ Left: send_channel_from(chan_327, rec_provider(arg1)), Right: terminate () }))))})}}
+    cut! { []; shared_provider(arg1); binder_16307 => {acquire_shared_session(binder_16307, move |chan_22399| {choose!(chan_22399, Left, receive_value_from(chan_22399, move |binder_28535| {rec_provider(binder_28535)}))})}}
 }
-// fn rec_provider(arg1: String) -> Session<Rec<TyExternalChoice<Either<SendChannel<SharedService, Z>, End>>>> { cut! { []; shared_provider(arg1); binder_73 => {acquire_shared_session(binder_73, move |chan_283| {choose!(chan_283, Right, fix_session(offer_choice!{ Left: send_value_to(chan_283, arg1, release_shared_session(chan_283, send_channel_from(chan_319, rec_provider(arg1)))), Right: send_value_to(chan_283, arg1, release_shared_session(chan_283, terminate ())) }))})}} }
+// fn rec_provider(arg1: String) -> Session<Rec<TyExternalChoice<Either<SendChannel<SharedService, Z>, End>>>> { cut! { []; shared_provider(arg1); binder_16307 => {acquire_shared_session(binder_16307, move |chan_22399| {choose!(chan_22399, Right, send_value_to(chan_22399, arg1, release_shared_session(chan_22399, fix_session(offer_choice!{ Left: send_channel_from(chan_26947, rec_provider(arg1)), Right: cut! { []; rec_provider(arg1); binder_31537 => {unfix_session(binder_31537, choose!(binder_31537, Left, receive_channel_from(binder_31537, |binder_31575| {acquire_shared_session(binder_31575, move |chan_26987| {choose!(chan_26987, Left, receive_value_from(chan_26987, move |binder_31595| {unfix_session(binder_31537, wait(binder_31537, terminate ()))}))})})))}} }))))})}} }
 
 fn user() -> Session<
     ReceiveChannel<
@@ -25,34 +24,10 @@ fn user() -> Session<
         SendValue<String, SendValue<String, End>>,
     >,
 > {
-    receive_channel(|chan_340| {
-        unfix_session(
-            chan_340,
-            choose!(
-                chan_340,
-                Left,
-                receive_channel_from(chan_340, |binder_1127| {
-                    acquire_shared_session(binder_1127, move |chan_700| {
-                        choose!(
-                            chan_700,
-                            Left,
-                            receive_value_from(chan_700, move |binder_1139| {
-                                unfix_session(
-                                    chan_340,
-                                    wait(
-                                        chan_340,
-                                        send_value(
-                                            binder_1139,
-                                            send_value(binder_1139, terminate()),
-                                        ),
-                                    ),
-                                )
-                            })
-                        )
-                    })
-                })
-            ),
-        )
+    receive_channel(|chan_27908| {
+        cut! { [R]; user(); binder_273233 => {send_channel_to(binder_273233, chan_27908, receive_value_from(binder_273233, move |binder_287215| {receive_value_from(binder_273233, move |binder_287216| {wait(binder_273233, send_value(binder_287216, send_value(binder_287216, terminate ())))})}))}}
     })
 }
-// fn user() -> Session<ReceiveChannel<Rec<TyExternalChoice<Either<SendChannel<SharedService, Z>, End>>>, SendValue<String, SendValue<String, End>>>> { receive_channel(|chan_340| {unfix_session(chan_340, choose!(chan_340, Left, receive_channel_from(chan_340, |binder_1127| {acquire_shared_session(binder_1127, move |chan_700| {choose!(chan_700, Left, receive_value_from(chan_700, move |binder_1139| {unfix_session(chan_340, wait(chan_340, send_value(binder_1139, send_value(binder_1139, terminate ()))))}))})})))}) }
+// fn user() -> Session<ReceiveChannel<Rec<TyExternalChoice<Either<SendChannel<SharedService, Z>, End>>>, SendValue<String, SendValue<String, End>>>> { receive_channel(|chan_27908| {cut! { [R]; user(); binder_273233 => {unfix_session(chan_27908, choose!(chan_27908, Left, receive_channel_from(chan_27908, |binder_287217| {acquire_shared_session(binder_287217, move |chan_38872| {choose!(chan_38872, Left, receive_value_from(chan_38872, move |binder_295525| {unfix_session(chan_27908, choose!(chan_27908, Left, receive_channel_from(chan_27908, |binder_296457| {acquire_shared_session(binder_296457, move |chan_38984| {choose!(chan_38984, Left, receive_value_from(chan_38984, move |binder_296829| {send_value(send_channel_to(binder_273233, chan_27908, receive_value_from(binder_273233, move |binder_296832| {receive_value_from(binder_273233, move |binder_296833| {wait(binder_273233, binder_296833)})})), send_value(binder_296829, terminate ()))}))})})))}))})})))}}}) }
+// fn user() -> Session<ReceiveChannel<Rec<TyExternalChoice<Either<SendChannel<SharedService, Z>, End>>>, SendValue<String, SendValue<String, End>>>> { receive_channel(|chan_27908| {unfix_session(chan_27908, choose!(chan_27908, Left, receive_channel_from(chan_27908, |binder_126773| {acquire_shared_session(binder_126773, move |chan_33800| {choose!(chan_33800, Left, receive_value_from(chan_33800, move |binder_174513| {unfix_session(chan_27908, wait(chan_27908, send_value(binder_174513, send_value(binder_174513, terminate ()))))}))})})))}) }
+// fn user() -> Session<ReceiveChannel<Rec<TyExternalChoice<Either<SendChannel<SharedService, Z>, End>>>, SendValue<String, SendValue<String, End>>>> { receive_channel(|chan_27908| {unfix_session(chan_27908, choose!(chan_27908, Left, receive_channel_from(chan_27908, |binder_126773| {acquire_shared_session(binder_126773, move |chan_33800| {choose!(chan_33800, Left, receive_value_from(chan_33800, move |binder_174513| {unfix_session(chan_27908, wait(chan_27908, send_value(binder_174513, send_value(binder_174513, terminate ()))))}))})})))}) }

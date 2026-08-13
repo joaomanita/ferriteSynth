@@ -8,4 +8,10 @@ define_choice! {
 
 type Stream = Rec<TyExternalChoiceId>;
 
-// couldnt synthesize function
+fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> {
+    producer(arg1)
+}
+// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_2| {cut! { []; producer(val_2); binder_11 => {unfix_session(binder_11, choose!(binder_11, end1, send_value_to(binder_11, val_2, wait(binder_11, terminate ()))))}}}) }) }
+// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {cut! { []; producer(val_0); binder_7 => {unfix_session(binder_7, choose!(binder_7, end1, send_value_to(binder_7, val_0, wait(binder_7, terminate ()))))}}}) }) }
+// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {cut! { []; producer(val_0); binder_7 => {unfix_session(binder_7, choose!(binder_7, end1, send_value_to(binder_7, val_0, wait(binder_7, terminate ()))))}}}) }) }
+// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {terminate ()}) }) }
