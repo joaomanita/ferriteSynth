@@ -5,16 +5,6 @@ open Stdlib
 open Utils
 open Memo
 
-let debug_enabled = true
-let debug_out = if debug_enabled then Some (open_out "debug.log") else None
-
-let log fmt =
-  match debug_out with
-  | Some ch -> Printf.fprintf ch fmt
-  | None -> Printf.ifprintf stdout fmt
-
-exception Fail
-
 type id = string
 
 let fn_ctxt = ref []
@@ -173,20 +163,6 @@ type tm =
 and side = L | R
 
 let print_side = function L -> "L" | R -> "R"
-
-let print_fail func_name ident =
-  log "%s< %s: fail\n" (String.make ident ' ') func_name
-
-let print_func_entry func_name t ident =
-  log "%s< %s: %s\n" (String.make ident ' ') func_name (print_type t)
-
-let print_func_entry_withgoal func_name t ident goal =
-  log "%s< %s: %s with goal %s \n" (String.make ident ' ') func_name
-    (print_type t) (print_type goal)
-
-let print_ctxts_with_ident gamma delta ident =
-  log "%s< [%s] [%s]\n" (String.make ident ' ') (print_ctxt_gamma gamma)
-    (print_ctxt_delta delta)
 
 let rec print_exp e =
   match e with
@@ -714,32 +690,6 @@ and inversionR gamma delta_in omega t psi zeta theta focus_ctx ident =
         >>= fun ((delta_out, theta_out), e) ->
         return
           ((delta_out, theta_out), UnitRetFunc ((name, argList), RunSession e))
-        (* ( of_list delta_in >>= fun (_, ty) ->
-            try
-              let _, delta_in' = searchAndRemoveFuncType ty delta_in in
-              match ty with
-              | TyFunc
-                  ( ( (name, argList),
-                      TySession (TyReceiveChannel (tChan, TyEnd)) ),
-                    _ ) ->
-                  let ((name2, argList2), _), delta_in'' =
-                    searchAndRemoveFuncType tChan delta_in'
-                  in
-                  inversionR gamma delta_in'' omega
-                    (TyApp (name, List.map snd argList))
-                    psi zeta theta ident
-                  >>= fun ((delta_out, theta_out), e1) ->
-                  inversionR gamma delta_out omega
-                    (TyApp (name2, List.map snd argList2))
-                    psi zeta theta_out ident
-                  >>= fun ((delta_out2, theta_out2), e2) ->
-                  return
-                    ( (delta_out2, theta_out2),
-                      UnitRetFunc
-                        ((name, argList), RunSession (ApplyChannel (e1, e2))) )
-              | TyFunc _ -> Choice.fail
-              | _ -> Choice.fail
-            with Fail -> Choice.fail ) *)
     | TyApp ty ->
         let name, tyArgList =
           match ty with
@@ -928,37 +878,6 @@ and decideFocus gamma delta_in t psi zeta theta focus_ctx ident =
 
   append (append l r) g
 
-and focusing_candidate target ty =
-  match target with
-  | TyFunc (((_, _), TySession retType), _)
-  | TySchemeFunc (_, (((_, _), TySession retType), _)) ->
-      focusing_candidate_aux retType ty
-  | _ -> focusing_candidate_aux target ty
-
-and focusing_candidate_aux target ty =
-  match ty with
-  | TyInternalChoice c | TyExternalChoice c -> (
-      equal_type target ty
-      ||
-      match c with
-      | TyDefineChoice (_, l) ->
-          List.exists (fun (_, t) -> focusing_candidate_aux target t) l
-      | TyEither (t1, t2) ->
-          focusing_candidate_aux target t1 || focusing_candidate_aux target t2)
-  | TySendChannel (t1, _) -> equal_type target ty || equal_type target t1
-  | TyReceiveChannel (_, t1) ->
-      equal_type target ty || focusing_candidate_aux target t1
-  | TySendValue (t1, _) -> equal_type target ty || equal_type target t1
-  | TyReceiveValue (_, t1) ->
-      equal_type target ty || focusing_candidate_aux target t1
-  | TySharedToLinear (t1, _) | TyLinearToShared (t1, _) ->
-      equal_type target t1 || focusing_candidate_aux target t1
-  | TySession t1 | TyRec t1 ->
-      equal_type target ty || focusing_candidate_aux target t1
-  | TyApp t1 -> focusing_candidate_aux target t1
-  | TyAtomic _ | TyPrimitive _ -> equal_type target ty
-  | _ -> false
-
 and can_add_focus_ctx focus_ctx t =
   match focus_ctx with
   | [] -> true
@@ -1110,32 +1029,9 @@ and focusR gamma delta_in t psi zeta theta focus_ctx ident =
         else (
           log "%s success\n" (String.make ident ' ');
           return ((delta_in, theta), Terminate))
-    | TyAtomic _ ->
-        Choice.fail
-        (*try
-          let id, ctxt_out = searchAndRemove t delta_in in
-          log "%s success\n" (String.make ident ' ');
-          return ((ctxt_out, theta), Forward id)
-        with Fail ->
-          print_fail "focusR" ident;
-          Choice.fail)*)
-    | TyPrimitive _ ->
-        (*(
-        try
-          let id, ctxt_out = searchAndRemove t delta_in in
-          log "%s success\n" (String.make ident ' ');
-          return ((ctxt_out, theta), Var id)
-        with Fail ->
-          print_fail "focusR" ident;
-          Choice.fail)*)
-        Choice.fail
-    | TyExistential _ ->
-        (*let options = of_list delta_in in
-        options >>= fun (id, ty) ->
-        let theta_out = unify (t, ty) theta in
-        log "%s success\n" (String.make ident ' ');
-        return ((delta_in, theta_out), Forward id)*)
-        Choice.fail
+    | TyAtomic _ -> Choice.fail
+    | TyPrimitive _ -> Choice.fail
+    | TyExistential _ -> Choice.fail
     | _ -> inversionR gamma delta_in [] t psi zeta theta focus_ctx (ident + 1)
   in
   tm
@@ -1144,60 +1040,6 @@ and choice_to_list c =
   match c with
   | TyDefineChoice (_, l) -> l
   | TyEither (t1, t2) -> [ ("Left", t1); ("Right", t2) ]
-
-and searchAndRemove t = function
-  | [] -> raise Fail
-  | (id, t1) :: xs ->
-      if equal_type t1 t then (id, xs)
-      else
-        let id', rest = searchAndRemove t xs in
-        (id', (id, t1) :: rest)
-
-and search t = function
-  | [] -> raise Fail
-  | (id, t1) :: xs ->
-      if equal_type t1 t then (id, (id, t1) :: xs)
-      else
-        let id', rest = search t xs in
-        (id', (id, t1) :: rest)
-
-and removeWithId id t = function
-  | [] -> raise Fail
-  | (id1, t1) :: xs ->
-      if equal_type t1 t && id1 = id then xs
-      else
-        let rest = removeWithId id t xs in
-        (id1, t1) :: rest
-
-and removeWithIdGamma id t = function
-  | [] -> raise Fail
-  | ((id1, t1), count) :: xs ->
-      if equal_type t1 t && id1 = id then xs
-      else
-        let rest = removeWithIdGamma id t xs in
-        ((id1, t1), count) :: rest
-
-and searchFuncType t = function
-  | [] -> raise Fail
-  | (_, TyFunc (((func_id, argList), retType), _)) :: rest ->
-      if equal_type retType (TySession t) then ((func_id, argList), retType)
-      else searchFuncType t rest
-  | (_, TySchemeFunc (vars, (((name, argList), retType), _))) :: rest -> (
-      let inst = fresh_instantiation vars in
-      let retType = instantiateSubst inst retType in
-      try
-        let subst = unifyT [] retType (TySession t) in
-        let argList =
-          List.map
-            (fun (id, ty) ->
-              (id, apply_all_subst (instantiateSubst inst ty) subst))
-            argList
-        in
-        ((name, argList), apply_all_subst retType subst)
-      with CannotUnify ->
-        print_endline "cannot unify";
-        searchFuncType t rest)
-  | _ :: rest -> searchFuncType t rest
 
 and searchAndRemoveFuncType t delta_in =
   match delta_in with
@@ -1230,49 +1072,13 @@ and searchAndRemoveFuncType t delta_in =
       let res, rest' = searchAndRemoveFuncType t rest in
       (res, x :: rest')
 
-and searchAndRemoveFocusCtx focus_ctx id t =
-  match focus_ctx with
-  | [] -> []
-  | (id1, t1) :: xs ->
-      if equal_type t1 t && id1 = id then xs
-      else
-        let res = searchAndRemoveFocusCtx xs id t in
-        (id1, t1) :: res
-
-and searchZeta id = function
-  | [] -> false
-  | (id1, _) :: rest -> if id1 = id then true else searchZeta id rest
-
-and searchTimesUsedZeta id = function
-  | [] -> raise Fail
-  | (id1, timesUsed) :: rest ->
-      if id1 = id then timesUsed else searchTimesUsedZeta id rest
-
-and incTimesUsedZeta id acc = function
-  | [] -> raise Fail
-  | (id1, timesUsed) :: rest ->
-      if id1 = id then List.rev_append acc ((id1, timesUsed + 1) :: rest)
-      else incTimesUsedZeta id ((id1, timesUsed) :: acc) rest
-
-and incTimesUsedGamma id acc = function
-  | [] -> raise Fail
-  | ((id1, t), timesUsed) :: rest ->
-      if id1 = id then List.rev_append acc (((id1, t), timesUsed + 1) :: rest)
-      else incTimesUsedGamma id (((id1, t), timesUsed) :: acc) rest
-
-and swapIdZeta id_old id_new = function
-  | [] -> []
-  | (id, timesUsed) :: rest ->
-      let id' = if id = id_old then id_new else id in
-      (id', timesUsed) :: swapIdZeta id_old id_new rest
-
 and focusL gamma delta_in t psi zeta theta focus_ctx ident =
   let filtered_delta =
     List.filter
       (fun (_, ty) ->
         match ty with
         | TySharedToLinear (_, timesUsed) | TyLinearToShared (_, timesUsed) ->
-            timesUsed < 1
+            timesUsed < 2
         | _ -> true)
       delta_in
   in
@@ -1470,11 +1276,3 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
           t psi zeta theta focus_ctx (ident + 1)
   in
   tm
-
-and print_zeta zeta =
-  let elems = List.map (fun (id, n) -> Printf.sprintf "(%s, %d)" id n) zeta in
-  log "[%s]\n" (String.concat "; " elems)
-
-and print_psi psi =
-  let elems = List.map (fun t -> Printf.sprintf "(%s)" (print_type t)) psi in
-  log "[%s]\n" (String.concat "; " elems)

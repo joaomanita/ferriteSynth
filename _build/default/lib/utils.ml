@@ -1,6 +1,16 @@
 open Mini_ast
 open Printf
 
+exception Fail
+
+let debug_enabled = true
+let debug_out = if debug_enabled then Some (open_out "debug.log") else None
+
+let log fmt =
+  match debug_out with
+  | Some ch -> Printf.fprintf ch fmt
+  | None -> Printf.ifprintf stdout fmt
+
 let fresh_channel_id =
   let unique = ref (-1) in
   fun () ->
@@ -163,3 +173,79 @@ let rec print_ctxt_gamma ctxt =
   | ((id, t), timesUsed) :: xs ->
       sprintf "((%s, %s), %s), %s" id (print_type t) (string_of_int timesUsed)
         (print_ctxt_gamma xs)
+
+and print_zeta zeta =
+  let elems = List.map (fun (id, n) -> Printf.sprintf "(%s, %d)" id n) zeta in
+  log "[%s]\n" (String.concat "; " elems)
+
+and print_psi psi =
+  let elems = List.map (fun t -> Printf.sprintf "(%s)" (print_type t)) psi in
+  log "[%s]\n" (String.concat "; " elems)
+
+and searchAndRemove t = function
+  | [] -> raise Fail
+  | (id, t1) :: xs ->
+      if equal_type t1 t then (id, xs)
+      else
+        let id', rest = searchAndRemove t xs in
+        (id', (id, t1) :: rest)
+
+and removeWithId id t = function
+  | [] -> raise Fail
+  | (id1, t1) :: xs ->
+      if equal_type t1 t && id1 = id then xs
+      else
+        let rest = removeWithId id t xs in
+        (id1, t1) :: rest
+
+and removeWithIdGamma id t = function
+  | [] -> raise Fail
+  | ((id1, t1), count) :: xs ->
+      if equal_type t1 t && id1 = id then xs
+      else
+        let rest = removeWithIdGamma id t xs in
+        ((id1, t1), count) :: rest
+
+and searchAndRemoveFocusCtx focus_ctx id t =
+  match focus_ctx with
+  | [] -> []
+  | (id1, t1) :: xs ->
+      if equal_type t1 t && id1 = id then xs
+      else
+        let res = searchAndRemoveFocusCtx xs id t in
+        (id1, t1) :: res
+
+and incTimesUsedGamma id acc = function
+  | [] -> raise Fail
+  | ((id1, t), timesUsed) :: rest ->
+      if id1 = id then List.rev_append acc (((id1, t), timesUsed + 1) :: rest)
+      else incTimesUsedGamma id (((id1, t), timesUsed) :: acc) rest
+
+and searchZeta id = function
+  | [] -> false
+  | (id1, _) :: rest -> if id1 = id then true else searchZeta id rest
+
+and searchTimesUsedZeta id = function
+  | [] -> raise Fail
+  | (id1, timesUsed) :: rest ->
+      if id1 = id then timesUsed else searchTimesUsedZeta id rest
+
+and incTimesUsedZeta id acc = function
+  | [] -> raise Fail
+  | (id1, timesUsed) :: rest ->
+      if id1 = id then List.rev_append acc ((id1, timesUsed + 1) :: rest)
+      else incTimesUsedZeta id ((id1, timesUsed) :: acc) rest
+
+let print_fail func_name ident =
+  log "%s< %s: fail\n" (String.make ident ' ') func_name
+
+let print_func_entry func_name t ident =
+  log "%s< %s: %s\n" (String.make ident ' ') func_name (print_type t)
+
+let print_func_entry_withgoal func_name t ident goal =
+  log "%s< %s: %s with goal %s \n" (String.make ident ' ') func_name
+    (print_type t) (print_type goal)
+
+let print_ctxts_with_ident gamma delta ident =
+  log "%s< [%s] [%s]\n" (String.make ident ' ') (print_ctxt_gamma gamma)
+    (print_ctxt_delta delta)
