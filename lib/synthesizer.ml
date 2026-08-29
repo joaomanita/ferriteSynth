@@ -191,7 +191,7 @@ let rec print_exp e =
       sprintf "receive_value_from(%s, move |%s| {%s})" chan binder
         (print_exp tm)
   | ReceiveValue (binder, tm) ->
-      sprintf "receive_value(|%s| {%s})" binder (print_exp tm)
+      sprintf "receive_value(move |%s| {%s})" binder (print_exp tm)
   | Terminate -> "terminate ()"
   | Wait (chan, tm) -> sprintf "wait(%s, %s)" chan (print_exp tm)
   | Detach tm -> sprintf "detach_shared_session(%s)" (print_exp tm)
@@ -219,13 +219,17 @@ let rec print_exp e =
         (arg_tmList |> List.map print_exp |> String.concat ", ")
   | Fix tm -> sprintf "fix_session(%s)" (print_exp tm)
   | Unfix (id, tm) -> sprintf "unfix_session(%s, %s)" id (print_exp tm)
-  | UnitRetFunc ((name, argList), tm) ->
+  | UnitRetFunc ((name, argList), tm) -> (
       let args_str =
         argList
         |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
         |> String.concat ", "
       in
-      sprintf "fn %s(%s) { %s }" name args_str (print_exp tm)
+      match tm with
+      | RunSession _ | ApplyChannel _ ->
+          sprintf "#[tokio::main]\n pub async fn %s(%s) { %s }" name args_str
+            (print_exp tm)
+      | _ -> sprintf "fn %s(%s) { %s }" name args_str (print_exp tm))
   | RunSession tm -> sprintf "run_session(%s).await()" (print_exp tm)
   | ApplyChannel (tm1, tm2) ->
       sprintf "apply_channel(%s, %s)" (print_exp tm1) (print_exp tm2)
@@ -647,12 +651,6 @@ and inversionR gamma delta_in omega t psi zeta theta focus_ctx ident =
   let tm =
     match t with
     | TyFunc (((name, argList), tRet), _) ->
-        (* let rec_func =
-          match tRet with
-          | TySession (TyRec _) | TySession (TyLinearToShared _) ->
-              [ (name, t) ]
-          | _ -> []
-        in *)
         let argListCounted = List.map (fun (id, ty) -> ((id, ty), 0)) argList in
         inversionR
           ([ ((name, t), 0) ] @ argListCounted @ gamma)
@@ -917,10 +915,7 @@ and focusGamma gamma delta_in t psi zeta theta focus_ctx ident =
                log "%s< focusGamma: %s\n" (String.make ident ' ')
                  (print_type ty);
                print_ctxts_with_ident filtered_gamma delta_in ident;
-               if List.exists (fun (_, t1) -> equal_type ty t1) delta_in then (
-                 print_fail "focusGamma: Already in delta" (ident + 1);
-                 Choice.fail)
-               else if not (can_add_focus_ctx focus_ctx ty) then Choice.fail
+               if not (can_add_focus_ctx focus_ctx ty) then Choice.fail
                else
                  let gamma' = incTimesUsedGamma id [] filtered_gamma in
                  let gamma'' =
@@ -1244,7 +1239,7 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
         >>= fun ((delta_out2, theta_out2), e2) ->
         return ((delta_out2, theta_out2), SendValueTo ((id, e1), e2))
     | TySharedToLinear (_, counter) ->
-        if counter > 1 then (
+        if counter > 2 then (
           print_fail "inversionL" ident;
           Choice.fail)
         else
@@ -1259,7 +1254,7 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
             >>= fun ((delta_out, theta_out), e1) ->
             return ((delta_out, theta_out), Release (id, e1))
     | TyLinearToShared (_, counter) ->
-        if counter > 1 then (
+        if counter > 2 then (
           print_fail "focusL" ident;
           Choice.fail)
         else

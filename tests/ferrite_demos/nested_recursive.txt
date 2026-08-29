@@ -3,15 +3,10 @@ use ferrite_session::{
   prelude::*,
 };
 
-define_choice! {
-    StreamChoice;
-    rec1: Rec<InternalChoice<Either<SendValue<String, Z>, S<Z>>>>,
-    end1: ReceiveValue<String, End>
-}
-
 type Stream = Rec<
-  ExternalChoice<
-    StreamChoice
+  ExternalChoice<Either<
+    Rec<InternalChoice<Either<SendValue<String, Z>, S<Z>>>>,
+    ReceiveValue<String, End>>
   >
 >;
 

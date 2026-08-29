@@ -4,8 +4,8 @@ use ferrite_session::prelude::*;
 
 type myType = Session<
     ReceiveChannel<
-        TyExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
-        ReceiveChannel<A, TyExternalChoice<Either<B, C>>>,
+        ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
+        ReceiveChannel<A, ExternalChoice<Either<B, C>>>,
     >,
 >;
 

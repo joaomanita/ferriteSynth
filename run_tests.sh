@@ -3,6 +3,7 @@
 set -u
 
 TEST_ROOT="$HOME/Tese/ferriteSynth/tests"
+OUTPUT_ROOT="$HOME/Tese/rustapps/ferrite/ferrite-demo/examples"
 EXEC="dune exec bin/main.exe"
 
 run_test() {
@@ -10,10 +11,17 @@ run_test() {
 
     echo "Running: $file"
 
+    local output="$OUTPUT_ROOT/$(basename "${file%.txt}").rs"
+
+    mkdir -p "$OUTPUT_ROOT"
+
     if $EXEC "$file" >/dev/null 2>&1; then
+        cp "$file.out" "$output"
         echo "SUCCESS: $(basename "$file")"
+        echo "Output:  $output"
     else
         echo "FAIL:    $(basename "$file")"
+        rm -f "$output"
     fi
 
     echo
@@ -23,7 +31,7 @@ run_all() {
     find \
         "$TEST_ROOT/basic_tests" \
         "$TEST_ROOT/ferrite_demos" \
-         "$TEST_ROOT/advanced_tests" \
+        "$TEST_ROOT/advanced_tests" \
         -type f -name "*.txt" |
     sort |
     while read -r file; do

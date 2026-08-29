@@ -1,17 +1,15 @@
 use ferrite_session::{either::*, prelude::*};
 
-define_choice! {
-    StreamChoice;
-    rec1: Rec<TyInternalChoice<Either<SendValue<String, Z>, S<Z>>>>,
-    end1: ReceiveValue<String, End>
-}
+type Stream = Rec<
+    ExternalChoice<
+        Either<Rec<InternalChoice<Either<SendValue<String, Z>, S<Z>>>>, ReceiveValue<String, End>>,
+    >,
+>;
 
-type Stream = Rec<TyExternalChoiceId>;
-
-fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> {
+fn producer(arg1: String) -> Session<Stream> {
     producer(arg1)
 }
-// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_2| {cut! { []; producer(val_2); binder_27 => {unfix_session(binder_27, choose!(binder_27, end1, send_value_to(binder_27, val_2, wait(binder_27, terminate ()))))}}}) }) }
-// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {cut! { []; producer(val_0); binder_23 => {unfix_session(binder_23, choose!(binder_23, end1, send_value_to(binder_23, val_0, wait(binder_23, terminate ()))))}}}) }) }
-// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {cut! { []; producer(val_0); binder_23 => {unfix_session(binder_23, choose!(binder_23, end1, send_value_to(binder_23, val_0, wait(binder_23, terminate ()))))}}}) }) }
-// fn producer(arg1: String) -> Session<Rec<TyExternalChoice<StreamChoice>>> { fix_session(offer_choice!{ rec1: fix_session(offer_case!(Right, producer(arg1))), end1: receive_value(|val_0| {terminate ()}) }) }
+// fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_2| {cut! { []; producer(val_2); binder_27 => {unfix_session(binder_27, choose!(binder_27, Right, send_value_to(binder_27, val_2, wait(binder_27, terminate ()))))}}}) }) }
+// fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_0| {cut! { []; producer(val_0); binder_23 => {unfix_session(binder_23, choose!(binder_23, Right, send_value_to(binder_23, val_0, wait(binder_23, terminate ()))))}}}) }) }
+// fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_0| {cut! { []; producer(val_0); binder_23 => {unfix_session(binder_23, choose!(binder_23, Right, send_value_to(binder_23, val_0, wait(binder_23, terminate ()))))}}}) }) }
+// fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_0| {terminate ()}) }) }

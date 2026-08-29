@@ -65,6 +65,48 @@ and print_type t =
   | TyPrimitive t -> t
   | TyAtomic a -> a
   | TyExistential a -> "?" ^ a
+  | TyInternalChoice c -> "InternalChoice<" ^ print_choice c ^ ">"
+  | TyExternalChoice c -> "ExternalChoice<" ^ print_choice c ^ ">"
+  | TyInternalChoiceId _ -> "TyInternalChoiceId"
+  | TyExternalChoiceId _ -> "TyExternalChoiceId"
+  | TySendChannel (t1, t2) ->
+      "SendChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TyReceiveChannel (t1, t2) ->
+      "ReceiveChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TySendValue (t1, t2) ->
+      "SendValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TyReceiveValue (t1, t2) ->
+      "ReceiveValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TyEnd -> "End"
+  | TySharedToLinear (t, _) -> "SharedToLinear<" ^ print_type t ^ ">"
+  | TyLinearToShared (t, _) -> "LinearToShared<" ^ print_type t ^ ">"
+  | TyFixShared -> "Release"
+  | TySession t -> "Session<" ^ print_type t ^ ">"
+  | TyFunc (((name, tyArgs), tyRet), _) ->
+      "FN<<" ^ name ^ ", "
+      ^ print_labeled_choices tyArgs print_type
+      ^ ">, " ^ print_type tyRet ^ ">"
+  | TyApp func_ty -> "App<" ^ print_type func_ty ^ ">"
+  | TyRec t -> "Rec<" ^ print_type t ^ ">"
+  | TyZ i -> print_peano i
+  | TyUnitRetFunc ((name, argList), _) ->
+      "FN<<" ^ name ^ ", " ^ print_labeled_choices argList print_type ^ ">, >"
+  | TyScheme (tList, tau) ->
+      "Scheme<<"
+      ^ String.concat ", " (List.map print_type tList)
+      ^ ">, " ^ print_type tau ^ ">"
+  | TySchemeFunc (tList, (((name, tyArgs), tyRet), _)) ->
+      "SCHEMEFN<<" ^ name ^ "<"
+      ^ String.concat ", " (List.map print_type tList)
+      ^ ">, "
+      ^ print_labeled_choices tyArgs print_type
+      ^ ">, " ^ print_type tyRet ^ ">"
+
+and print_type_internal t =
+  match t with
+  | TyPrimitive t -> t
+  | TyAtomic a -> a
+  | TyExistential a -> "?" ^ a
   | TyInternalChoice c -> "TyInternalChoice<" ^ print_choice c ^ ">"
   | TyExternalChoice c -> "TyExternalChoice<" ^ print_choice c ^ ">"
   | TyInternalChoiceId _ -> "TyInternalChoiceId"

@@ -2,13 +2,13 @@ use std::format;
 
 use ferrite_session::prelude::*;
 
-fn myFunc() -> Session<Rec<TyExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> {
+fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> {
     myFunc()
 }
-// fn myFunc() -> Session<Rec<TyExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(|val_2| {cut! { []; myFunc(); binder_7 => {unfix_session(binder_7, choose!(binder_7, Left, send_value_to(binder_7, val_2, wait(binder_7, terminate ()))))}}}), Right: myFunc() }) }
-// fn myFunc() -> Session<Rec<TyExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(|val_0| {cut! { []; myFunc(); binder_3 => {unfix_session(binder_3, choose!(binder_3, Left, send_value_to(binder_3, val_0, wait(binder_3, terminate ()))))}}}), Right: myFunc() }) }
-// fn myFunc() -> Session<Rec<TyExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(|val_0| {cut! { []; myFunc(); binder_3 => {unfix_session(binder_3, choose!(binder_3, Left, send_value_to(binder_3, val_0, wait(binder_3, terminate ()))))}}}), Right: myFunc() }) }
-// fn myFunc() -> Session<Rec<TyExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(|val_0| {cut! { []; myFunc(); binder_3 => {unfix_session(binder_3, choose!(binder_3, Left, send_value_to(binder_3, val_0, wait(binder_3, terminate ()))))}}}), Right: myFunc() }) }
-// fn myFunc() -> Session<Rec<TyExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(|val_0| {cut! { []; myFunc(); binder_3 => {unfix_session(binder_3, choose!(binder_3, Left, send_value_to(binder_3, val_0, wait(binder_3, terminate ()))))}}}), Right: myFunc() }) }
-// fn myFunc() -> Session<Rec<TyExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(|val_0| {terminate ()}), Right: myFunc() }) }
-// fn myFunc() -> Session<Rec<TyExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(|val_0| {terminate ()}), Right: myFunc() }) }
+// fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(move |val_2| {cut! { []; myFunc(); binder_7 => {unfix_session(binder_7, choose!(binder_7, Left, send_value_to(binder_7, val_2, wait(binder_7, terminate ()))))}}}), Right: myFunc() }) }
+// fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(move |val_0| {cut! { []; myFunc(); binder_3 => {unfix_session(binder_3, choose!(binder_3, Left, send_value_to(binder_3, val_0, wait(binder_3, terminate ()))))}}}), Right: myFunc() }) }
+// fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(move |val_0| {cut! { []; myFunc(); binder_3 => {unfix_session(binder_3, choose!(binder_3, Left, send_value_to(binder_3, val_0, wait(binder_3, terminate ()))))}}}), Right: myFunc() }) }
+// fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(move |val_0| {cut! { []; myFunc(); binder_3 => {unfix_session(binder_3, choose!(binder_3, Left, send_value_to(binder_3, val_0, wait(binder_3, terminate ()))))}}}), Right: myFunc() }) }
+// fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(move |val_0| {cut! { []; myFunc(); binder_3 => {unfix_session(binder_3, choose!(binder_3, Left, send_value_to(binder_3, val_0, wait(binder_3, terminate ()))))}}}), Right: myFunc() }) }
+// fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(move |val_0| {terminate ()}), Right: myFunc() }) }
+// fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(move |val_0| {terminate ()}), Right: myFunc() }) }

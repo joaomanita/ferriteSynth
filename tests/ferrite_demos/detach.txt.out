@@ -1,6 +1,6 @@
 use ferrite_session::{internal::protocol::Lock, prelude::*};
 
-type Counter = LinearToShared<SendValue<u64, FixShared>>;
+type Counter = LinearToShared<SendValue<u64, Release>>;
 
 fn shared_provider_1(count: u64) -> Session<Counter> {
     shared_provider_1(count)
@@ -9,10 +9,11 @@ fn shared_provider_1(count: u64) -> Session<Counter> {
 
 fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> {
     receive_channel(|chan_0| {
-        cut! { [R]; shared_client(); binder_33 => {send_channel_to(binder_33, chan_0, receive_value_from(binder_33, move |binder_39| {wait(binder_33, send_value(binder_39, terminate ()))}))}}
+        cut! { [R]; shared_client(); binder_35 => {send_channel_to(binder_35, chan_0, receive_value_from(binder_35, move |binder_41| {wait(binder_35, send_value(binder_41, terminate ()))}))}}
     })
 }
-// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {cut! { [R]; shared_client(); binder_33 => {send_channel_to(binder_33, chan_0, receive_value_from(binder_33, move |binder_39| {wait(binder_33, send_value(binder_39, terminate ()))}))}}}) }
-// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {send_value(acquire_shared_session(chan_0, move |chan_2| {receive_value_from(chan_2, move |binder_1| {binder_1})}), terminate ())}) }
-// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {acquire_shared_session(chan_0, move |chan_6| {receive_value_from(chan_6, move |binder_11| {send_value(binder_11, terminate ())})})}) }
-// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {acquire_shared_session(chan_0, move |chan_6| {receive_value_from(chan_6, move |binder_11| {send_value(binder_11, terminate ())})})}) }
+// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {cut! { [R]; shared_client(); binder_35 => {send_channel_to(binder_35, chan_0, receive_value_from(binder_35, move |binder_41| {wait(binder_35, send_value(binder_41, terminate ()))}))}}}) }
+// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {send_value(acquire_shared_session(chan_0, move |chan_10| {receive_value_from(chan_10, move |binder_1| {release_shared_session(chan_10, binder_1)})}), terminate ())}) }
+// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {send_value(acquire_shared_session(chan_0, move |chan_10| {receive_value_from(chan_10, move |binder_1| {release_shared_session(chan_10, binder_1)})}), terminate ())}) }
+// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {acquire_shared_session(chan_0, move |chan_36| {receive_value_from(chan_36, move |binder_13| {release_shared_session(chan_36, send_value(binder_13, terminate ()))})})}) }
+// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { receive_channel(|chan_0| {acquire_shared_session(chan_0, move |chan_36| {receive_value_from(chan_36, move |binder_13| {release_shared_session(chan_36, send_value(binder_13, terminate ()))})})}) }

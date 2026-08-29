@@ -1,3 +1,4 @@
+use ferrite_session::prelude::*;
 type myType = ReceiveChannel< LinearToShared<ReceiveChannel<A, B>>, ReceiveChannel<LinearToShared<A>, LinearToShared<B>>>;
 
 fn myFunc2() -> Session<myType> { @SYNTHESIZE [] }

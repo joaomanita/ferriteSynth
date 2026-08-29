@@ -1,4 +1,5 @@
-type myType1 = ReceiveChannel<TyExternalChoice<Either<A, A>>, A>;
+use ferrite_session::prelude::*;
+type myType1 = ReceiveChannel<ExternalChoice<Either<A, A>>, A>;
 
 fn myFunc2() -> Session<myType1> {
     receive_channel(|chan_0| choose!(chan_0, Left, forward(chan_0)))

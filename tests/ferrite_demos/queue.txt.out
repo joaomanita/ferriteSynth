@@ -3,7 +3,7 @@ use std::{future::Future, time::Duration};
 use ferrite_session::{either::*, prelude::*};
 use tokio::time::sleep;
 
-type StringQueue = Rec<TyInternalChoice<Either<End, SendValue<String, Z>>>>;
+type StringQueue = Rec<InternalChoice<Either<End, SendValue<String, Z>>>>;
 
 fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> {
     receive_channel(|chan_0| {

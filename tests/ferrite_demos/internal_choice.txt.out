@@ -1,6 +1,6 @@
 use ferrite_session::{either::*, prelude::*};
 
-type Choice = TyInternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>;
+type Choice = InternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>;
 
 fn client(arg1: u64) -> Session<ReceiveChannel<Choice, End>> {
     receive_channel(|chan_0| {
@@ -12,8 +12,8 @@ fn client(arg1: u64) -> Session<ReceiveChannel<Choice, End>> {
 fn provider(arg2: String) -> Session<Choice> {
     provider(arg2)
 }
-// fn provider(arg2: String) -> Session<Choice> { offer_case!(Right, receive_value(|val_2| {cut! { []; provider(arg2); binder_25 => {case!{ binder_25 ; Left: receive_value_from(binder_25, move |binder_26| {wait(binder_25, terminate ())}), Right: send_value_to(binder_25, val_2, wait(binder_25, terminate ())) }}}})) }
-// fn provider(arg2: String) -> Session<Choice> { offer_case!(Right, receive_value(|val_0| {cut! { []; provider(arg2); binder_17 => {case!{ binder_17 ; Left: receive_value_from(binder_17, move |binder_18| {wait(binder_17, terminate ())}), Right: send_value_to(binder_17, val_0, wait(binder_17, terminate ())) }}}})) }
-// fn provider(arg2: String) -> Session<Choice> { offer_case!(Right, receive_value(|val_0| {cut! { []; provider(arg2); binder_17 => {case!{ binder_17 ; Left: receive_value_from(binder_17, move |binder_18| {wait(binder_17, terminate ())}), Right: send_value_to(binder_17, val_0, wait(binder_17, terminate ())) }}}})) }
-// fn provider(arg2: String) -> Session<Choice> { offer_case!(Right, receive_value(|val_0| {terminate ()})) }
+// fn provider(arg2: String) -> Session<Choice> { offer_case!(Right, receive_value(move |val_2| {cut! { []; provider(arg2); binder_25 => {case!{ binder_25 ; Left: receive_value_from(binder_25, move |binder_26| {wait(binder_25, terminate ())}), Right: send_value_to(binder_25, val_2, wait(binder_25, terminate ())) }}}})) }
+// fn provider(arg2: String) -> Session<Choice> { offer_case!(Right, receive_value(move |val_0| {cut! { []; provider(arg2); binder_17 => {case!{ binder_17 ; Left: receive_value_from(binder_17, move |binder_18| {wait(binder_17, terminate ())}), Right: send_value_to(binder_17, val_0, wait(binder_17, terminate ())) }}}})) }
+// fn provider(arg2: String) -> Session<Choice> { offer_case!(Right, receive_value(move |val_0| {cut! { []; provider(arg2); binder_17 => {case!{ binder_17 ; Left: receive_value_from(binder_17, move |binder_18| {wait(binder_17, terminate ())}), Right: send_value_to(binder_17, val_0, wait(binder_17, terminate ())) }}}})) }
+// fn provider(arg2: String) -> Session<Choice> { offer_case!(Right, receive_value(move |val_0| {terminate ()})) }
 // fn provider(arg2: String) -> Session<Choice> { offer_case!(Left, send_value(arg2, terminate ())) }
