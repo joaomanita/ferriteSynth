@@ -3,6 +3,8 @@ use ferrite_session::{
   prelude::*,
 };
 
-fn provider(arg1: String) -> Session<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>> { @SYNTHESIZE []}
+fn creator() -> Session<SendChannel<A, End>> {}
+
+fn provider() -> Session<ExternalChoice<Either<SendChannel<A, End>, ReceiveValue<u64, End>>>> { @SYNTHESIZE [use creator;]}
 
 fn client() -> Session<ReceiveChannel<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>, End>> { @SYNTHESIZE []}

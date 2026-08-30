@@ -75,5 +75,5 @@ let () =
   in
   print_prog prog;
   close_out out_channel;
-  let _ = Sys.command ("rustfmt " ^ out_filename) in
+  let _ = Sys.command ("rustfmt --edition 2021 " ^ out_filename) in
   ()

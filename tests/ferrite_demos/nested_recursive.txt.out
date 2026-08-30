@@ -9,7 +9,27 @@ type Stream = Rec<
 fn producer(arg1: String) -> Session<Stream> {
     producer(arg1)
 }
-// fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_2| {cut! { []; producer(val_2); binder_27 => {unfix_session(binder_27, choose!(binder_27, Right, send_value_to(binder_27, val_2, wait(binder_27, terminate ()))))}}}) }) }
-// fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_0| {cut! { []; producer(val_0); binder_23 => {unfix_session(binder_23, choose!(binder_23, Right, send_value_to(binder_23, val_0, wait(binder_23, terminate ()))))}}}) }) }
-// fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_0| {cut! { []; producer(val_0); binder_23 => {unfix_session(binder_23, choose!(binder_23, Right, send_value_to(binder_23, val_0, wait(binder_23, terminate ()))))}}}) }) }
+// fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_2| {cut! { []; producer(val_2); binder_35 => {unfix_session(binder_35, choose!(binder_35, Right, send_value_to(binder_35, val_2, wait(binder_35, terminate ()))))}}}) }) }
+// fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_0| {cut! { []; producer(val_0); binder_31 => {unfix_session(binder_31, choose!(binder_31, Right, send_value_to(binder_31, val_0, wait(binder_31, terminate ()))))}}}) }) }
+// fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_0| {cut! { []; producer(val_0); binder_31 => {unfix_session(binder_31, choose!(binder_31, Right, send_value_to(binder_31, val_0, wait(binder_31, terminate ()))))}}}) }) }
 // fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left: fix_session(offer_case!(Right, producer(arg1))), Right: receive_value(move |val_0| {terminate ()}) }) }
+
+fn user(arg2: String) -> Session<ReceiveChannel<Stream, End>> {
+    receive_channel(|chan_0| {
+        unfix_session(
+            chan_0,
+            choose!(
+                chan_0,
+                Right,
+                send_value_to(chan_0, arg2, wait(chan_0, terminate()))
+            ),
+        )
+    })
+}
+// fn user(arg2: String) -> Session<ReceiveChannel<Stream, End>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Right, send_value_to(chan_0, arg2, wait(chan_0, terminate ()))))}) }
+// fn user(arg2: String) -> Session<ReceiveChannel<Stream, End>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Right, send_value_to(chan_0, arg2, wait(chan_0, terminate ()))))}) }
+
+#[tokio::main]
+pub async fn main(arg3: String) {
+    run_session(cut! { [L, R]; user(arg3); binder_76 => {cut! { [L, R]; producer(arg3); binder_80 => {send_channel_to(binder_76, binder_80, wait(binder_76, terminate ()))}}}}).await
+}

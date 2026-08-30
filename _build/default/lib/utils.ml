@@ -263,20 +263,23 @@ and incTimesUsedGamma id acc = function
       if id1 = id then List.rev_append acc (((id1, t), timesUsed + 1) :: rest)
       else incTimesUsedGamma id (((id1, t), timesUsed) :: acc) rest
 
-and searchZeta id = function
+and searchZeta id t = function
   | [] -> false
-  | (id1, _) :: rest -> if id1 = id then true else searchZeta id rest
+  | ((id1, t1), _) :: rest ->
+      if id1 = id && equal_type t t1 then true else searchZeta id t rest
 
-and searchTimesUsedZeta id = function
+and searchTimesUsedZeta id t = function
   | [] -> raise Fail
-  | (id1, timesUsed) :: rest ->
-      if id1 = id then timesUsed else searchTimesUsedZeta id rest
+  | ((id1, t1), timesUsed) :: rest ->
+      if id1 = id && equal_type t t1 then timesUsed
+      else searchTimesUsedZeta id t rest
 
-and incTimesUsedZeta id acc = function
+and incTimesUsedZeta id t acc = function
   | [] -> raise Fail
-  | (id1, timesUsed) :: rest ->
-      if id1 = id then List.rev_append acc ((id1, timesUsed + 1) :: rest)
-      else incTimesUsedZeta id ((id1, timesUsed) :: acc) rest
+  | ((id1, t1), timesUsed) :: rest ->
+      if id1 = id && equal_type t t1 then
+        List.rev_append acc (((id1, t1), timesUsed + 1) :: rest)
+      else incTimesUsedZeta id t (((id1, t1), timesUsed) :: acc) rest
 
 let print_fail func_name ident =
   log "%s< %s: fail\n" (String.make ident ' ') func_name

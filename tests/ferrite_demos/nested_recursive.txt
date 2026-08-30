@@ -11,3 +11,7 @@ type Stream = Rec<
 >;
 
 fn producer(arg1: String) -> Session<Stream> { @SYNTHESIZE  []}
+
+fn user(arg2: String) -> Session<ReceiveChannel<Stream, End>> { @SYNTHESIZE []}
+
+fn main(arg3: String) { @SYNTHESIZE [use producer, user;] }
