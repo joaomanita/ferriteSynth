@@ -6,9 +6,21 @@ type myType = Rec<ExternalChoice<Either<SendValue<Int, Z>, End>>>;
 
 fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> {
     receive_channel(|chan_0| {
-        cut! { [R]; myFunc(); binder_4029 => {send_channel_to(binder_4029, chan_0, receive_value_from(binder_4029, move |binder_4235| {receive_value_from(binder_4029, move |binder_4236| {wait(binder_4029, send_value(binder_4236, send_value(binder_4236, terminate ())))})}))}}
+        unfix_session(
+            chan_0,
+            choose!(
+                chan_0,
+                Left,
+                receive_value_from(chan_0, move |binder_5| {
+                    unfix_session(
+                        chan_0,
+                        wait(
+                            chan_0,
+                            send_value(binder_5, send_value(binder_5, terminate())),
+                        ),
+                    )
+                })
+            ),
+        )
     })
 }
-// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {cut! { [R]; myFunc(); binder_4029 => {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_4237| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_4309| {send_value(send_channel_to(binder_4029, chan_0, receive_value_from(binder_4029, move |binder_4312| {receive_value_from(binder_4029, move |binder_4313| {wait(binder_4029, binder_4313)})})), send_value(binder_4309, terminate ()))})))})))}}}) }
-// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_1817| {unfix_session(chan_0, wait(chan_0, send_value(binder_1817, send_value(binder_1817, terminate ()))))})))}) }
-// fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Left, receive_value_from(chan_0, move |binder_1817| {unfix_session(chan_0, wait(chan_0, send_value(binder_1817, send_value(binder_1817, terminate ()))))})))}) }

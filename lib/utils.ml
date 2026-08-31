@@ -3,7 +3,7 @@ open Printf
 
 exception Fail
 
-let debug_enabled = true
+let debug_enabled = false
 let debug_out = if debug_enabled then Some (open_out "debug.log") else None
 
 let log fmt =
@@ -82,20 +82,20 @@ and print_type t =
   | TyLinearToShared (t, _) -> "LinearToShared<" ^ print_type t ^ ">"
   | TyFixShared -> "Release"
   | TySession t -> "Session<" ^ print_type t ^ ">"
-  | TyFunc (((name, tyArgs), tyRet), _) ->
+  | TyFunc ((name, tyArgs), tyRet) ->
       "FN<<" ^ name ^ ", "
       ^ print_labeled_choices tyArgs print_type
       ^ ">, " ^ print_type tyRet ^ ">"
   | TyApp func_ty -> "App<" ^ print_type func_ty ^ ">"
   | TyRec t -> "Rec<" ^ print_type t ^ ">"
   | TyZ i -> print_peano i
-  | TyUnitRetFunc ((name, argList), _) ->
+  | TyUnitRetFunc (name, argList) ->
       "FN<<" ^ name ^ ", " ^ print_labeled_choices argList print_type ^ ">, >"
   | TyScheme (tList, tau) ->
       "Scheme<<"
       ^ String.concat ", " (List.map print_type tList)
       ^ ">, " ^ print_type tau ^ ">"
-  | TySchemeFunc (tList, (((name, tyArgs), tyRet), _)) ->
+  | TySchemeFunc (tList, ((name, tyArgs), tyRet)) ->
       "SCHEMEFN<<" ^ name ^ "<"
       ^ String.concat ", " (List.map print_type tList)
       ^ ">, "
@@ -124,20 +124,20 @@ and print_type_internal t =
   | TyLinearToShared (t, _) -> "LinearToShared<" ^ print_type t ^ ">"
   | TyFixShared -> "FixShared"
   | TySession t -> "Session<" ^ print_type t ^ ">"
-  | TyFunc (((name, tyArgs), tyRet), _) ->
+  | TyFunc ((name, tyArgs), tyRet) ->
       "FN<<" ^ name ^ ", "
       ^ print_labeled_choices tyArgs print_type
       ^ ">, " ^ print_type tyRet ^ ">"
   | TyApp func_ty -> "App<" ^ print_type func_ty ^ ">"
   | TyRec t -> "Rec<" ^ print_type t ^ ">"
   | TyZ i -> print_peano i
-  | TyUnitRetFunc ((name, argList), _) ->
+  | TyUnitRetFunc (name, argList) ->
       "FN<<" ^ name ^ ", " ^ print_labeled_choices argList print_type ^ ">, >"
   | TyScheme (tList, tau) ->
       "Scheme<<"
       ^ String.concat ", " (List.map print_type tList)
       ^ ">, " ^ print_type tau ^ ">"
-  | TySchemeFunc (tList, (((name, tyArgs), tyRet), _)) ->
+  | TySchemeFunc (tList, ((name, tyArgs), tyRet)) ->
       "SCHEMEFN<<" ^ name ^ "<"
       ^ String.concat ", " (List.map print_type tList)
       ^ ">, "
@@ -170,9 +170,9 @@ and equal_type t1 t2 =
       equal_type t1 t2
   | TyFixShared, TyFixShared -> true
   | TySession t1, TySession t2 -> equal_type t1 t2
-  | TyFunc (((name1, args1), ret1), _), TyFunc (((name2, args2), ret2), _) ->
+  | TyFunc ((name1, args1), ret1), TyFunc ((name2, args2), ret2) ->
       name1 = name2 && equal_labeled_types args1 args2 && equal_type ret1 ret2
-  | TyUnitRetFunc ((name1, args1), _), TyUnitRetFunc ((name2, args2), _) ->
+  | TyUnitRetFunc (name1, args1), TyUnitRetFunc (name2, args2) ->
       name1 = name2 && equal_labeled_types args1 args2
   | TyApp f1, TyApp f2 -> equal_type f1 f2
   | TyRec t1, TyRec t2 -> equal_type t1 t2
@@ -181,8 +181,8 @@ and equal_type t1 t2 =
       List.length ts1 = List.length ts2
       && List.for_all2 equal_type ts1 ts2
       && equal_type tau1 tau2
-  | ( TySchemeFunc (ts1, (((name1, args1), ret1), _)),
-      TySchemeFunc (ts2, (((name2, args2), ret2), _)) ) ->
+  | ( TySchemeFunc (ts1, ((name1, args1), ret1)),
+      TySchemeFunc (ts2, ((name2, args2), ret2)) ) ->
       List.length ts1 = List.length ts2
       && List.for_all2 equal_type ts1 ts2
       && name1 = name2

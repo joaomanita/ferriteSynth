@@ -4,8 +4,8 @@ use ferrite_session::prelude::*;
 
 type SharedService = LinearToShared<ExternalChoice<Either<SendValue<String, Release>, ReceiveValue<String, Release>>>>;
 
-fn shared_provider(arg1: String) -> Session<SharedService> { @SYNTHESIZE [] }
+fn shared_provider(arg1: String) -> Session<SharedService> { @SYNTHESIZE REC [] }
 
-fn rec_provider(arg1: String) -> Session<Rec<ExternalChoice<Either<SendChannel<SharedService, Z>, End>>>> { @SYNTHESIZE [use shared_provider;]}
+fn rec_provider(arg1: String) -> Session<Rec<ExternalChoice<Either<SendChannel<SharedService, Z>, End>>>> { @SYNTHESIZE REC [use shared_provider;]}
 
-fn user() -> Session<ReceiveChannel<Rec<ExternalChoice<Either<SendChannel<SharedService, Z>, End>>>, SendValue<String, SendValue<String, End>>>> { @SYNTHESIZE [] }
+fn user() -> Session<ReceiveChannel<Rec<ExternalChoice<Either<SendChannel<SharedService, Z>, End>>>, SendValue<String, SendValue<String, End>>>> { @SYNTHESIZE REC [] }

@@ -39,6 +39,8 @@
 %token ACQUIRE
 %token SYNTHESIZE
 %token USE
+%token SUGGEST
+%token REC_FUNC
 %token DEFINE_CHOICE
 %token EITHER
 %token EXCLAMATION
@@ -107,12 +109,14 @@ func:
     MINUS; GT; ret = s_type;
     LBRACE;
     AT; SYNTHESIZE;
+    recursive = boption(REC_FUNC);
     LSQUARE;
-    funcs = used_funcs;
+    required_funcs = require_funcs;
+    suggested_funcs = suggest_funcs;
     RSQUARE;
     RBRACE
     {
-      Function (TyFunc (((name, ars), ret), funcs))
+      Function (TyFunc (((name, ars), ret)), recursive, (required_funcs, suggested_funcs))
     }
 
 unit_ret_func:
@@ -120,21 +124,28 @@ unit_ret_func:
     LPAR; ars = separated_list(COMMA, arg); RPAR;
     LBRACE;
     AT; SYNTHESIZE;
+    recursive = boption(REC_FUNC);
     LSQUARE;
-    funcs = used_funcs;
+    required_funcs = require_funcs;
+    suggested_funcs = suggest_funcs;
     RSQUARE;
     RBRACE
     {
-      Function (TyUnitRetFunc ((name, ars), funcs))
+      Function (TyUnitRetFunc (name, ars), recursive, (required_funcs, suggested_funcs))
     }
 
-used_funcs:
+require_funcs:
   |                             { [] }
   | USE; ids = separated_nonempty_list(COMMA, ID); SEMICOLON
                                 { ids }
 
+suggest_funcs:
+  |                             { [] }
+  | SUGGEST; ids = separated_nonempty_list(COMMA, ID); SEMICOLON
+                                { ids }
+
 closed_func:
-  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE; body = list(RAW); RBRACE { ClosedFunction((TyFunc(((name, ars), ret), []), String.concat "" body)) }
+  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE; body = list(RAW); RBRACE { ClosedFunction((TyFunc((name, ars), ret), String.concat "" body)) }
   | FUNC; name = ID;
     LT; tList = scheme_args; GT;
     LPAR; ars = separated_list(COMMA, arg); RPAR;
@@ -146,7 +157,7 @@ closed_func:
       ClosedFunction
         ((TySchemeFunc
            (tList,
-            (((name, ars), ret), []))), String.concat "" body)
+            ((name, ars), ret))), String.concat "" body)
     }
 
 scheme_args:
@@ -160,15 +171,17 @@ scheme_func:
     MINUS; GT; ret = s_type;
     LBRACE;
     AT; SYNTHESIZE;
+    recursive = boption(REC_FUNC);
     LSQUARE;
-    funcs = used_funcs;
+    required_funcs = require_funcs;
+    suggested_funcs = suggest_funcs;
     RSQUARE;
     RBRACE
     {
       Function
         (TySchemeFunc
            (tList,
-            (((name, ars), ret), funcs)))
+            ((name, ars), ret)), recursive, (required_funcs, suggested_funcs))
     }
 
 arg:

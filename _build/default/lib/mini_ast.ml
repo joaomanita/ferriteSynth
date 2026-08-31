@@ -2,7 +2,7 @@ type program = decl list
 
 and decl =
   | TypeDef of type_def
-  | Function of ty
+  | Function of ty * bool * (label list * label list)
   | Raw of string
   | ClosedFunction of ty * string
   | ChoiceDef of choice
@@ -27,13 +27,13 @@ and ty =
   | TyLinearToShared of ty * int
   | TyFixShared
   | TySession of ty
-  | TyFunc of func_ty * string list
-  | TyUnitRetFunc of (string * (label * ty) list) * string list
+  | TyFunc of func_ty
+  | TyUnitRetFunc of (string * (label * ty) list)
   | TyApp of ty
   | TyRec of ty
   | TyZ of int
   | TyScheme of ty list * ty
-  | TySchemeFunc of ty list * (func_ty * string list)
+  | TySchemeFunc of ty list * func_ty
   | TyExistential of string
 
 and choice =

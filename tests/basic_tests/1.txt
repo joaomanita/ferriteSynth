@@ -2,6 +2,10 @@ use std::format;
 
 use ferrite_session::prelude::*;
 
-type myType = ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<B, C>>>>;
+type myType = ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>;
 
 fn myFunc() -> Session<myType> { @SYNTHESIZE [] }
+
+fn user(arg1: A, arg2: ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>) -> Session<ReceiveChannel<myType, SendChannel<C, End>>> { @SYNTHESIZE [] }
+
+fn main(arg1: A, arg2: ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>) -> Session<SendChannel<C, End>> { @SYNTHESIZE [use myFunc, user;] }

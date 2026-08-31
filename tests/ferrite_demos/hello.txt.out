@@ -7,9 +7,6 @@ type HelloSession = ReceiveValue<String, SendValue<String, End>>;
 fn server() -> Session<HelloSession> {
     receive_value(move |val_0| send_value(val_0, terminate()))
 }
-// fn server() -> Session<HelloSession> { receive_value(move |val_0| {cut! { []; server(); binder_47 => {send_value_to(binder_47, val_0, receive_value_from(binder_47, move |binder_51| {wait(binder_47, send_value(binder_51, terminate ()))}))}}}) }
-// fn server() -> Session<HelloSession> { receive_value(move |val_0| {send_value(val_0, cut! { []; server(); binder_21 => {send_value_to(binder_21, val_0, receive_value_from(binder_21, move |binder_27| {wait(binder_21, terminate ())}))}})}) }
-// fn server() -> Session<HelloSession> { receive_value(move |val_0| {send_value(val_0, cut! { []; server(); binder_21 => {send_value_to(binder_21, val_0, receive_value_from(binder_21, move |binder_23| {wait(binder_21, terminate ())}))}})}) }
 // fn server() -> Session<HelloSession> { receive_value(move |val_0| {send_value(val_0, terminate ())}) }
 
 fn client(arg1: String) -> Session<ReceiveChannel<HelloSession, End>> {
@@ -17,8 +14,8 @@ fn client(arg1: String) -> Session<ReceiveChannel<HelloSession, End>> {
         send_value_to(
             chan_0,
             arg1,
-            receive_value_from(chan_0, move |binder_65| wait(chan_0, terminate())),
+            receive_value_from(chan_0, move |binder_5| wait(chan_0, terminate())),
         )
     })
 }
-// fn client(arg1: String) -> Session<ReceiveChannel<HelloSession, End>> { receive_channel(|chan_0| {send_value_to(chan_0, arg1, receive_value_from(chan_0, move |binder_55| {wait(chan_0, terminate ())}))}) }
+// fn client(arg1: String) -> Session<ReceiveChannel<HelloSession, End>> { receive_channel(|chan_0| {send_value_to(chan_0, arg1, receive_value_from(chan_0, move |binder_1| {wait(chan_0, terminate ())}))}) }

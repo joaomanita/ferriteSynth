@@ -9,28 +9,19 @@ define_choice! {
 
 type RecBankOps = Rec<TyExternalChoiceId>;
 
-fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> {
-    bankops(arg1)
-}
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: cut! { []; bankops(arg1); binder_45 => {unfix_session(binder_45, choose!(binder_45, deposit, send_value_to(binder_45, arg1, unfix_session(binder_45, choose!(binder_45, Terminate, wait(binder_45, terminate ()))))))}} }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: cut! { []; bankops(arg1); binder_45 => {unfix_session(binder_45, choose!(binder_45, deposit, send_value_to(binder_45, arg1, unfix_session(binder_45, choose!(binder_45, Terminate, wait(binder_45, terminate ()))))))}} }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: terminate () }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: cut! { []; bankops(arg1); binder_45 => {unfix_session(binder_45, choose!(binder_45, deposit, send_value_to(binder_45, arg1, unfix_session(binder_45, choose!(binder_45, Terminate, wait(binder_45, terminate ()))))))}} }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: cut! { []; bankops(arg1); binder_45 => {unfix_session(binder_45, choose!(binder_45, deposit, send_value_to(binder_45, arg1, unfix_session(binder_45, choose!(binder_45, Terminate, wait(binder_45, terminate ()))))))}} }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: terminate () }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: cut! { []; bankops(arg1); binder_45 => {unfix_session(binder_45, choose!(binder_45, deposit, send_value_to(binder_45, arg1, unfix_session(binder_45, choose!(binder_45, Terminate, wait(binder_45, terminate ()))))))}} }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: cut! { []; bankops(arg1); binder_45 => {unfix_session(binder_45, choose!(binder_45, deposit, send_value_to(binder_45, arg1, unfix_session(binder_45, choose!(binder_45, Terminate, wait(binder_45, terminate ()))))))}} }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: terminate () }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: cut! { []; bankops(arg1); binder_45 => {unfix_session(binder_45, choose!(binder_45, deposit, send_value_to(binder_45, arg1, unfix_session(binder_45, choose!(binder_45, Terminate, wait(binder_45, terminate ()))))))}} }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: cut! { []; bankops(arg1); binder_45 => {unfix_session(binder_45, choose!(binder_45, deposit, send_value_to(binder_45, arg1, unfix_session(binder_45, choose!(binder_45, Terminate, wait(binder_45, terminate ()))))))}} }) }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: terminate () }) }
+// couldnt synthesize function
 
 fn bank_session(
     withdraw_value: Int,
 ) -> Session<ReceiveValue<String, Rec<ExternalChoice<BankOps>>>> {
-    receive_value(move |val_30| bankops(withdraw_value))
+    receive_value(move |val_4| {
+        fix_session(
+            offer_choice! { deposit: receive_value(move |val_5| {bankops(val_5)}), withdraw: send_value(withdraw_value, receive_value(move |val_6| {bankops(val_6)})), Terminate: cut! { [L]; bankops(withdraw_value); binder_33 => {unfix_session(binder_33, choose!(binder_33, deposit, send_value_to(binder_33, withdraw_value, unfix_session(binder_33, choose!(binder_33, Terminate, wait(binder_33, terminate ()))))))}} },
+        )
+    })
 }
-// fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, Rec<ExternalChoice<BankOps>>>> { receive_value(move |val_30| {bankops(withdraw_value)}) }
+// fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, Rec<ExternalChoice<BankOps>>>> { receive_value(move |val_4| {fix_session(offer_choice!{ deposit: receive_value(move |val_5| {bankops(val_5)}), withdraw: send_value(withdraw_value, receive_value(move |val_6| {bankops(val_6)})), Terminate: cut! { []; bankops(withdraw_value); binder_29 => {unfix_session(binder_29, choose!(binder_29, deposit, send_value_to(binder_29, withdraw_value, unfix_session(binder_29, choose!(binder_29, Terminate, wait(binder_29, terminate ()))))))}} })}) }
+// fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, Rec<ExternalChoice<BankOps>>>> { receive_value(move |val_4| {bankops(withdraw_value)}) }
 
 fn client_session(
     myId: String,
@@ -42,10 +33,20 @@ fn client_session(
             myId,
             unfix_session(
                 chan_0,
-                choose!(chan_0, Terminate, wait(chan_0, terminate())),
+                choose!(
+                    chan_0,
+                    deposit,
+                    send_value_to(
+                        chan_0,
+                        depositAmt,
+                        unfix_session(
+                            chan_0,
+                            choose!(chan_0, Terminate, wait(chan_0, terminate()))
+                        )
+                    )
+                ),
             ),
         )
     })
 }
-// fn client_session(myId: String, depositAmt: Int) -> Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<BankOps>>>, End>> { receive_channel(|chan_0| {send_value_to(chan_0, myId, unfix_session(chan_0, choose!(chan_0, deposit, send_value_to(chan_0, depositAmt, unfix_session(chan_0, choose!(chan_0, Terminate, wait(chan_0, terminate ())))))))}) }
 // fn client_session(myId: String, depositAmt: Int) -> Session<ReceiveChannel<ReceiveValue<String, Rec<ExternalChoice<BankOps>>>, End>> { receive_channel(|chan_0| {send_value_to(chan_0, myId, unfix_session(chan_0, choose!(chan_0, deposit, send_value_to(chan_0, depositAmt, unfix_session(chan_0, choose!(chan_0, Terminate, wait(chan_0, terminate ())))))))}) }

@@ -17,6 +17,7 @@ module MenhirBasics = struct
     | USE
     | TYPE_KEYWORD
     | SYNTHESIZE
+    | SUGGEST
     | SHAREDTOLINEAR
     | SESSION
     | SENDVALUE
@@ -26,6 +27,7 @@ module MenhirBasics = struct
     | RSQUARE
     | RPAR
     | RELEASE
+    | REC_FUNC
     | RECEIVEVALUE
     | RECEIVECHANNEL
     | REC
@@ -33,7 +35,7 @@ module MenhirBasics = struct
     | RAW of (
 # 5 "lib/parser.mly"
        (string)
-# 37 "lib/parser.ml"
+# 39 "lib/parser.ml"
   )
     | MINUS
     | LT
@@ -45,7 +47,7 @@ module MenhirBasics = struct
     | ID of (
 # 6 "lib/parser.mly"
        (string)
-# 49 "lib/parser.ml"
+# 51 "lib/parser.ml"
   )
     | GT
     | FUNC
@@ -61,7 +63,7 @@ module MenhirBasics = struct
     | ATOMIC of (
 # 7 "lib/parser.mly"
        (string)
-# 65 "lib/parser.ml"
+# 67 "lib/parser.ml"
   )
     | AT
     | ACQUIRE
@@ -74,7 +76,7 @@ include MenhirBasics
   
   open Mini_ast
 
-# 78 "lib/parser.ml"
+# 80 "lib/parser.ml"
 
 module Tables = struct
   
@@ -84,76 +86,80 @@ module Tables = struct
     fun _tok ->
       match _tok with
       | ACQUIRE ->
-          40
+          42
       | AT ->
-          39
+          41
       | ATOMIC _ ->
-          38
+          40
       | COLON ->
-          37
+          39
       | COMMA ->
-          36
+          38
       | DEFINE_CHOICE ->
-          35
+          37
       | EITHER ->
-          34
+          36
       | END ->
-          33
+          35
       | EOF ->
-          32
+          34
       | EQ ->
-          31
+          33
       | EXCLAMATION ->
-          30
+          32
       | EXTERNALCHOICE ->
-          29
+          31
       | FUNC ->
-          28
+          30
       | GT ->
-          27
+          29
       | ID _ ->
-          26
+          28
       | INTERNALCHOICE ->
-          25
+          27
       | LBRACE ->
-          24
+          26
       | LINEARTOSHARED ->
-          23
+          25
       | LPAR ->
-          22
+          24
       | LSQUARE ->
-          21
+          23
       | LT ->
-          20
+          22
       | MINUS ->
-          19
+          21
       | RAW _ ->
-          18
+          20
       | RBRACE ->
-          17
+          19
       | REC ->
-          16
+          18
       | RECEIVECHANNEL ->
-          15
+          17
       | RECEIVEVALUE ->
-          14
+          16
+      | REC_FUNC ->
+          15
       | RELEASE ->
-          13
+          14
       | RPAR ->
-          12
+          13
       | RSQUARE ->
-          11
+          12
       | S ->
-          10
+          11
       | SEMICOLON ->
-          9
+          10
       | SENDCHANNEL ->
-          8
+          9
       | SENDVALUE ->
-          7
+          8
       | SESSION ->
-          6
+          7
       | SHAREDTOLINEAR ->
+          6
+      | SUGGEST ->
           5
       | SYNTHESIZE ->
           4
@@ -178,7 +184,7 @@ module Tables = struct
           Obj.repr (_v : (
 # 7 "lib/parser.mly"
        (string)
-# 182 "lib/parser.ml"
+# 188 "lib/parser.ml"
           ))
       | COLON ->
           Obj.repr ()
@@ -206,7 +212,7 @@ module Tables = struct
           Obj.repr (_v : (
 # 6 "lib/parser.mly"
        (string)
-# 210 "lib/parser.ml"
+# 216 "lib/parser.ml"
           ))
       | INTERNALCHOICE ->
           Obj.repr ()
@@ -226,7 +232,7 @@ module Tables = struct
           Obj.repr (_v : (
 # 5 "lib/parser.mly"
        (string)
-# 230 "lib/parser.ml"
+# 236 "lib/parser.ml"
           ))
       | RBRACE ->
           Obj.repr ()
@@ -235,6 +241,8 @@ module Tables = struct
       | RECEIVECHANNEL ->
           Obj.repr ()
       | RECEIVEVALUE ->
+          Obj.repr ()
+      | REC_FUNC ->
           Obj.repr ()
       | RELEASE ->
           Obj.repr ()
@@ -254,6 +262,8 @@ module Tables = struct
           Obj.repr ()
       | SHAREDTOLINEAR ->
           Obj.repr ()
+      | SUGGEST ->
+          Obj.repr ()
       | SYNTHESIZE ->
           Obj.repr ()
       | TYPE_KEYWORD ->
@@ -264,22 +274,22 @@ module Tables = struct
           Obj.repr ()
   
   and default_reduction =
-    (8, "\000\000\000\000:\000\000\000\000\000\000\000\000\000\000\000\000\000;*\000\000\000\000\000\000\000\000\000\000\000\000\000\028\000\000\024\000\000\000\029\000\027$\025+)\000\000\000\004\000\026\000&\000(\000\000\000\031\000\"\000\000\000#\000\000\000\030\000 \000\000\000!\000'\000%\0006\b\000\000\000\000\000/,\000\000\000\000\000\003\002\022\000\000\000\000\000\000\000\018\000\000\000\000\000\0001\0009\000\000-\000\007\000\0003\000\000\000\000\000\000\000\000\000\000\000\000\016\000\006\000\000\000\000\000\0007\000\000\000\000\000\000\000\005\000\015\000\0005\012\t\014\001\000\023\011\n\000\020\r")
+    (8, "\000\000\000\000>\000\000\000\000\000\000\000\000\000\000\000\000\000?.\000\000\000\000\000\000\000\000\000\000\000\000\000 \000\000\028\000\000\000!\000\031(\029/-\000\000\000\006\000\030\000*\000,\000\000\000#\000&\000\000\000'\000\000\000\"\000$\000\000\000%\000+\000)\000<\n\000\000\000\000\00030\000\000\000\000\000\003\002\024\000\000\000\000\000\000\000\020\000\000\005\000\000\000\000\0005\000\027\000\000\000;\000\0001\000\t\000\0007\000\000\000\000\000\000\000\000\000\000\000\000\000\000\018\000\b\000\000\000\000\000\000\000\000=\000\000\000\000\000\000\000\007\000\017\000\0009\014\011\016\001\000\025\r\012\000\022\015")
   
   and error =
-    (41, "\016\000 \b\144\000\000\000\016\000\000\000\000\000@\b\244\240,\136P\000\000\000\000\000\000\000@\000\001\030\158\005\145\n\000\000\016\000\000G\167\129dB\128\000\004\000\000\000\000\000\b\000\128\000\000\000\001\004zx\022D(\000\000@\000\001\030\158\005\145\n\000\000\016\000\000@ \000\000\000\000\000\000\b\000\000\000\000\000\000\000\000\000\000\000\000\000\000\128\000\000\000\000\001\000\016\000\000\000\000 \143O\002\200\133\000\000\b\000\000#\211\192\178!@\000\002\000\000\b\244\240,\136P\000\000\128\000\002=<\011\"\020\000\000 \000\000\000\000\000@@\000\000\000\016\000\000\000\000\000\000\000\000\002\000\000\b\244\240,\136P\000\000\000\000\000\000\000@\000\000\000\000\000\128\128\000\000\000 \000\000\000\000\000\000\000\000\000\b\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\016G\167\129dB\128\000\000\b\000\000\000\000\000\000\000\000\000\002\000\000\000\000\000\000\000\000\000\000\128\000\000\000\000\000\000\000\000\000 \000\000\000\000\000\000\000\000\000\000\004\017\233\224Y\016\160\000\000\002\000\000\000\000\000\000\000\000\000\000\128\000\000\000\000\000\000\000\000\000\000\016G\167\129dB\128\000\000\b\000\000\000\000\000\000\000\000\000\000\001\004zx\022D(\000\000\000\128\000\000\000\000\000\000\000\000\000 \000\000\000\000\000\000\000\000\000\000\004\017\233\224Y\016\160\000\000\002\000\000\000\000\000\000\000\000\000\000\128\000\000\000\000\000\000\000\000\000 \000\000\000\000\000\000\000 \000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\002\000\000\000\000P\000\000\000\000\000\000\b\000\000\000 \016\000\000\000\000\002\000\000\000\000\000\000\000\000\000\000\000\000\000\002\000\000\000\000 \000\000\000@\001\000\000\000\000\000\000\016\143O\002\200\133\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\001\000\000\000\000\000\001\000\000\000\000\000\000\128\001\030\158\005\145\n\000\000\001\000\000\000\000`\000\001\000\0000\000\000\000\000\000\000\000\001\000\000\000\000\000\000\000@\000\001\000\128\000\000\000\000\000\000\128\000\000\128\000\000\016\000\000\000 \000\000\000\000\000\000\000\016\000\000\000\000\000\000\000\000\000\001\000\000\000\000\000\002\000\000\000\000\000\000\000\000\000\000\128\000\000\000\000\000\000\000\000\004\000\000\004\000\000\000\b\000\000\000\000\000\000\000\000\128\002\000\000\000@\000\000\000\000\000B\000\000\000\000\000 \000G\167\129dB\128\000\000@\000\000\000\024\000\000A\000\000\000\000\000\000\000@\000\001\000\128\000\000\000\000@\000\000\000\000\000\128\000\000\000\000\000\000\000\000\000 \000\000\000\000\000\000\000\000\000\000\000\000 \128\000\000\000\000\000\000 \000\000\128@\000\000\000\000 \000\000\000\000\000@\000\000\000\000\000\000\000\000\000\000\000\128\000\000\000\016\000\000\000\000\002\000\000\002\000\000\000\000\000\000\000\128\000\000\000\000\000\bG\167\129dB\128\000\000\000\000\000\000\016\000\000\000\000\000\000\000\000\000\004\000\000\128\000\000\001\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\016\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000 \000@\017 \000\000\000\000\000\000\000\000\000\000\000")
+    (43, "\016\000\b\002$\000\000\000\001\000\000\000\000\000\001\000!\233p,\136P\000\000\000\000\000\000\000\004\000\000\016\244\184\022D(\000\000\016\000\000C\210\224Y\016\160\000\000@\000\000\000\000\000 \002\000\000\000\000\001\004=.\005\145\n\000\000\004\000\000\016\244\184\022D(\000\000\016\000\000@\016\000\000\000\000\000\000\000\128\000\000\000\000\000\000\000\000\000\000\000\000\000\000 \000\000\000\000\000\016\001\000\000\000\000\000\130\030\151\002\200\133\000\000\002\000\000\bz\\\011\"\020\000\000\b\000\000!\233p,\136P\000\000 \000\000\135\165\192\178!@\000\000\128\000\000\000\000\000@@\000\000\000\004\000\000\000\000\000\000\000\000\000\b\000\000!\233p,\136P\000\000\000\000\000\000\000\004\000\000\000\000\000\002\002\000\000\000\000 \000\000\000\000\000\000\000\000\000\000\128\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\016C\210\224Y\016\160\000\000\000\128\000\000\000\000\000\000\000\000\000\002\000\000\000\000\000\000\000\000\000\000\b\000\000\000\000\000\000\000\000\000\000 \000\000\000\000\000\000\000\000\000\000\000A\015K\129dB\128\000\000\002\000\000\000\000\000\000\000\000\000\000\b\000\000\000\000\000\000\000\000\000\000\000\016C\210\224Y\016\160\000\000\000\128\000\000\000\000\000\000\000\000\000\000\001\004=.\005\145\n\000\000\000\b\000\000\000\000\000\000\000\000\000\000 \000\000\000\000\000\000\000\000\000\000\000A\015K\129dB\128\000\000\002\000\000\000\000\000\000\000\000\000\000\b\000\000\000\000\000\000\000\000\000\000 \000\000\000\000\000\000\000\004\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\128\000\000\000\005\000\000\000\000\000\000\000 \000\000\000 \016\000\000\000\000\000\128\000\000\000\000\000\000\000\000\000\000\000\000\000\002\000\000\000\000\b\000\000\000\b\000\016\000\000\000\000\000\000B\030\151\002\200\133\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\002\000\000\000\000\000\000@\000\000\000\000\000\b\000\016\244\184\022D(\000\000\001\000\000\000\000\024\000\000@\000\003\000\000\000\000\000\000\000\000\004\000\000\000\000\000\000\016\016\000\000\000\000\000\000\000\000\000\000@\000\001 @\000\000\000\000\000\000\b\000\000\004\000\000\000@\000\000\000 \000\000\000\000\000\000\000\002\000\000\000\000\000\000\000\000\000\001\002\000\000\000\000\000\000\000@\000\000 \000\000\000\000\000\000\000\000\000\000 \000\000\000\000\000\b\000\000\000\000\000\000\000\000\000\000 \000\000\000\000\000\000\000\000\000 \000\000\016\000\000\000\b\000\000\000\000\000\000\000\000\016\000 \000\000\002\000\000\000\000\000\000B\000\000\000\000\000\b\000\016\244\184\022D(\000\000\001\000\000\000\000\024\000\000A\000\000\000\000\000\000\004\004\000\000\000\000\000\128\000\002@\128\000\000\000\b\016\000\000\000\000\002\000\000\000\000\000\000\128\000\000\000\000\000\000\000\000\000\002\000\000\000\000\000\000\000\000\000\000\000\000\000 \128\000\000\000\000\000\002\002\000\000\000\000\000@\000\001 @\000\000\000\004\b\000\000\000\000\001\000\000\000\000\000\000@\000\000\000\000\000\000\000\000\000\000\000\b\000\000\000\000@\000\000\000\000\002\000\000\001\000\000\000\000\000\000\000\b\000\000\000\000\000\000!\015K\129dB\128\000\000\000\000\000\000\001\000\000\000\000\000\000\000\000\000\000\004\000\000\128\000\000\000@\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000@\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\002\000\001\000D\128\000\000\000\000\000\000\000\000\000\000\000")
   
   and start =
     1
   
   and action =
-    ((8, "\005\031\152\003\000p\003\162\003|$\172\0032\003X\003\132\000\000\150\016\136\003\176\003\144\003\186\003\190\007\180\000\200\003\000\2081\198\0008\000\000\000\000\000@\003Z\000d\000\158\000~\000`\003v\000\134\000x\003\142\000\138\003\152\000\150\000\128\003\140\000\164\000\168\000\164\000\000~:\152\028\152\000\000lt\"\158\003\000\000\000~\200X\003\194\006\006\000~ZH\194\003\194\000d\000\228P\000J\000\019\"\000\"t:>\003\188\002pPHf\190\000\186\0004\168\156H\152r\000Nv^\140vR\003\000F\000\000v\000\000\000\000\000>\000\000\000\005\000\000"), (16, "\000\018\000\006\000\158\000\197\000\022\000\030\000&\0006\000\189\000>\000\138\000\n\000N\000R\000b\000j\001N\000\205\000A\001\166\000A\001\166\000r\000\130\000z\000\146\001R\001\234\000\150\000Q\000I\000\138\000\174\002J\000Z\001\194\002v\000\178\001\186\000\182\002\014\000\181\001\174\001z\000.\000:\000\254\000\221\001\254\001Z\001b\001\242\002n\002.\001\226\000\170\001&\001\218\002\002\001\206\002\018\002\022\002\030\002\147\000B\0022\001\182\001\178\000\194\002N\001\250\001\154\000\202\002V\002F\001\146\000\026\000\210\002b\002Z\001v\001r\000*\002R\000\234\002^\000\242\002B\0026\001V\000\226\001J\000n\000J\000\250\000V\001\002\0012\001\n\002:\001*\000\"\001\"\001\026\000^\001\018\000\218\000\014\000f\001:\002*\001B\002\"\000v\001^\000~\001~\000\134\002\n\001\150\000\142\001\162\0002\001\190\000\154\001\214\000\162"))
+    ((8, "\0055\152\003\000r\003\180\003\142$\178\003B\003Z\003f\000\000\146\024\132\003\182\003\160\003\192\003\196\011\186\000\206\003\000\214\029\206\000<\000\000\000\000\000\154\003X\000r\000j\000D\000\138\003>\000\130\000v\003\138\000\134\003\154\000\162\000\146\003\158\000\170\000\174\000\182\000\000\1442\158 \158\000\000~\134P\164\003\000\000\000\220\206l\003\200!\002\000\1468\000b\014\204P\204\000\242\000@\204n\000XL\000T\000\005P\000Pb\024F\003t\002|8\\\014@t\168\000h\000b\1408\132\014@\128\160\000pnr\154\178H\003\000\154\000\020\178\000\000\000\000\000\188\000\000\000\005\000\000"), (16, "\000\018\000\006\000\n\000I\001\166\000\022\000\030\000&\0006\001\194\000>\000\213\000e\000N\000\158\000R\000b\000j\001N\000e\000I\001\166\000\138\000\130\000r\001\174\000z\000\146\001R\000\221\000\150\000\138\000Q\002\022\000\174\002r\002\002\001\222\002N\000\178\000Z\000\182\002&\001\182\000\229\000\197\000.\001Z\002\158\002\n\000\205\000\r\000\254\000Y\001b\000:\001\238\001\242\001&\000\170\000\242\001\250\002\018\000\226\002\026\001\230\002*\000B\001z\0022\002>\002J\001\190\000\202\002V\002\138\002j\001\178\001\202\000\026\000J\002z\000\218\001\154\002\"\002~\000\210\002\130\002v\002^\002R\001v\001r\000*\000\250\000V\002\150\001\002\001\n\002n\001V\001J\000n\002B\000^\001\018\001\026\000\234\0012\000\014\001\"\001*\000\"\000f\001:\000\194\001B\002\134\000v\001^\000~\001~\000\134\001\146\001\150\000\142\001\162\0002\002\187\000\154\001\198\001\214\000\162"))
   
   and lhs =
-    (8, "\000\023\022\021\020\019\019\018\018\018\018\018\018\018\017\016\015\015\014\014\r\r\012\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\n\t\b\b\007\007\006\006\005\005\004\003\002\002\001\001")
+    (8, "\000\025\024\023\023\022\021\020\020\019\019\019\019\019\019\019\018\017\016\016\015\015\014\014\r\012\012\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\011\n\t\b\b\007\007\006\006\005\005\004\004\003\002\001\001")
   
   and goto =
-    ((8, "\007\000\000\130\000\0002\000V\000\000\0000\000\138\000\002\000\000\000\000\000\000L\000p\000J\000H\000t\000\000\000t\000\0002\000\000\000\000\000\000\000\000\000.\000\000\000\000\000\000\000\000\000f\000\000\000\000\000T\000\000\000~\000\000\000\000\000X\000\000\000\000\000\000\000\000\000\000\000n\000\134\000\000\000\000\007\000$\000\000\000\000\000\000r\000t~\000\000\000\150\130\000\128\000\000\000\000\000\000\000\000\000\005\000\003\000\000\000b\000\015\000\000\158\000\000\000\000\000\000\000\000\n\000\000\000\000\000\000\000H\000d\000\000\000\000,\000\000\000\000\000\000\000\000\000\028\000\000"), (8, "\160\161\018c|c\162\144\138\163d\164~\166\167\168\170\160\161/zzz\162///\159\169a\166\167\168\1702HP///b\155\157///*68>///BNL\157///\130\154<[/\\/:h0/rsxFZRuk4D\135"))
+    ((8, "\005\000\000\128\000\000\026\000<\000\000\000x\000Z\000\134\000\000\000\000\000\000V\000b\000`\000@\000|\000\000\000X\000\000\132\000\000\000\000\000\000\000\000\000\\\000\000\000\000\000\000\000\000\000^\000\000\000\000\000~\000\000\000z\000\000\000\000\000R\000\000\000\000\000\000\000\000\000\000\000\011\000\156\000\000\000\000\t\0006\000\000\000\000\000\000:\000\134\132\000\000\128\000\000\138\144\000\156\000\000\000\152\142\000\000\000\000\000\000\000\000\004\000\005\000\000\0008\000z\000j\000z\132\000\000\000\000\000\000\000\\\000n|\000\000\000\000\000\000\000\b\000h\000\000\000\000\002\000\000\000\000\000\000\000\000\000\"\000\000"), (8, "\170\171c[c\\\169\172\130\165d\173\132\174/\176\177\178\180\170\171\128\167\128P\167\172\128////\179/\176\177\178\180a\136hN/6///////bL/>0D2<8://\164//\154\153\018\151\143HF\142BR\140\146yu{wk~4tZo*"))
   
   and semantic_action =
     [|
@@ -309,15 +319,15 @@ module Tables = struct
         let arg_name : (
 # 6 "lib/parser.mly"
        (string)
-# 313 "lib/parser.ml"
+# 323 "lib/parser.ml"
         ) = Obj.magic arg_name in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_arg_name_ in
         let _endpos = _endpos_t_ in
         let _v : (string * Mini_ast.ty) = 
-# 175 "lib/parser.mly"
+# 188 "lib/parser.mly"
                                        ( (arg_name, t) )
-# 321 "lib/parser.ml"
+# 331 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -340,9 +350,52 @@ module Tables = struct
         let _startpos = _startpos_t_ in
         let _endpos = _endpos_t_ in
         let _v : (Mini_ast.ty) = 
-# 178 "lib/parser.mly"
+# 191 "lib/parser.mly"
                 ( t )
-# 346 "lib/parser.ml"
+# 356 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let _menhir_s = _menhir_env.MenhirLib.EngineTypes.current in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _endpos = _startpos in
+        let _v : (bool) = 
+# 134 "<standard.mly>"
+    ( false )
+# 374 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = _1;
+          MenhirLib.EngineTypes.startp = _startpos__1_;
+          MenhirLib.EngineTypes.endp = _endpos__1_;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        } = _menhir_stack in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__1_ in
+        let _v : (bool) = 
+# 137 "<standard.mly>"
+    ( true )
+# 399 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -400,9 +453,9 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos__6_ in
         let _v : (Mini_ast.choice) = 
-# 87 "lib/parser.mly"
+# 89 "lib/parser.mly"
       ( (TyEither (t1, t2)) )
-# 406 "lib/parser.ml"
+# 459 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -437,17 +490,17 @@ module Tables = struct
         let lbl : (
 # 6 "lib/parser.mly"
        (string)
-# 441 "lib/parser.ml"
+# 494 "lib/parser.ml"
         ) = Obj.magic lbl in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_lbl_ in
         let _endpos = _endpos_ty_ in
         let _v : (string * Mini_ast.ty) = 
-# 91 "lib/parser.mly"
+# 93 "lib/parser.mly"
     (
       (lbl, ty)
     )
-# 451 "lib/parser.ml"
+# 504 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -537,7 +590,7 @@ module Tables = struct
         let name : (
 # 6 "lib/parser.mly"
        (string)
-# 541 "lib/parser.ml"
+# 594 "lib/parser.ml"
         ) = Obj.magic name in
         let _1 : unit = Obj.magic _1 in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
@@ -547,12 +600,12 @@ module Tables = struct
           let ars = 
 # 241 "<standard.mly>"
     ( xs )
-# 551 "lib/parser.ml"
+# 604 "lib/parser.ml"
            in
           (
-# 137 "lib/parser.mly"
-                                                                                                                            ( ClosedFunction((TyFunc(((name, ars), ret), []), String.concat "" body)) )
-# 556 "lib/parser.ml"
+# 148 "lib/parser.mly"
+                                                                                                                            ( ClosedFunction((TyFunc((name, ars), ret), String.concat "" body)) )
+# 609 "lib/parser.ml"
            : (Mini_ast.decl))
         in
         {
@@ -664,7 +717,7 @@ module Tables = struct
         let name : (
 # 6 "lib/parser.mly"
        (string)
-# 668 "lib/parser.ml"
+# 721 "lib/parser.ml"
         ) = Obj.magic name in
         let _1 : unit = Obj.magic _1 in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
@@ -674,17 +727,17 @@ module Tables = struct
           let ars = 
 # 241 "<standard.mly>"
     ( xs )
-# 678 "lib/parser.ml"
+# 731 "lib/parser.ml"
            in
           (
-# 145 "lib/parser.mly"
+# 156 "lib/parser.mly"
     (
       ClosedFunction
         ((TySchemeFunc
            (tList,
-            (((name, ars), ret), []))), String.concat "" body)
+            ((name, ars), ret))), String.concat "" body)
     )
-# 688 "lib/parser.ml"
+# 741 "lib/parser.ml"
            : (Mini_ast.decl))
         in
         {
@@ -706,15 +759,15 @@ module Tables = struct
         let text : (
 # 5 "lib/parser.mly"
        (string)
-# 710 "lib/parser.ml"
+# 763 "lib/parser.ml"
         ) = Obj.magic text in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_text_ in
         let _endpos = _endpos_text_ in
         let _v : (Mini_ast.decl) = 
-# 52 "lib/parser.mly"
+# 54 "lib/parser.mly"
                ( Raw(text) )
-# 718 "lib/parser.ml"
+# 771 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -737,9 +790,9 @@ module Tables = struct
         let _startpos = _startpos_tdef_ in
         let _endpos = _endpos_tdef_ in
         let _v : (Mini_ast.decl) = 
-# 53 "lib/parser.mly"
+# 55 "lib/parser.mly"
                     ( tdef )
-# 743 "lib/parser.ml"
+# 796 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -762,59 +815,9 @@ module Tables = struct
         let _startpos = _startpos_cdef_ in
         let _endpos = _endpos_cdef_ in
         let _v : (Mini_ast.decl) = 
-# 54 "lib/parser.mly"
-                         ( ChoiceDef(cdef) )
-# 768 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = f;
-          MenhirLib.EngineTypes.startp = _startpos_f_;
-          MenhirLib.EngineTypes.endp = _endpos_f_;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        } = _menhir_stack in
-        let f : (Mini_ast.decl) = Obj.magic f in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos_f_ in
-        let _endpos = _endpos_f_ in
-        let _v : (Mini_ast.decl) = 
-# 55 "lib/parser.mly"
-             ( f )
-# 793 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = f;
-          MenhirLib.EngineTypes.startp = _startpos_f_;
-          MenhirLib.EngineTypes.endp = _endpos_f_;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        } = _menhir_stack in
-        let f : (Mini_ast.decl) = Obj.magic f in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos_f_ in
-        let _endpos = _endpos_f_ in
-        let _v : (Mini_ast.decl) = 
 # 56 "lib/parser.mly"
-                      ( f )
-# 818 "lib/parser.ml"
+                         ( ChoiceDef(cdef) )
+# 821 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -827,19 +830,19 @@ module Tables = struct
         let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
         let {
           MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = closed_f;
-          MenhirLib.EngineTypes.startp = _startpos_closed_f_;
-          MenhirLib.EngineTypes.endp = _endpos_closed_f_;
+          MenhirLib.EngineTypes.semv = f;
+          MenhirLib.EngineTypes.startp = _startpos_f_;
+          MenhirLib.EngineTypes.endp = _endpos_f_;
           MenhirLib.EngineTypes.next = _menhir_stack;
         } = _menhir_stack in
-        let closed_f : (Mini_ast.decl) = Obj.magic closed_f in
+        let f : (Mini_ast.decl) = Obj.magic f in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos_closed_f_ in
-        let _endpos = _endpos_closed_f_ in
+        let _startpos = _startpos_f_ in
+        let _endpos = _endpos_f_ in
         let _v : (Mini_ast.decl) = 
 # 57 "lib/parser.mly"
-                           ( closed_f )
-# 843 "lib/parser.ml"
+             ( f )
+# 846 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -863,8 +866,58 @@ module Tables = struct
         let _endpos = _endpos_f_ in
         let _v : (Mini_ast.decl) = 
 # 58 "lib/parser.mly"
+                      ( f )
+# 871 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = closed_f;
+          MenhirLib.EngineTypes.startp = _startpos_closed_f_;
+          MenhirLib.EngineTypes.endp = _endpos_closed_f_;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        } = _menhir_stack in
+        let closed_f : (Mini_ast.decl) = Obj.magic closed_f in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos_closed_f_ in
+        let _endpos = _endpos_closed_f_ in
+        let _v : (Mini_ast.decl) = 
+# 59 "lib/parser.mly"
+                           ( closed_f )
+# 896 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = f;
+          MenhirLib.EngineTypes.startp = _startpos_f_;
+          MenhirLib.EngineTypes.endp = _endpos_f_;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        } = _menhir_stack in
+        let f : (Mini_ast.decl) = Obj.magic f in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos_f_ in
+        let _endpos = _endpos_f_ in
+        let _v : (Mini_ast.decl) = 
+# 60 "lib/parser.mly"
                     ( f )
-# 868 "lib/parser.ml"
+# 921 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -924,7 +977,7 @@ module Tables = struct
         let name : (
 # 6 "lib/parser.mly"
        (string)
-# 928 "lib/parser.ml"
+# 981 "lib/parser.ml"
         ) = Obj.magic name in
         let _3 : unit = Obj.magic _3 in
         let _2 : unit = Obj.magic _2 in
@@ -933,11 +986,11 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos__7_ in
         let _v : (Mini_ast.choice) = 
-# 100 "lib/parser.mly"
+# 102 "lib/parser.mly"
     (
       (TyDefineChoice (name, branches))
     )
-# 941 "lib/parser.ml"
+# 994 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -950,80 +1003,92 @@ module Tables = struct
         let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
         let {
           MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _15;
-          MenhirLib.EngineTypes.startp = _startpos__15_;
-          MenhirLib.EngineTypes.endp = _endpos__15_;
+          MenhirLib.EngineTypes.semv = _17;
+          MenhirLib.EngineTypes.startp = _startpos__17_;
+          MenhirLib.EngineTypes.endp = _endpos__17_;
           MenhirLib.EngineTypes.next = {
             MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = _14;
-            MenhirLib.EngineTypes.startp = _startpos__14_;
-            MenhirLib.EngineTypes.endp = _endpos__14_;
+            MenhirLib.EngineTypes.semv = _16;
+            MenhirLib.EngineTypes.startp = _startpos__16_;
+            MenhirLib.EngineTypes.endp = _endpos__16_;
             MenhirLib.EngineTypes.next = {
               MenhirLib.EngineTypes.state = _;
-              MenhirLib.EngineTypes.semv = funcs;
-              MenhirLib.EngineTypes.startp = _startpos_funcs_;
-              MenhirLib.EngineTypes.endp = _endpos_funcs_;
+              MenhirLib.EngineTypes.semv = suggested_funcs;
+              MenhirLib.EngineTypes.startp = _startpos_suggested_funcs_;
+              MenhirLib.EngineTypes.endp = _endpos_suggested_funcs_;
               MenhirLib.EngineTypes.next = {
                 MenhirLib.EngineTypes.state = _;
-                MenhirLib.EngineTypes.semv = _12;
-                MenhirLib.EngineTypes.startp = _startpos__12_;
-                MenhirLib.EngineTypes.endp = _endpos__12_;
+                MenhirLib.EngineTypes.semv = required_funcs;
+                MenhirLib.EngineTypes.startp = _startpos_required_funcs_;
+                MenhirLib.EngineTypes.endp = _endpos_required_funcs_;
                 MenhirLib.EngineTypes.next = {
                   MenhirLib.EngineTypes.state = _;
-                  MenhirLib.EngineTypes.semv = _11;
-                  MenhirLib.EngineTypes.startp = _startpos__11_;
-                  MenhirLib.EngineTypes.endp = _endpos__11_;
+                  MenhirLib.EngineTypes.semv = _13;
+                  MenhirLib.EngineTypes.startp = _startpos__13_;
+                  MenhirLib.EngineTypes.endp = _endpos__13_;
                   MenhirLib.EngineTypes.next = {
                     MenhirLib.EngineTypes.state = _;
-                    MenhirLib.EngineTypes.semv = _10;
-                    MenhirLib.EngineTypes.startp = _startpos__10_;
-                    MenhirLib.EngineTypes.endp = _endpos__10_;
+                    MenhirLib.EngineTypes.semv = recursive;
+                    MenhirLib.EngineTypes.startp = _startpos_recursive_;
+                    MenhirLib.EngineTypes.endp = _endpos_recursive_;
                     MenhirLib.EngineTypes.next = {
                       MenhirLib.EngineTypes.state = _;
-                      MenhirLib.EngineTypes.semv = _9;
-                      MenhirLib.EngineTypes.startp = _startpos__9_;
-                      MenhirLib.EngineTypes.endp = _endpos__9_;
+                      MenhirLib.EngineTypes.semv = _11;
+                      MenhirLib.EngineTypes.startp = _startpos__11_;
+                      MenhirLib.EngineTypes.endp = _endpos__11_;
                       MenhirLib.EngineTypes.next = {
                         MenhirLib.EngineTypes.state = _;
-                        MenhirLib.EngineTypes.semv = ret;
-                        MenhirLib.EngineTypes.startp = _startpos_ret_;
-                        MenhirLib.EngineTypes.endp = _endpos_ret_;
+                        MenhirLib.EngineTypes.semv = _10;
+                        MenhirLib.EngineTypes.startp = _startpos__10_;
+                        MenhirLib.EngineTypes.endp = _endpos__10_;
                         MenhirLib.EngineTypes.next = {
                           MenhirLib.EngineTypes.state = _;
-                          MenhirLib.EngineTypes.semv = _7;
-                          MenhirLib.EngineTypes.startp = _startpos__7_;
-                          MenhirLib.EngineTypes.endp = _endpos__7_;
+                          MenhirLib.EngineTypes.semv = _9;
+                          MenhirLib.EngineTypes.startp = _startpos__9_;
+                          MenhirLib.EngineTypes.endp = _endpos__9_;
                           MenhirLib.EngineTypes.next = {
                             MenhirLib.EngineTypes.state = _;
-                            MenhirLib.EngineTypes.semv = _6;
-                            MenhirLib.EngineTypes.startp = _startpos__6_;
-                            MenhirLib.EngineTypes.endp = _endpos__6_;
+                            MenhirLib.EngineTypes.semv = ret;
+                            MenhirLib.EngineTypes.startp = _startpos_ret_;
+                            MenhirLib.EngineTypes.endp = _endpos_ret_;
                             MenhirLib.EngineTypes.next = {
                               MenhirLib.EngineTypes.state = _;
-                              MenhirLib.EngineTypes.semv = _5;
-                              MenhirLib.EngineTypes.startp = _startpos__5_;
-                              MenhirLib.EngineTypes.endp = _endpos__5_;
+                              MenhirLib.EngineTypes.semv = _7;
+                              MenhirLib.EngineTypes.startp = _startpos__7_;
+                              MenhirLib.EngineTypes.endp = _endpos__7_;
                               MenhirLib.EngineTypes.next = {
                                 MenhirLib.EngineTypes.state = _;
-                                MenhirLib.EngineTypes.semv = xs;
-                                MenhirLib.EngineTypes.startp = _startpos_xs_;
-                                MenhirLib.EngineTypes.endp = _endpos_xs_;
+                                MenhirLib.EngineTypes.semv = _6;
+                                MenhirLib.EngineTypes.startp = _startpos__6_;
+                                MenhirLib.EngineTypes.endp = _endpos__6_;
                                 MenhirLib.EngineTypes.next = {
                                   MenhirLib.EngineTypes.state = _;
-                                  MenhirLib.EngineTypes.semv = _3;
-                                  MenhirLib.EngineTypes.startp = _startpos__3_;
-                                  MenhirLib.EngineTypes.endp = _endpos__3_;
+                                  MenhirLib.EngineTypes.semv = _5;
+                                  MenhirLib.EngineTypes.startp = _startpos__5_;
+                                  MenhirLib.EngineTypes.endp = _endpos__5_;
                                   MenhirLib.EngineTypes.next = {
                                     MenhirLib.EngineTypes.state = _;
-                                    MenhirLib.EngineTypes.semv = name;
-                                    MenhirLib.EngineTypes.startp = _startpos_name_;
-                                    MenhirLib.EngineTypes.endp = _endpos_name_;
+                                    MenhirLib.EngineTypes.semv = xs;
+                                    MenhirLib.EngineTypes.startp = _startpos_xs_;
+                                    MenhirLib.EngineTypes.endp = _endpos_xs_;
                                     MenhirLib.EngineTypes.next = {
-                                      MenhirLib.EngineTypes.state = _menhir_s;
-                                      MenhirLib.EngineTypes.semv = _1;
-                                      MenhirLib.EngineTypes.startp = _startpos__1_;
-                                      MenhirLib.EngineTypes.endp = _endpos__1_;
-                                      MenhirLib.EngineTypes.next = _menhir_stack;
+                                      MenhirLib.EngineTypes.state = _;
+                                      MenhirLib.EngineTypes.semv = _3;
+                                      MenhirLib.EngineTypes.startp = _startpos__3_;
+                                      MenhirLib.EngineTypes.endp = _endpos__3_;
+                                      MenhirLib.EngineTypes.next = {
+                                        MenhirLib.EngineTypes.state = _;
+                                        MenhirLib.EngineTypes.semv = name;
+                                        MenhirLib.EngineTypes.startp = _startpos_name_;
+                                        MenhirLib.EngineTypes.endp = _endpos_name_;
+                                        MenhirLib.EngineTypes.next = {
+                                          MenhirLib.EngineTypes.state = _menhir_s;
+                                          MenhirLib.EngineTypes.semv = _1;
+                                          MenhirLib.EngineTypes.startp = _startpos__1_;
+                                          MenhirLib.EngineTypes.endp = _endpos__1_;
+                                          MenhirLib.EngineTypes.next = _menhir_stack;
+                                        };
+                                      };
                                     };
                                   };
                                 };
@@ -1039,10 +1104,12 @@ module Tables = struct
             };
           };
         } = _menhir_stack in
-        let _15 : unit = Obj.magic _15 in
-        let _14 : unit = Obj.magic _14 in
-        let funcs : (string list) = Obj.magic funcs in
-        let _12 : unit = Obj.magic _12 in
+        let _17 : unit = Obj.magic _17 in
+        let _16 : unit = Obj.magic _16 in
+        let suggested_funcs : (string list) = Obj.magic suggested_funcs in
+        let required_funcs : (string list) = Obj.magic required_funcs in
+        let _13 : unit = Obj.magic _13 in
+        let recursive : (bool) = Obj.magic recursive in
         let _11 : unit = Obj.magic _11 in
         let _10 : unit = Obj.magic _10 in
         let _9 : unit = Obj.magic _9 in
@@ -1055,24 +1122,24 @@ module Tables = struct
         let name : (
 # 6 "lib/parser.mly"
        (string)
-# 1059 "lib/parser.ml"
+# 1126 "lib/parser.ml"
         ) = Obj.magic name in
         let _1 : unit = Obj.magic _1 in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos__1_ in
-        let _endpos = _endpos__15_ in
+        let _endpos = _endpos__17_ in
         let _v =
           let ars = 
 # 241 "<standard.mly>"
     ( xs )
-# 1069 "lib/parser.ml"
+# 1136 "lib/parser.ml"
            in
           (
-# 114 "lib/parser.mly"
+# 118 "lib/parser.mly"
     (
-      Function (TyFunc (((name, ars), ret), funcs))
+      Function (TyFunc (((name, ars), ret)), recursive, (required_funcs, suggested_funcs))
     )
-# 1076 "lib/parser.ml"
+# 1143 "lib/parser.ml"
            : (Mini_ast.decl))
         in
         {
@@ -1091,7 +1158,7 @@ module Tables = struct
         let _v : (string list) = 
 # 216 "<standard.mly>"
     ( [] )
-# 1095 "lib/parser.ml"
+# 1162 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1119,7 +1186,7 @@ module Tables = struct
         let x : (
 # 5 "lib/parser.mly"
        (string)
-# 1123 "lib/parser.ml"
+# 1190 "lib/parser.ml"
         ) = Obj.magic x in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_x_ in
@@ -1127,7 +1194,7 @@ module Tables = struct
         let _v : (string list) = 
 # 219 "<standard.mly>"
     ( x :: xs )
-# 1131 "lib/parser.ml"
+# 1198 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1145,7 +1212,7 @@ module Tables = struct
         let _v : (Mini_ast.decl list) = 
 # 216 "<standard.mly>"
     ( [] )
-# 1149 "lib/parser.ml"
+# 1216 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1177,7 +1244,7 @@ module Tables = struct
         let _v : (Mini_ast.decl list) = 
 # 219 "<standard.mly>"
     ( x :: xs )
-# 1181 "lib/parser.ml"
+# 1248 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1195,7 +1262,7 @@ module Tables = struct
         let _v : ((string * Mini_ast.ty) list) = 
 # 145 "<standard.mly>"
     ( [] )
-# 1199 "lib/parser.ml"
+# 1266 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1220,7 +1287,7 @@ module Tables = struct
         let _v : ((string * Mini_ast.ty) list) = 
 # 148 "<standard.mly>"
     ( x )
-# 1224 "lib/parser.ml"
+# 1291 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1250,9 +1317,66 @@ module Tables = struct
         let _startpos = _startpos_d_ in
         let _endpos = _endpos__2_ in
         let _v : (Mini_ast.decl list) = 
-# 49 "lib/parser.mly"
+# 51 "lib/parser.mly"
                         ( d )
-# 1256 "lib/parser.ml"
+# 1323 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let _menhir_s = _menhir_env.MenhirLib.EngineTypes.current in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _endpos = _startpos in
+        let _v : (string list) = 
+# 138 "lib/parser.mly"
+                                ( [] )
+# 1341 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _;
+          MenhirLib.EngineTypes.semv = _3;
+          MenhirLib.EngineTypes.startp = _startpos__3_;
+          MenhirLib.EngineTypes.endp = _endpos__3_;
+          MenhirLib.EngineTypes.next = {
+            MenhirLib.EngineTypes.state = _;
+            MenhirLib.EngineTypes.semv = ids;
+            MenhirLib.EngineTypes.startp = _startpos_ids_;
+            MenhirLib.EngineTypes.endp = _endpos_ids_;
+            MenhirLib.EngineTypes.next = {
+              MenhirLib.EngineTypes.state = _menhir_s;
+              MenhirLib.EngineTypes.semv = _1;
+              MenhirLib.EngineTypes.startp = _startpos__1_;
+              MenhirLib.EngineTypes.endp = _endpos__1_;
+              MenhirLib.EngineTypes.next = _menhir_stack;
+            };
+          };
+        } = _menhir_stack in
+        let _3 : unit = Obj.magic _3 in
+        let ids : (string list) = Obj.magic ids in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__3_ in
+        let _v : (string list) = 
+# 140 "lib/parser.mly"
+                                ( ids )
+# 1380 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1273,15 +1397,15 @@ module Tables = struct
         let id : (
 # 6 "lib/parser.mly"
        (string)
-# 1277 "lib/parser.ml"
+# 1401 "lib/parser.ml"
         ) = Obj.magic id in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_id_ in
         let _endpos = _endpos_id_ in
         let _v : (Mini_ast.ty) = 
-# 64 "lib/parser.mly"
+# 66 "lib/parser.mly"
                                                                          ( TyPrimitive(id) )
-# 1285 "lib/parser.ml"
+# 1409 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1302,107 +1426,15 @@ module Tables = struct
         let uppercaseid : (
 # 7 "lib/parser.mly"
        (string)
-# 1306 "lib/parser.ml"
+# 1430 "lib/parser.ml"
         ) = Obj.magic uppercaseid in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_uppercaseid_ in
         let _endpos = _endpos_uppercaseid_ in
         let _v : (Mini_ast.ty) = 
-# 65 "lib/parser.mly"
-                                                                         ( TyAtomic(uppercaseid) )
-# 1314 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _4;
-          MenhirLib.EngineTypes.startp = _startpos__4_;
-          MenhirLib.EngineTypes.endp = _endpos__4_;
-          MenhirLib.EngineTypes.next = {
-            MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = c;
-            MenhirLib.EngineTypes.startp = _startpos_c_;
-            MenhirLib.EngineTypes.endp = _endpos_c_;
-            MenhirLib.EngineTypes.next = {
-              MenhirLib.EngineTypes.state = _;
-              MenhirLib.EngineTypes.semv = _2;
-              MenhirLib.EngineTypes.startp = _startpos__2_;
-              MenhirLib.EngineTypes.endp = _endpos__2_;
-              MenhirLib.EngineTypes.next = {
-                MenhirLib.EngineTypes.state = _menhir_s;
-                MenhirLib.EngineTypes.semv = _1;
-                MenhirLib.EngineTypes.startp = _startpos__1_;
-                MenhirLib.EngineTypes.endp = _endpos__1_;
-                MenhirLib.EngineTypes.next = _menhir_stack;
-              };
-            };
-          };
-        } = _menhir_stack in
-        let _4 : unit = Obj.magic _4 in
-        let c : (Mini_ast.choice) = Obj.magic c in
-        let _2 : unit = Obj.magic _2 in
-        let _1 : unit = Obj.magic _1 in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos__1_ in
-        let _endpos = _endpos__4_ in
-        let _v : (Mini_ast.ty) = 
-# 66 "lib/parser.mly"
-                                                                         ( TyInternalChoice(c) )
-# 1360 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _4;
-          MenhirLib.EngineTypes.startp = _startpos__4_;
-          MenhirLib.EngineTypes.endp = _endpos__4_;
-          MenhirLib.EngineTypes.next = {
-            MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = c;
-            MenhirLib.EngineTypes.startp = _startpos_c_;
-            MenhirLib.EngineTypes.endp = _endpos_c_;
-            MenhirLib.EngineTypes.next = {
-              MenhirLib.EngineTypes.state = _;
-              MenhirLib.EngineTypes.semv = _2;
-              MenhirLib.EngineTypes.startp = _startpos__2_;
-              MenhirLib.EngineTypes.endp = _endpos__2_;
-              MenhirLib.EngineTypes.next = {
-                MenhirLib.EngineTypes.state = _menhir_s;
-                MenhirLib.EngineTypes.semv = _1;
-                MenhirLib.EngineTypes.startp = _startpos__1_;
-                MenhirLib.EngineTypes.endp = _endpos__1_;
-                MenhirLib.EngineTypes.next = _menhir_stack;
-              };
-            };
-          };
-        } = _menhir_stack in
-        let _4 : unit = Obj.magic _4 in
-        let c : (Mini_ast.choice) = Obj.magic c in
-        let _2 : unit = Obj.magic _2 in
-        let _1 : unit = Obj.magic _1 in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos__1_ in
-        let _endpos = _endpos__4_ in
-        let _v : (Mini_ast.ty) = 
 # 67 "lib/parser.mly"
-                                                                         ( TyExternalChoice(c) )
-# 1406 "lib/parser.ml"
+                                                                         ( TyAtomic(uppercaseid) )
+# 1438 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1420,9 +1452,9 @@ module Tables = struct
           MenhirLib.EngineTypes.endp = _endpos__4_;
           MenhirLib.EngineTypes.next = {
             MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = id;
-            MenhirLib.EngineTypes.startp = _startpos_id_;
-            MenhirLib.EngineTypes.endp = _endpos_id_;
+            MenhirLib.EngineTypes.semv = c;
+            MenhirLib.EngineTypes.startp = _startpos_c_;
+            MenhirLib.EngineTypes.endp = _endpos_c_;
             MenhirLib.EngineTypes.next = {
               MenhirLib.EngineTypes.state = _;
               MenhirLib.EngineTypes.semv = _2;
@@ -1439,11 +1471,7 @@ module Tables = struct
           };
         } = _menhir_stack in
         let _4 : unit = Obj.magic _4 in
-        let id : (
-# 6 "lib/parser.mly"
-       (string)
-# 1446 "lib/parser.ml"
-        ) = Obj.magic id in
+        let c : (Mini_ast.choice) = Obj.magic c in
         let _2 : unit = Obj.magic _2 in
         let _1 : unit = Obj.magic _1 in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
@@ -1451,8 +1479,54 @@ module Tables = struct
         let _endpos = _endpos__4_ in
         let _v : (Mini_ast.ty) = 
 # 68 "lib/parser.mly"
-                                                                         ( TyInternalChoiceId(id) )
-# 1456 "lib/parser.ml"
+                                                                         ( TyInternalChoice(c) )
+# 1484 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _;
+          MenhirLib.EngineTypes.semv = _4;
+          MenhirLib.EngineTypes.startp = _startpos__4_;
+          MenhirLib.EngineTypes.endp = _endpos__4_;
+          MenhirLib.EngineTypes.next = {
+            MenhirLib.EngineTypes.state = _;
+            MenhirLib.EngineTypes.semv = c;
+            MenhirLib.EngineTypes.startp = _startpos_c_;
+            MenhirLib.EngineTypes.endp = _endpos_c_;
+            MenhirLib.EngineTypes.next = {
+              MenhirLib.EngineTypes.state = _;
+              MenhirLib.EngineTypes.semv = _2;
+              MenhirLib.EngineTypes.startp = _startpos__2_;
+              MenhirLib.EngineTypes.endp = _endpos__2_;
+              MenhirLib.EngineTypes.next = {
+                MenhirLib.EngineTypes.state = _menhir_s;
+                MenhirLib.EngineTypes.semv = _1;
+                MenhirLib.EngineTypes.startp = _startpos__1_;
+                MenhirLib.EngineTypes.endp = _endpos__1_;
+                MenhirLib.EngineTypes.next = _menhir_stack;
+              };
+            };
+          };
+        } = _menhir_stack in
+        let _4 : unit = Obj.magic _4 in
+        let c : (Mini_ast.choice) = Obj.magic c in
+        let _2 : unit = Obj.magic _2 in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__4_ in
+        let _v : (Mini_ast.ty) = 
+# 69 "lib/parser.mly"
+                                                                         ( TyExternalChoice(c) )
+# 1530 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1492,7 +1566,7 @@ module Tables = struct
         let id : (
 # 6 "lib/parser.mly"
        (string)
-# 1496 "lib/parser.ml"
+# 1570 "lib/parser.ml"
         ) = Obj.magic id in
         let _2 : unit = Obj.magic _2 in
         let _1 : unit = Obj.magic _1 in
@@ -1500,69 +1574,9 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos__4_ in
         let _v : (Mini_ast.ty) = 
-# 69 "lib/parser.mly"
-                                                                         ( TyExternalChoiceId(id) )
-# 1506 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _6;
-          MenhirLib.EngineTypes.startp = _startpos__6_;
-          MenhirLib.EngineTypes.endp = _endpos__6_;
-          MenhirLib.EngineTypes.next = {
-            MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = cont;
-            MenhirLib.EngineTypes.startp = _startpos_cont_;
-            MenhirLib.EngineTypes.endp = _endpos_cont_;
-            MenhirLib.EngineTypes.next = {
-              MenhirLib.EngineTypes.state = _;
-              MenhirLib.EngineTypes.semv = _4;
-              MenhirLib.EngineTypes.startp = _startpos__4_;
-              MenhirLib.EngineTypes.endp = _endpos__4_;
-              MenhirLib.EngineTypes.next = {
-                MenhirLib.EngineTypes.state = _;
-                MenhirLib.EngineTypes.semv = t;
-                MenhirLib.EngineTypes.startp = _startpos_t_;
-                MenhirLib.EngineTypes.endp = _endpos_t_;
-                MenhirLib.EngineTypes.next = {
-                  MenhirLib.EngineTypes.state = _;
-                  MenhirLib.EngineTypes.semv = _2;
-                  MenhirLib.EngineTypes.startp = _startpos__2_;
-                  MenhirLib.EngineTypes.endp = _endpos__2_;
-                  MenhirLib.EngineTypes.next = {
-                    MenhirLib.EngineTypes.state = _menhir_s;
-                    MenhirLib.EngineTypes.semv = _1;
-                    MenhirLib.EngineTypes.startp = _startpos__1_;
-                    MenhirLib.EngineTypes.endp = _endpos__1_;
-                    MenhirLib.EngineTypes.next = _menhir_stack;
-                  };
-                };
-              };
-            };
-          };
-        } = _menhir_stack in
-        let _6 : unit = Obj.magic _6 in
-        let cont : (Mini_ast.ty) = Obj.magic cont in
-        let _4 : unit = Obj.magic _4 in
-        let t : (Mini_ast.ty) = Obj.magic t in
-        let _2 : unit = Obj.magic _2 in
-        let _1 : unit = Obj.magic _1 in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos__1_ in
-        let _endpos = _endpos__6_ in
-        let _v : (Mini_ast.ty) = 
 # 70 "lib/parser.mly"
-                                                                         ( TySendChannel(t, cont) )
-# 1566 "lib/parser.ml"
+                                                                         ( TyInternalChoiceId(id) )
+# 1580 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1575,109 +1589,95 @@ module Tables = struct
         let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
         let {
           MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _6;
-          MenhirLib.EngineTypes.startp = _startpos__6_;
-          MenhirLib.EngineTypes.endp = _endpos__6_;
+          MenhirLib.EngineTypes.semv = _4;
+          MenhirLib.EngineTypes.startp = _startpos__4_;
+          MenhirLib.EngineTypes.endp = _endpos__4_;
           MenhirLib.EngineTypes.next = {
             MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = cont;
-            MenhirLib.EngineTypes.startp = _startpos_cont_;
-            MenhirLib.EngineTypes.endp = _endpos_cont_;
+            MenhirLib.EngineTypes.semv = id;
+            MenhirLib.EngineTypes.startp = _startpos_id_;
+            MenhirLib.EngineTypes.endp = _endpos_id_;
             MenhirLib.EngineTypes.next = {
               MenhirLib.EngineTypes.state = _;
-              MenhirLib.EngineTypes.semv = _4;
-              MenhirLib.EngineTypes.startp = _startpos__4_;
-              MenhirLib.EngineTypes.endp = _endpos__4_;
+              MenhirLib.EngineTypes.semv = _2;
+              MenhirLib.EngineTypes.startp = _startpos__2_;
+              MenhirLib.EngineTypes.endp = _endpos__2_;
               MenhirLib.EngineTypes.next = {
-                MenhirLib.EngineTypes.state = _;
-                MenhirLib.EngineTypes.semv = t;
-                MenhirLib.EngineTypes.startp = _startpos_t_;
-                MenhirLib.EngineTypes.endp = _endpos_t_;
-                MenhirLib.EngineTypes.next = {
-                  MenhirLib.EngineTypes.state = _;
-                  MenhirLib.EngineTypes.semv = _2;
-                  MenhirLib.EngineTypes.startp = _startpos__2_;
-                  MenhirLib.EngineTypes.endp = _endpos__2_;
-                  MenhirLib.EngineTypes.next = {
-                    MenhirLib.EngineTypes.state = _menhir_s;
-                    MenhirLib.EngineTypes.semv = _1;
-                    MenhirLib.EngineTypes.startp = _startpos__1_;
-                    MenhirLib.EngineTypes.endp = _endpos__1_;
-                    MenhirLib.EngineTypes.next = _menhir_stack;
-                  };
-                };
+                MenhirLib.EngineTypes.state = _menhir_s;
+                MenhirLib.EngineTypes.semv = _1;
+                MenhirLib.EngineTypes.startp = _startpos__1_;
+                MenhirLib.EngineTypes.endp = _endpos__1_;
+                MenhirLib.EngineTypes.next = _menhir_stack;
               };
             };
           };
         } = _menhir_stack in
-        let _6 : unit = Obj.magic _6 in
-        let cont : (Mini_ast.ty) = Obj.magic cont in
-        let _4 : unit = Obj.magic _4 in
-        let t : (Mini_ast.ty) = Obj.magic t in
-        let _2 : unit = Obj.magic _2 in
-        let _1 : unit = Obj.magic _1 in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos__1_ in
-        let _endpos = _endpos__6_ in
-        let _v : (Mini_ast.ty) = 
-# 71 "lib/parser.mly"
-                                                                         ( TyReceiveChannel(t, cont) )
-# 1626 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _6;
-          MenhirLib.EngineTypes.startp = _startpos__6_;
-          MenhirLib.EngineTypes.endp = _endpos__6_;
-          MenhirLib.EngineTypes.next = {
-            MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = cont;
-            MenhirLib.EngineTypes.startp = _startpos_cont_;
-            MenhirLib.EngineTypes.endp = _endpos_cont_;
-            MenhirLib.EngineTypes.next = {
-              MenhirLib.EngineTypes.state = _;
-              MenhirLib.EngineTypes.semv = _4;
-              MenhirLib.EngineTypes.startp = _startpos__4_;
-              MenhirLib.EngineTypes.endp = _endpos__4_;
-              MenhirLib.EngineTypes.next = {
-                MenhirLib.EngineTypes.state = _;
-                MenhirLib.EngineTypes.semv = id;
-                MenhirLib.EngineTypes.startp = _startpos_id_;
-                MenhirLib.EngineTypes.endp = _endpos_id_;
-                MenhirLib.EngineTypes.next = {
-                  MenhirLib.EngineTypes.state = _;
-                  MenhirLib.EngineTypes.semv = _2;
-                  MenhirLib.EngineTypes.startp = _startpos__2_;
-                  MenhirLib.EngineTypes.endp = _endpos__2_;
-                  MenhirLib.EngineTypes.next = {
-                    MenhirLib.EngineTypes.state = _menhir_s;
-                    MenhirLib.EngineTypes.semv = _1;
-                    MenhirLib.EngineTypes.startp = _startpos__1_;
-                    MenhirLib.EngineTypes.endp = _endpos__1_;
-                    MenhirLib.EngineTypes.next = _menhir_stack;
-                  };
-                };
-              };
-            };
-          };
-        } = _menhir_stack in
-        let _6 : unit = Obj.magic _6 in
-        let cont : (Mini_ast.ty) = Obj.magic cont in
         let _4 : unit = Obj.magic _4 in
         let id : (
 # 6 "lib/parser.mly"
        (string)
-# 1680 "lib/parser.ml"
+# 1620 "lib/parser.ml"
         ) = Obj.magic id in
+        let _2 : unit = Obj.magic _2 in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__4_ in
+        let _v : (Mini_ast.ty) = 
+# 71 "lib/parser.mly"
+                                                                         ( TyExternalChoiceId(id) )
+# 1630 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _;
+          MenhirLib.EngineTypes.semv = _6;
+          MenhirLib.EngineTypes.startp = _startpos__6_;
+          MenhirLib.EngineTypes.endp = _endpos__6_;
+          MenhirLib.EngineTypes.next = {
+            MenhirLib.EngineTypes.state = _;
+            MenhirLib.EngineTypes.semv = cont;
+            MenhirLib.EngineTypes.startp = _startpos_cont_;
+            MenhirLib.EngineTypes.endp = _endpos_cont_;
+            MenhirLib.EngineTypes.next = {
+              MenhirLib.EngineTypes.state = _;
+              MenhirLib.EngineTypes.semv = _4;
+              MenhirLib.EngineTypes.startp = _startpos__4_;
+              MenhirLib.EngineTypes.endp = _endpos__4_;
+              MenhirLib.EngineTypes.next = {
+                MenhirLib.EngineTypes.state = _;
+                MenhirLib.EngineTypes.semv = t;
+                MenhirLib.EngineTypes.startp = _startpos_t_;
+                MenhirLib.EngineTypes.endp = _endpos_t_;
+                MenhirLib.EngineTypes.next = {
+                  MenhirLib.EngineTypes.state = _;
+                  MenhirLib.EngineTypes.semv = _2;
+                  MenhirLib.EngineTypes.startp = _startpos__2_;
+                  MenhirLib.EngineTypes.endp = _endpos__2_;
+                  MenhirLib.EngineTypes.next = {
+                    MenhirLib.EngineTypes.state = _menhir_s;
+                    MenhirLib.EngineTypes.semv = _1;
+                    MenhirLib.EngineTypes.startp = _startpos__1_;
+                    MenhirLib.EngineTypes.endp = _endpos__1_;
+                    MenhirLib.EngineTypes.next = _menhir_stack;
+                  };
+                };
+              };
+            };
+          };
+        } = _menhir_stack in
+        let _6 : unit = Obj.magic _6 in
+        let cont : (Mini_ast.ty) = Obj.magic cont in
+        let _4 : unit = Obj.magic _4 in
+        let t : (Mini_ast.ty) = Obj.magic t in
         let _2 : unit = Obj.magic _2 in
         let _1 : unit = Obj.magic _1 in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
@@ -1685,7 +1685,7 @@ module Tables = struct
         let _endpos = _endpos__6_ in
         let _v : (Mini_ast.ty) = 
 # 72 "lib/parser.mly"
-                                                                         ( TySendValue(TyPrimitive id, cont) )
+                                                                         ( TySendChannel(t, cont) )
 # 1690 "lib/parser.ml"
          in
         {
@@ -1714,9 +1714,9 @@ module Tables = struct
               MenhirLib.EngineTypes.endp = _endpos__4_;
               MenhirLib.EngineTypes.next = {
                 MenhirLib.EngineTypes.state = _;
-                MenhirLib.EngineTypes.semv = a;
-                MenhirLib.EngineTypes.startp = _startpos_a_;
-                MenhirLib.EngineTypes.endp = _endpos_a_;
+                MenhirLib.EngineTypes.semv = t;
+                MenhirLib.EngineTypes.startp = _startpos_t_;
+                MenhirLib.EngineTypes.endp = _endpos_t_;
                 MenhirLib.EngineTypes.next = {
                   MenhirLib.EngineTypes.state = _;
                   MenhirLib.EngineTypes.semv = _2;
@@ -1737,11 +1737,7 @@ module Tables = struct
         let _6 : unit = Obj.magic _6 in
         let cont : (Mini_ast.ty) = Obj.magic cont in
         let _4 : unit = Obj.magic _4 in
-        let a : (
-# 7 "lib/parser.mly"
-       (string)
-# 1744 "lib/parser.ml"
-        ) = Obj.magic a in
+        let t : (Mini_ast.ty) = Obj.magic t in
         let _2 : unit = Obj.magic _2 in
         let _1 : unit = Obj.magic _1 in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
@@ -1749,8 +1745,8 @@ module Tables = struct
         let _endpos = _endpos__6_ in
         let _v : (Mini_ast.ty) = 
 # 73 "lib/parser.mly"
-                                                                         ( TySendValue(TyAtomic a, cont) )
-# 1754 "lib/parser.ml"
+                                                                         ( TyReceiveChannel(t, cont) )
+# 1750 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1804,7 +1800,7 @@ module Tables = struct
         let id : (
 # 6 "lib/parser.mly"
        (string)
-# 1808 "lib/parser.ml"
+# 1804 "lib/parser.ml"
         ) = Obj.magic id in
         let _2 : unit = Obj.magic _2 in
         let _1 : unit = Obj.magic _1 in
@@ -1813,8 +1809,8 @@ module Tables = struct
         let _endpos = _endpos__6_ in
         let _v : (Mini_ast.ty) = 
 # 74 "lib/parser.mly"
-                                                                         ( TyReceiveValue(TyPrimitive id, cont) )
-# 1818 "lib/parser.ml"
+                                                                         ( TySendValue(TyPrimitive id, cont) )
+# 1814 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1868,7 +1864,7 @@ module Tables = struct
         let a : (
 # 7 "lib/parser.mly"
        (string)
-# 1872 "lib/parser.ml"
+# 1868 "lib/parser.ml"
         ) = Obj.magic a in
         let _2 : unit = Obj.magic _2 in
         let _1 : unit = Obj.magic _1 in
@@ -1877,8 +1873,136 @@ module Tables = struct
         let _endpos = _endpos__6_ in
         let _v : (Mini_ast.ty) = 
 # 75 "lib/parser.mly"
+                                                                         ( TySendValue(TyAtomic a, cont) )
+# 1878 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _;
+          MenhirLib.EngineTypes.semv = _6;
+          MenhirLib.EngineTypes.startp = _startpos__6_;
+          MenhirLib.EngineTypes.endp = _endpos__6_;
+          MenhirLib.EngineTypes.next = {
+            MenhirLib.EngineTypes.state = _;
+            MenhirLib.EngineTypes.semv = cont;
+            MenhirLib.EngineTypes.startp = _startpos_cont_;
+            MenhirLib.EngineTypes.endp = _endpos_cont_;
+            MenhirLib.EngineTypes.next = {
+              MenhirLib.EngineTypes.state = _;
+              MenhirLib.EngineTypes.semv = _4;
+              MenhirLib.EngineTypes.startp = _startpos__4_;
+              MenhirLib.EngineTypes.endp = _endpos__4_;
+              MenhirLib.EngineTypes.next = {
+                MenhirLib.EngineTypes.state = _;
+                MenhirLib.EngineTypes.semv = id;
+                MenhirLib.EngineTypes.startp = _startpos_id_;
+                MenhirLib.EngineTypes.endp = _endpos_id_;
+                MenhirLib.EngineTypes.next = {
+                  MenhirLib.EngineTypes.state = _;
+                  MenhirLib.EngineTypes.semv = _2;
+                  MenhirLib.EngineTypes.startp = _startpos__2_;
+                  MenhirLib.EngineTypes.endp = _endpos__2_;
+                  MenhirLib.EngineTypes.next = {
+                    MenhirLib.EngineTypes.state = _menhir_s;
+                    MenhirLib.EngineTypes.semv = _1;
+                    MenhirLib.EngineTypes.startp = _startpos__1_;
+                    MenhirLib.EngineTypes.endp = _endpos__1_;
+                    MenhirLib.EngineTypes.next = _menhir_stack;
+                  };
+                };
+              };
+            };
+          };
+        } = _menhir_stack in
+        let _6 : unit = Obj.magic _6 in
+        let cont : (Mini_ast.ty) = Obj.magic cont in
+        let _4 : unit = Obj.magic _4 in
+        let id : (
+# 6 "lib/parser.mly"
+       (string)
+# 1932 "lib/parser.ml"
+        ) = Obj.magic id in
+        let _2 : unit = Obj.magic _2 in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__6_ in
+        let _v : (Mini_ast.ty) = 
+# 76 "lib/parser.mly"
+                                                                         ( TyReceiveValue(TyPrimitive id, cont) )
+# 1942 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _;
+          MenhirLib.EngineTypes.semv = _6;
+          MenhirLib.EngineTypes.startp = _startpos__6_;
+          MenhirLib.EngineTypes.endp = _endpos__6_;
+          MenhirLib.EngineTypes.next = {
+            MenhirLib.EngineTypes.state = _;
+            MenhirLib.EngineTypes.semv = cont;
+            MenhirLib.EngineTypes.startp = _startpos_cont_;
+            MenhirLib.EngineTypes.endp = _endpos_cont_;
+            MenhirLib.EngineTypes.next = {
+              MenhirLib.EngineTypes.state = _;
+              MenhirLib.EngineTypes.semv = _4;
+              MenhirLib.EngineTypes.startp = _startpos__4_;
+              MenhirLib.EngineTypes.endp = _endpos__4_;
+              MenhirLib.EngineTypes.next = {
+                MenhirLib.EngineTypes.state = _;
+                MenhirLib.EngineTypes.semv = a;
+                MenhirLib.EngineTypes.startp = _startpos_a_;
+                MenhirLib.EngineTypes.endp = _endpos_a_;
+                MenhirLib.EngineTypes.next = {
+                  MenhirLib.EngineTypes.state = _;
+                  MenhirLib.EngineTypes.semv = _2;
+                  MenhirLib.EngineTypes.startp = _startpos__2_;
+                  MenhirLib.EngineTypes.endp = _endpos__2_;
+                  MenhirLib.EngineTypes.next = {
+                    MenhirLib.EngineTypes.state = _menhir_s;
+                    MenhirLib.EngineTypes.semv = _1;
+                    MenhirLib.EngineTypes.startp = _startpos__1_;
+                    MenhirLib.EngineTypes.endp = _endpos__1_;
+                    MenhirLib.EngineTypes.next = _menhir_stack;
+                  };
+                };
+              };
+            };
+          };
+        } = _menhir_stack in
+        let _6 : unit = Obj.magic _6 in
+        let cont : (Mini_ast.ty) = Obj.magic cont in
+        let _4 : unit = Obj.magic _4 in
+        let a : (
+# 7 "lib/parser.mly"
+       (string)
+# 1996 "lib/parser.ml"
+        ) = Obj.magic a in
+        let _2 : unit = Obj.magic _2 in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__6_ in
+        let _v : (Mini_ast.ty) = 
+# 77 "lib/parser.mly"
                                                                          ( TyReceiveValue(TyAtomic a, cont) )
-# 1882 "lib/parser.ml"
+# 2006 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -1901,101 +2025,9 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos__1_ in
         let _v : (Mini_ast.ty) = 
-# 76 "lib/parser.mly"
-                                                                         ( TyEnd )
-# 1907 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _4;
-          MenhirLib.EngineTypes.startp = _startpos__4_;
-          MenhirLib.EngineTypes.endp = _endpos__4_;
-          MenhirLib.EngineTypes.next = {
-            MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = t;
-            MenhirLib.EngineTypes.startp = _startpos_t_;
-            MenhirLib.EngineTypes.endp = _endpos_t_;
-            MenhirLib.EngineTypes.next = {
-              MenhirLib.EngineTypes.state = _;
-              MenhirLib.EngineTypes.semv = _2;
-              MenhirLib.EngineTypes.startp = _startpos__2_;
-              MenhirLib.EngineTypes.endp = _endpos__2_;
-              MenhirLib.EngineTypes.next = {
-                MenhirLib.EngineTypes.state = _menhir_s;
-                MenhirLib.EngineTypes.semv = _1;
-                MenhirLib.EngineTypes.startp = _startpos__1_;
-                MenhirLib.EngineTypes.endp = _endpos__1_;
-                MenhirLib.EngineTypes.next = _menhir_stack;
-              };
-            };
-          };
-        } = _menhir_stack in
-        let _4 : unit = Obj.magic _4 in
-        let t : (Mini_ast.ty) = Obj.magic t in
-        let _2 : unit = Obj.magic _2 in
-        let _1 : unit = Obj.magic _1 in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos__1_ in
-        let _endpos = _endpos__4_ in
-        let _v : (Mini_ast.ty) = 
-# 77 "lib/parser.mly"
-                                                                         ( TySharedToLinear(t, 0) )
-# 1953 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _4;
-          MenhirLib.EngineTypes.startp = _startpos__4_;
-          MenhirLib.EngineTypes.endp = _endpos__4_;
-          MenhirLib.EngineTypes.next = {
-            MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = t;
-            MenhirLib.EngineTypes.startp = _startpos_t_;
-            MenhirLib.EngineTypes.endp = _endpos_t_;
-            MenhirLib.EngineTypes.next = {
-              MenhirLib.EngineTypes.state = _;
-              MenhirLib.EngineTypes.semv = _2;
-              MenhirLib.EngineTypes.startp = _startpos__2_;
-              MenhirLib.EngineTypes.endp = _endpos__2_;
-              MenhirLib.EngineTypes.next = {
-                MenhirLib.EngineTypes.state = _menhir_s;
-                MenhirLib.EngineTypes.semv = _1;
-                MenhirLib.EngineTypes.startp = _startpos__1_;
-                MenhirLib.EngineTypes.endp = _endpos__1_;
-                MenhirLib.EngineTypes.next = _menhir_stack;
-              };
-            };
-          };
-        } = _menhir_stack in
-        let _4 : unit = Obj.magic _4 in
-        let t : (Mini_ast.ty) = Obj.magic t in
-        let _2 : unit = Obj.magic _2 in
-        let _1 : unit = Obj.magic _1 in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos__1_ in
-        let _endpos = _endpos__4_ in
-        let _v : (Mini_ast.ty) = 
 # 78 "lib/parser.mly"
-                                                                         ( TyLinearToShared(t, 0) )
-# 1999 "lib/parser.ml"
+                                                                         ( TyEnd )
+# 2031 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2040,8 +2072,8 @@ module Tables = struct
         let _endpos = _endpos__4_ in
         let _v : (Mini_ast.ty) = 
 # 79 "lib/parser.mly"
-                                                                         ( TySession(t) )
-# 2045 "lib/parser.ml"
+                                                                         ( TySharedToLinear(t, 0) )
+# 2077 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2086,8 +2118,100 @@ module Tables = struct
         let _endpos = _endpos__4_ in
         let _v : (Mini_ast.ty) = 
 # 80 "lib/parser.mly"
+                                                                         ( TyLinearToShared(t, 0) )
+# 2123 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _;
+          MenhirLib.EngineTypes.semv = _4;
+          MenhirLib.EngineTypes.startp = _startpos__4_;
+          MenhirLib.EngineTypes.endp = _endpos__4_;
+          MenhirLib.EngineTypes.next = {
+            MenhirLib.EngineTypes.state = _;
+            MenhirLib.EngineTypes.semv = t;
+            MenhirLib.EngineTypes.startp = _startpos_t_;
+            MenhirLib.EngineTypes.endp = _endpos_t_;
+            MenhirLib.EngineTypes.next = {
+              MenhirLib.EngineTypes.state = _;
+              MenhirLib.EngineTypes.semv = _2;
+              MenhirLib.EngineTypes.startp = _startpos__2_;
+              MenhirLib.EngineTypes.endp = _endpos__2_;
+              MenhirLib.EngineTypes.next = {
+                MenhirLib.EngineTypes.state = _menhir_s;
+                MenhirLib.EngineTypes.semv = _1;
+                MenhirLib.EngineTypes.startp = _startpos__1_;
+                MenhirLib.EngineTypes.endp = _endpos__1_;
+                MenhirLib.EngineTypes.next = _menhir_stack;
+              };
+            };
+          };
+        } = _menhir_stack in
+        let _4 : unit = Obj.magic _4 in
+        let t : (Mini_ast.ty) = Obj.magic t in
+        let _2 : unit = Obj.magic _2 in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__4_ in
+        let _v : (Mini_ast.ty) = 
+# 81 "lib/parser.mly"
+                                                                         ( TySession(t) )
+# 2169 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _;
+          MenhirLib.EngineTypes.semv = _4;
+          MenhirLib.EngineTypes.startp = _startpos__4_;
+          MenhirLib.EngineTypes.endp = _endpos__4_;
+          MenhirLib.EngineTypes.next = {
+            MenhirLib.EngineTypes.state = _;
+            MenhirLib.EngineTypes.semv = t;
+            MenhirLib.EngineTypes.startp = _startpos_t_;
+            MenhirLib.EngineTypes.endp = _endpos_t_;
+            MenhirLib.EngineTypes.next = {
+              MenhirLib.EngineTypes.state = _;
+              MenhirLib.EngineTypes.semv = _2;
+              MenhirLib.EngineTypes.startp = _startpos__2_;
+              MenhirLib.EngineTypes.endp = _endpos__2_;
+              MenhirLib.EngineTypes.next = {
+                MenhirLib.EngineTypes.state = _menhir_s;
+                MenhirLib.EngineTypes.semv = _1;
+                MenhirLib.EngineTypes.startp = _startpos__1_;
+                MenhirLib.EngineTypes.endp = _endpos__1_;
+                MenhirLib.EngineTypes.next = _menhir_stack;
+              };
+            };
+          };
+        } = _menhir_stack in
+        let _4 : unit = Obj.magic _4 in
+        let t : (Mini_ast.ty) = Obj.magic t in
+        let _2 : unit = Obj.magic _2 in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__4_ in
+        let _v : (Mini_ast.ty) = 
+# 82 "lib/parser.mly"
                                                                          ( TyRec(t) )
-# 2091 "lib/parser.ml"
+# 2215 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2110,59 +2234,59 @@ module Tables = struct
         let _startpos = _startpos_t_ in
         let _endpos = _endpos_t_ in
         let _v : (Mini_ast.ty) = 
-# 81 "lib/parser.mly"
-                                                                         ( TyZ (t) )
-# 2116 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = _1;
-          MenhirLib.EngineTypes.startp = _startpos__1_;
-          MenhirLib.EngineTypes.endp = _endpos__1_;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        } = _menhir_stack in
-        let _1 : unit = Obj.magic _1 in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos__1_ in
-        let _endpos = _endpos__1_ in
-        let _v : (Mini_ast.ty) = 
-# 82 "lib/parser.mly"
-                                                                         ( TyFixShared )
-# 2141 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = _1;
-          MenhirLib.EngineTypes.startp = _startpos__1_;
-          MenhirLib.EngineTypes.endp = _endpos__1_;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        } = _menhir_stack in
-        let _1 : unit = Obj.magic _1 in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos__1_ in
-        let _endpos = _endpos__1_ in
-        let _v : (Mini_ast.ty) = 
 # 83 "lib/parser.mly"
+                                                                         ( TyZ (t) )
+# 2240 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = _1;
+          MenhirLib.EngineTypes.startp = _startpos__1_;
+          MenhirLib.EngineTypes.endp = _endpos__1_;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        } = _menhir_stack in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__1_ in
+        let _v : (Mini_ast.ty) = 
+# 84 "lib/parser.mly"
                                                                          ( TyFixShared )
-# 2166 "lib/parser.ml"
+# 2265 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = _1;
+          MenhirLib.EngineTypes.startp = _startpos__1_;
+          MenhirLib.EngineTypes.endp = _endpos__1_;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        } = _menhir_stack in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__1_ in
+        let _v : (Mini_ast.ty) = 
+# 85 "lib/parser.mly"
+                                                                         ( TyFixShared )
+# 2290 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2185,9 +2309,9 @@ module Tables = struct
         let _startpos = _startpos_ts_ in
         let _endpos = _endpos_ts_ in
         let _v : (Mini_ast.ty list) = 
-# 154 "lib/parser.mly"
+# 165 "lib/parser.mly"
       ( List.map (fun t -> TyAtomic t) ts )
-# 2191 "lib/parser.ml"
+# 2315 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2200,95 +2324,107 @@ module Tables = struct
         let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
         let {
           MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _18;
-          MenhirLib.EngineTypes.startp = _startpos__18_;
-          MenhirLib.EngineTypes.endp = _endpos__18_;
+          MenhirLib.EngineTypes.semv = _20;
+          MenhirLib.EngineTypes.startp = _startpos__20_;
+          MenhirLib.EngineTypes.endp = _endpos__20_;
           MenhirLib.EngineTypes.next = {
             MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = _17;
-            MenhirLib.EngineTypes.startp = _startpos__17_;
-            MenhirLib.EngineTypes.endp = _endpos__17_;
+            MenhirLib.EngineTypes.semv = _19;
+            MenhirLib.EngineTypes.startp = _startpos__19_;
+            MenhirLib.EngineTypes.endp = _endpos__19_;
             MenhirLib.EngineTypes.next = {
               MenhirLib.EngineTypes.state = _;
-              MenhirLib.EngineTypes.semv = funcs;
-              MenhirLib.EngineTypes.startp = _startpos_funcs_;
-              MenhirLib.EngineTypes.endp = _endpos_funcs_;
+              MenhirLib.EngineTypes.semv = suggested_funcs;
+              MenhirLib.EngineTypes.startp = _startpos_suggested_funcs_;
+              MenhirLib.EngineTypes.endp = _endpos_suggested_funcs_;
               MenhirLib.EngineTypes.next = {
                 MenhirLib.EngineTypes.state = _;
-                MenhirLib.EngineTypes.semv = _15;
-                MenhirLib.EngineTypes.startp = _startpos__15_;
-                MenhirLib.EngineTypes.endp = _endpos__15_;
+                MenhirLib.EngineTypes.semv = required_funcs;
+                MenhirLib.EngineTypes.startp = _startpos_required_funcs_;
+                MenhirLib.EngineTypes.endp = _endpos_required_funcs_;
                 MenhirLib.EngineTypes.next = {
                   MenhirLib.EngineTypes.state = _;
-                  MenhirLib.EngineTypes.semv = _14;
-                  MenhirLib.EngineTypes.startp = _startpos__14_;
-                  MenhirLib.EngineTypes.endp = _endpos__14_;
+                  MenhirLib.EngineTypes.semv = _16;
+                  MenhirLib.EngineTypes.startp = _startpos__16_;
+                  MenhirLib.EngineTypes.endp = _endpos__16_;
                   MenhirLib.EngineTypes.next = {
                     MenhirLib.EngineTypes.state = _;
-                    MenhirLib.EngineTypes.semv = _13;
-                    MenhirLib.EngineTypes.startp = _startpos__13_;
-                    MenhirLib.EngineTypes.endp = _endpos__13_;
+                    MenhirLib.EngineTypes.semv = recursive;
+                    MenhirLib.EngineTypes.startp = _startpos_recursive_;
+                    MenhirLib.EngineTypes.endp = _endpos_recursive_;
                     MenhirLib.EngineTypes.next = {
                       MenhirLib.EngineTypes.state = _;
-                      MenhirLib.EngineTypes.semv = _12;
-                      MenhirLib.EngineTypes.startp = _startpos__12_;
-                      MenhirLib.EngineTypes.endp = _endpos__12_;
+                      MenhirLib.EngineTypes.semv = _14;
+                      MenhirLib.EngineTypes.startp = _startpos__14_;
+                      MenhirLib.EngineTypes.endp = _endpos__14_;
                       MenhirLib.EngineTypes.next = {
                         MenhirLib.EngineTypes.state = _;
-                        MenhirLib.EngineTypes.semv = ret;
-                        MenhirLib.EngineTypes.startp = _startpos_ret_;
-                        MenhirLib.EngineTypes.endp = _endpos_ret_;
+                        MenhirLib.EngineTypes.semv = _13;
+                        MenhirLib.EngineTypes.startp = _startpos__13_;
+                        MenhirLib.EngineTypes.endp = _endpos__13_;
                         MenhirLib.EngineTypes.next = {
                           MenhirLib.EngineTypes.state = _;
-                          MenhirLib.EngineTypes.semv = _10;
-                          MenhirLib.EngineTypes.startp = _startpos__10_;
-                          MenhirLib.EngineTypes.endp = _endpos__10_;
+                          MenhirLib.EngineTypes.semv = _12;
+                          MenhirLib.EngineTypes.startp = _startpos__12_;
+                          MenhirLib.EngineTypes.endp = _endpos__12_;
                           MenhirLib.EngineTypes.next = {
                             MenhirLib.EngineTypes.state = _;
-                            MenhirLib.EngineTypes.semv = _9;
-                            MenhirLib.EngineTypes.startp = _startpos__9_;
-                            MenhirLib.EngineTypes.endp = _endpos__9_;
+                            MenhirLib.EngineTypes.semv = ret;
+                            MenhirLib.EngineTypes.startp = _startpos_ret_;
+                            MenhirLib.EngineTypes.endp = _endpos_ret_;
                             MenhirLib.EngineTypes.next = {
                               MenhirLib.EngineTypes.state = _;
-                              MenhirLib.EngineTypes.semv = _8;
-                              MenhirLib.EngineTypes.startp = _startpos__8_;
-                              MenhirLib.EngineTypes.endp = _endpos__8_;
+                              MenhirLib.EngineTypes.semv = _10;
+                              MenhirLib.EngineTypes.startp = _startpos__10_;
+                              MenhirLib.EngineTypes.endp = _endpos__10_;
                               MenhirLib.EngineTypes.next = {
                                 MenhirLib.EngineTypes.state = _;
-                                MenhirLib.EngineTypes.semv = xs;
-                                MenhirLib.EngineTypes.startp = _startpos_xs_;
-                                MenhirLib.EngineTypes.endp = _endpos_xs_;
+                                MenhirLib.EngineTypes.semv = _9;
+                                MenhirLib.EngineTypes.startp = _startpos__9_;
+                                MenhirLib.EngineTypes.endp = _endpos__9_;
                                 MenhirLib.EngineTypes.next = {
                                   MenhirLib.EngineTypes.state = _;
-                                  MenhirLib.EngineTypes.semv = _6;
-                                  MenhirLib.EngineTypes.startp = _startpos__6_;
-                                  MenhirLib.EngineTypes.endp = _endpos__6_;
+                                  MenhirLib.EngineTypes.semv = _8;
+                                  MenhirLib.EngineTypes.startp = _startpos__8_;
+                                  MenhirLib.EngineTypes.endp = _endpos__8_;
                                   MenhirLib.EngineTypes.next = {
                                     MenhirLib.EngineTypes.state = _;
-                                    MenhirLib.EngineTypes.semv = _5;
-                                    MenhirLib.EngineTypes.startp = _startpos__5_;
-                                    MenhirLib.EngineTypes.endp = _endpos__5_;
+                                    MenhirLib.EngineTypes.semv = xs;
+                                    MenhirLib.EngineTypes.startp = _startpos_xs_;
+                                    MenhirLib.EngineTypes.endp = _endpos_xs_;
                                     MenhirLib.EngineTypes.next = {
                                       MenhirLib.EngineTypes.state = _;
-                                      MenhirLib.EngineTypes.semv = tList;
-                                      MenhirLib.EngineTypes.startp = _startpos_tList_;
-                                      MenhirLib.EngineTypes.endp = _endpos_tList_;
+                                      MenhirLib.EngineTypes.semv = _6;
+                                      MenhirLib.EngineTypes.startp = _startpos__6_;
+                                      MenhirLib.EngineTypes.endp = _endpos__6_;
                                       MenhirLib.EngineTypes.next = {
                                         MenhirLib.EngineTypes.state = _;
-                                        MenhirLib.EngineTypes.semv = _3;
-                                        MenhirLib.EngineTypes.startp = _startpos__3_;
-                                        MenhirLib.EngineTypes.endp = _endpos__3_;
+                                        MenhirLib.EngineTypes.semv = _5;
+                                        MenhirLib.EngineTypes.startp = _startpos__5_;
+                                        MenhirLib.EngineTypes.endp = _endpos__5_;
                                         MenhirLib.EngineTypes.next = {
                                           MenhirLib.EngineTypes.state = _;
-                                          MenhirLib.EngineTypes.semv = name;
-                                          MenhirLib.EngineTypes.startp = _startpos_name_;
-                                          MenhirLib.EngineTypes.endp = _endpos_name_;
+                                          MenhirLib.EngineTypes.semv = tList;
+                                          MenhirLib.EngineTypes.startp = _startpos_tList_;
+                                          MenhirLib.EngineTypes.endp = _endpos_tList_;
                                           MenhirLib.EngineTypes.next = {
-                                            MenhirLib.EngineTypes.state = _menhir_s;
-                                            MenhirLib.EngineTypes.semv = _1;
-                                            MenhirLib.EngineTypes.startp = _startpos__1_;
-                                            MenhirLib.EngineTypes.endp = _endpos__1_;
-                                            MenhirLib.EngineTypes.next = _menhir_stack;
+                                            MenhirLib.EngineTypes.state = _;
+                                            MenhirLib.EngineTypes.semv = _3;
+                                            MenhirLib.EngineTypes.startp = _startpos__3_;
+                                            MenhirLib.EngineTypes.endp = _endpos__3_;
+                                            MenhirLib.EngineTypes.next = {
+                                              MenhirLib.EngineTypes.state = _;
+                                              MenhirLib.EngineTypes.semv = name;
+                                              MenhirLib.EngineTypes.startp = _startpos_name_;
+                                              MenhirLib.EngineTypes.endp = _endpos_name_;
+                                              MenhirLib.EngineTypes.next = {
+                                                MenhirLib.EngineTypes.state = _menhir_s;
+                                                MenhirLib.EngineTypes.semv = _1;
+                                                MenhirLib.EngineTypes.startp = _startpos__1_;
+                                                MenhirLib.EngineTypes.endp = _endpos__1_;
+                                                MenhirLib.EngineTypes.next = _menhir_stack;
+                                              };
+                                            };
                                           };
                                         };
                                       };
@@ -2307,10 +2443,12 @@ module Tables = struct
             };
           };
         } = _menhir_stack in
-        let _18 : unit = Obj.magic _18 in
-        let _17 : unit = Obj.magic _17 in
-        let funcs : (string list) = Obj.magic funcs in
-        let _15 : unit = Obj.magic _15 in
+        let _20 : unit = Obj.magic _20 in
+        let _19 : unit = Obj.magic _19 in
+        let suggested_funcs : (string list) = Obj.magic suggested_funcs in
+        let required_funcs : (string list) = Obj.magic required_funcs in
+        let _16 : unit = Obj.magic _16 in
+        let recursive : (bool) = Obj.magic recursive in
         let _14 : unit = Obj.magic _14 in
         let _13 : unit = Obj.magic _13 in
         let _12 : unit = Obj.magic _12 in
@@ -2326,27 +2464,27 @@ module Tables = struct
         let name : (
 # 6 "lib/parser.mly"
        (string)
-# 2330 "lib/parser.ml"
+# 2468 "lib/parser.ml"
         ) = Obj.magic name in
         let _1 : unit = Obj.magic _1 in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos__1_ in
-        let _endpos = _endpos__18_ in
+        let _endpos = _endpos__20_ in
         let _v =
           let ars = 
 # 241 "<standard.mly>"
     ( xs )
-# 2340 "lib/parser.ml"
+# 2478 "lib/parser.ml"
            in
           (
-# 167 "lib/parser.mly"
+# 180 "lib/parser.mly"
     (
       Function
         (TySchemeFunc
            (tList,
-            (((name, ars), ret), funcs)))
+            ((name, ars), ret)), recursive, (required_funcs, suggested_funcs))
     )
-# 2350 "lib/parser.ml"
+# 2488 "lib/parser.ml"
            : (Mini_ast.decl))
         in
         {
@@ -2368,7 +2506,7 @@ module Tables = struct
         let x : (
 # 7 "lib/parser.mly"
        (string)
-# 2372 "lib/parser.ml"
+# 2510 "lib/parser.ml"
         ) = Obj.magic x in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_x_ in
@@ -2376,7 +2514,7 @@ module Tables = struct
         let _v : (string list) = 
 # 250 "<standard.mly>"
     ( [ x ] )
-# 2380 "lib/parser.ml"
+# 2518 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2411,7 +2549,7 @@ module Tables = struct
         let x : (
 # 7 "lib/parser.mly"
        (string)
-# 2415 "lib/parser.ml"
+# 2553 "lib/parser.ml"
         ) = Obj.magic x in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_x_ in
@@ -2419,7 +2557,7 @@ module Tables = struct
         let _v : (string list) = 
 # 253 "<standard.mly>"
     ( x :: xs )
-# 2423 "lib/parser.ml"
+# 2561 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2440,7 +2578,7 @@ module Tables = struct
         let x : (
 # 6 "lib/parser.mly"
        (string)
-# 2444 "lib/parser.ml"
+# 2582 "lib/parser.ml"
         ) = Obj.magic x in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_x_ in
@@ -2448,7 +2586,7 @@ module Tables = struct
         let _v : (string list) = 
 # 250 "<standard.mly>"
     ( [ x ] )
-# 2452 "lib/parser.ml"
+# 2590 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2483,7 +2621,7 @@ module Tables = struct
         let x : (
 # 6 "lib/parser.mly"
        (string)
-# 2487 "lib/parser.ml"
+# 2625 "lib/parser.ml"
         ) = Obj.magic x in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_x_ in
@@ -2491,7 +2629,7 @@ module Tables = struct
         let _v : (string list) = 
 # 253 "<standard.mly>"
     ( x :: xs )
-# 2495 "lib/parser.ml"
+# 2633 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2516,7 +2654,7 @@ module Tables = struct
         let _v : ((string * Mini_ast.ty) list) = 
 # 250 "<standard.mly>"
     ( [ x ] )
-# 2520 "lib/parser.ml"
+# 2658 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2555,7 +2693,7 @@ module Tables = struct
         let _v : ((string * Mini_ast.ty) list) = 
 # 253 "<standard.mly>"
     ( x :: xs )
-# 2559 "lib/parser.ml"
+# 2697 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2580,7 +2718,7 @@ module Tables = struct
         let _v : ((string * Mini_ast.ty) list) = 
 # 250 "<standard.mly>"
     ( [ x ] )
-# 2584 "lib/parser.ml"
+# 2722 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2619,7 +2757,64 @@ module Tables = struct
         let _v : ((string * Mini_ast.ty) list) = 
 # 253 "<standard.mly>"
     ( x :: xs )
-# 2623 "lib/parser.ml"
+# 2761 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let _menhir_s = _menhir_env.MenhirLib.EngineTypes.current in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _endpos = _startpos in
+        let _v : (string list) = 
+# 143 "lib/parser.mly"
+                                ( [] )
+# 2779 "lib/parser.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _;
+          MenhirLib.EngineTypes.semv = _3;
+          MenhirLib.EngineTypes.startp = _startpos__3_;
+          MenhirLib.EngineTypes.endp = _endpos__3_;
+          MenhirLib.EngineTypes.next = {
+            MenhirLib.EngineTypes.state = _;
+            MenhirLib.EngineTypes.semv = ids;
+            MenhirLib.EngineTypes.startp = _startpos_ids_;
+            MenhirLib.EngineTypes.endp = _endpos_ids_;
+            MenhirLib.EngineTypes.next = {
+              MenhirLib.EngineTypes.state = _menhir_s;
+              MenhirLib.EngineTypes.semv = _1;
+              MenhirLib.EngineTypes.startp = _startpos__1_;
+              MenhirLib.EngineTypes.endp = _endpos__1_;
+              MenhirLib.EngineTypes.next = _menhir_stack;
+            };
+          };
+        } = _menhir_stack in
+        let _3 : unit = Obj.magic _3 in
+        let ids : (string list) = Obj.magic ids in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__3_ in
+        let _v : (string list) = 
+# 145 "lib/parser.mly"
+                                ( ids )
+# 2818 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2667,16 +2862,16 @@ module Tables = struct
         let _name : (
 # 6 "lib/parser.mly"
        (string)
-# 2671 "lib/parser.ml"
+# 2866 "lib/parser.ml"
         ) = Obj.magic _name in
         let _1 : unit = Obj.magic _1 in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos__1_ in
         let _endpos = _endpos__5_ in
         let _v : (Mini_ast.decl) = 
-# 61 "lib/parser.mly"
+# 63 "lib/parser.mly"
                                                         ( TypeDef({name = _name; body = t}) )
-# 2680 "lib/parser.ml"
+# 2875 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2689,65 +2884,77 @@ module Tables = struct
         let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
         let {
           MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _12;
-          MenhirLib.EngineTypes.startp = _startpos__12_;
-          MenhirLib.EngineTypes.endp = _endpos__12_;
+          MenhirLib.EngineTypes.semv = _14;
+          MenhirLib.EngineTypes.startp = _startpos__14_;
+          MenhirLib.EngineTypes.endp = _endpos__14_;
           MenhirLib.EngineTypes.next = {
             MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = _11;
-            MenhirLib.EngineTypes.startp = _startpos__11_;
-            MenhirLib.EngineTypes.endp = _endpos__11_;
+            MenhirLib.EngineTypes.semv = _13;
+            MenhirLib.EngineTypes.startp = _startpos__13_;
+            MenhirLib.EngineTypes.endp = _endpos__13_;
             MenhirLib.EngineTypes.next = {
               MenhirLib.EngineTypes.state = _;
-              MenhirLib.EngineTypes.semv = funcs;
-              MenhirLib.EngineTypes.startp = _startpos_funcs_;
-              MenhirLib.EngineTypes.endp = _endpos_funcs_;
+              MenhirLib.EngineTypes.semv = suggested_funcs;
+              MenhirLib.EngineTypes.startp = _startpos_suggested_funcs_;
+              MenhirLib.EngineTypes.endp = _endpos_suggested_funcs_;
               MenhirLib.EngineTypes.next = {
                 MenhirLib.EngineTypes.state = _;
-                MenhirLib.EngineTypes.semv = _9;
-                MenhirLib.EngineTypes.startp = _startpos__9_;
-                MenhirLib.EngineTypes.endp = _endpos__9_;
+                MenhirLib.EngineTypes.semv = required_funcs;
+                MenhirLib.EngineTypes.startp = _startpos_required_funcs_;
+                MenhirLib.EngineTypes.endp = _endpos_required_funcs_;
                 MenhirLib.EngineTypes.next = {
                   MenhirLib.EngineTypes.state = _;
-                  MenhirLib.EngineTypes.semv = _8;
-                  MenhirLib.EngineTypes.startp = _startpos__8_;
-                  MenhirLib.EngineTypes.endp = _endpos__8_;
+                  MenhirLib.EngineTypes.semv = _10;
+                  MenhirLib.EngineTypes.startp = _startpos__10_;
+                  MenhirLib.EngineTypes.endp = _endpos__10_;
                   MenhirLib.EngineTypes.next = {
                     MenhirLib.EngineTypes.state = _;
-                    MenhirLib.EngineTypes.semv = _7;
-                    MenhirLib.EngineTypes.startp = _startpos__7_;
-                    MenhirLib.EngineTypes.endp = _endpos__7_;
+                    MenhirLib.EngineTypes.semv = recursive;
+                    MenhirLib.EngineTypes.startp = _startpos_recursive_;
+                    MenhirLib.EngineTypes.endp = _endpos_recursive_;
                     MenhirLib.EngineTypes.next = {
                       MenhirLib.EngineTypes.state = _;
-                      MenhirLib.EngineTypes.semv = _6;
-                      MenhirLib.EngineTypes.startp = _startpos__6_;
-                      MenhirLib.EngineTypes.endp = _endpos__6_;
+                      MenhirLib.EngineTypes.semv = _8;
+                      MenhirLib.EngineTypes.startp = _startpos__8_;
+                      MenhirLib.EngineTypes.endp = _endpos__8_;
                       MenhirLib.EngineTypes.next = {
                         MenhirLib.EngineTypes.state = _;
-                        MenhirLib.EngineTypes.semv = _5;
-                        MenhirLib.EngineTypes.startp = _startpos__5_;
-                        MenhirLib.EngineTypes.endp = _endpos__5_;
+                        MenhirLib.EngineTypes.semv = _7;
+                        MenhirLib.EngineTypes.startp = _startpos__7_;
+                        MenhirLib.EngineTypes.endp = _endpos__7_;
                         MenhirLib.EngineTypes.next = {
                           MenhirLib.EngineTypes.state = _;
-                          MenhirLib.EngineTypes.semv = xs;
-                          MenhirLib.EngineTypes.startp = _startpos_xs_;
-                          MenhirLib.EngineTypes.endp = _endpos_xs_;
+                          MenhirLib.EngineTypes.semv = _6;
+                          MenhirLib.EngineTypes.startp = _startpos__6_;
+                          MenhirLib.EngineTypes.endp = _endpos__6_;
                           MenhirLib.EngineTypes.next = {
                             MenhirLib.EngineTypes.state = _;
-                            MenhirLib.EngineTypes.semv = _3;
-                            MenhirLib.EngineTypes.startp = _startpos__3_;
-                            MenhirLib.EngineTypes.endp = _endpos__3_;
+                            MenhirLib.EngineTypes.semv = _5;
+                            MenhirLib.EngineTypes.startp = _startpos__5_;
+                            MenhirLib.EngineTypes.endp = _endpos__5_;
                             MenhirLib.EngineTypes.next = {
                               MenhirLib.EngineTypes.state = _;
-                              MenhirLib.EngineTypes.semv = name;
-                              MenhirLib.EngineTypes.startp = _startpos_name_;
-                              MenhirLib.EngineTypes.endp = _endpos_name_;
+                              MenhirLib.EngineTypes.semv = xs;
+                              MenhirLib.EngineTypes.startp = _startpos_xs_;
+                              MenhirLib.EngineTypes.endp = _endpos_xs_;
                               MenhirLib.EngineTypes.next = {
-                                MenhirLib.EngineTypes.state = _menhir_s;
-                                MenhirLib.EngineTypes.semv = _1;
-                                MenhirLib.EngineTypes.startp = _startpos__1_;
-                                MenhirLib.EngineTypes.endp = _endpos__1_;
-                                MenhirLib.EngineTypes.next = _menhir_stack;
+                                MenhirLib.EngineTypes.state = _;
+                                MenhirLib.EngineTypes.semv = _3;
+                                MenhirLib.EngineTypes.startp = _startpos__3_;
+                                MenhirLib.EngineTypes.endp = _endpos__3_;
+                                MenhirLib.EngineTypes.next = {
+                                  MenhirLib.EngineTypes.state = _;
+                                  MenhirLib.EngineTypes.semv = name;
+                                  MenhirLib.EngineTypes.startp = _startpos_name_;
+                                  MenhirLib.EngineTypes.endp = _endpos_name_;
+                                  MenhirLib.EngineTypes.next = {
+                                    MenhirLib.EngineTypes.state = _menhir_s;
+                                    MenhirLib.EngineTypes.semv = _1;
+                                    MenhirLib.EngineTypes.startp = _startpos__1_;
+                                    MenhirLib.EngineTypes.endp = _endpos__1_;
+                                    MenhirLib.EngineTypes.next = _menhir_stack;
+                                  };
+                                };
                               };
                             };
                           };
@@ -2760,10 +2967,12 @@ module Tables = struct
             };
           };
         } = _menhir_stack in
-        let _12 : unit = Obj.magic _12 in
-        let _11 : unit = Obj.magic _11 in
-        let funcs : (string list) = Obj.magic funcs in
-        let _9 : unit = Obj.magic _9 in
+        let _14 : unit = Obj.magic _14 in
+        let _13 : unit = Obj.magic _13 in
+        let suggested_funcs : (string list) = Obj.magic suggested_funcs in
+        let required_funcs : (string list) = Obj.magic required_funcs in
+        let _10 : unit = Obj.magic _10 in
+        let recursive : (bool) = Obj.magic recursive in
         let _8 : unit = Obj.magic _8 in
         let _7 : unit = Obj.magic _7 in
         let _6 : unit = Obj.magic _6 in
@@ -2773,83 +2982,26 @@ module Tables = struct
         let name : (
 # 6 "lib/parser.mly"
        (string)
-# 2777 "lib/parser.ml"
+# 2986 "lib/parser.ml"
         ) = Obj.magic name in
         let _1 : unit = Obj.magic _1 in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos__1_ in
-        let _endpos = _endpos__12_ in
+        let _endpos = _endpos__14_ in
         let _v =
           let ars = 
 # 241 "<standard.mly>"
     ( xs )
-# 2787 "lib/parser.ml"
+# 2996 "lib/parser.ml"
            in
           (
-# 127 "lib/parser.mly"
+# 133 "lib/parser.mly"
     (
-      Function (TyUnitRetFunc ((name, ars), funcs))
+      Function (TyUnitRetFunc (name, ars), recursive, (required_funcs, suggested_funcs))
     )
-# 2794 "lib/parser.ml"
+# 3003 "lib/parser.ml"
            : (Mini_ast.decl))
         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let _menhir_s = _menhir_env.MenhirLib.EngineTypes.current in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _endpos = _startpos in
-        let _v : (string list) = 
-# 132 "lib/parser.mly"
-                                ( [] )
-# 2813 "lib/parser.ml"
-         in
-        {
-          MenhirLib.EngineTypes.state = _menhir_s;
-          MenhirLib.EngineTypes.semv = Obj.repr _v;
-          MenhirLib.EngineTypes.startp = _startpos;
-          MenhirLib.EngineTypes.endp = _endpos;
-          MenhirLib.EngineTypes.next = _menhir_stack;
-        });
-      (fun _menhir_env ->
-        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
-        let {
-          MenhirLib.EngineTypes.state = _;
-          MenhirLib.EngineTypes.semv = _3;
-          MenhirLib.EngineTypes.startp = _startpos__3_;
-          MenhirLib.EngineTypes.endp = _endpos__3_;
-          MenhirLib.EngineTypes.next = {
-            MenhirLib.EngineTypes.state = _;
-            MenhirLib.EngineTypes.semv = ids;
-            MenhirLib.EngineTypes.startp = _startpos_ids_;
-            MenhirLib.EngineTypes.endp = _endpos_ids_;
-            MenhirLib.EngineTypes.next = {
-              MenhirLib.EngineTypes.state = _menhir_s;
-              MenhirLib.EngineTypes.semv = _1;
-              MenhirLib.EngineTypes.startp = _startpos__1_;
-              MenhirLib.EngineTypes.endp = _endpos__1_;
-              MenhirLib.EngineTypes.next = _menhir_stack;
-            };
-          };
-        } = _menhir_stack in
-        let _3 : unit = Obj.magic _3 in
-        let ids : (string list) = Obj.magic ids in
-        let _1 : unit = Obj.magic _1 in
-        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
-        let _startpos = _startpos__1_ in
-        let _endpos = _endpos__3_ in
-        let _v : (string list) = 
-# 134 "lib/parser.mly"
-                                ( ids )
-# 2852 "lib/parser.ml"
-         in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
           MenhirLib.EngineTypes.semv = Obj.repr _v;
@@ -2871,9 +3023,9 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos__1_ in
         let _v : (int) = 
-# 181 "lib/parser.mly"
+# 194 "lib/parser.mly"
       ( 0)
-# 2877 "lib/parser.ml"
+# 3029 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2917,9 +3069,9 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos__4_ in
         let _v : (int) = 
-# 182 "lib/parser.mly"
+# 195 "lib/parser.mly"
                           ( t + 1 )
-# 2923 "lib/parser.ml"
+# 3075 "lib/parser.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -2937,6 +3089,7 @@ module Tables = struct
       "USE";
       "TYPE_KEYWORD";
       "SYNTHESIZE";
+      "SUGGEST";
       "SHAREDTOLINEAR";
       "SESSION";
       "SENDVALUE";
@@ -2946,6 +3099,7 @@ module Tables = struct
       "RSQUARE";
       "RPAR";
       "RELEASE";
+      "REC_FUNC";
       "RECEIVEVALUE";
       "RECEIVECHANNEL";
       "REC";
@@ -2978,6 +3132,8 @@ module Tables = struct
       "Accepting";
       "Reducing production arg -> ID COLON arg_type";
       "Reducing production arg_type -> s_type";
+      "Reducing production boption(REC_FUNC) ->";
+      "Reducing production boption(REC_FUNC) -> REC_FUNC";
       "Reducing production choice -> EITHER LT s_type COMMA s_type GT";
       "Reducing production choice_branch -> ID COLON s_type";
       "Reducing production closed_func -> FUNC ID LPAR loption(separated_nonempty_list(COMMA,arg)) RPAR MINUS GT s_type LBRACE list(RAW) RBRACE";
@@ -2990,7 +3146,7 @@ module Tables = struct
       "Reducing production decl -> closed_func";
       "Reducing production decl -> scheme_func";
       "Reducing production define_choice -> DEFINE_CHOICE EXCLAMATION LBRACE ID SEMICOLON separated_nonempty_list(COMMA,choice_branch) RBRACE";
-      "Reducing production func -> FUNC ID LPAR loption(separated_nonempty_list(COMMA,arg)) RPAR MINUS GT s_type LBRACE AT SYNTHESIZE LSQUARE used_funcs RSQUARE RBRACE";
+      "Reducing production func -> FUNC ID LPAR loption(separated_nonempty_list(COMMA,arg)) RPAR MINUS GT s_type LBRACE AT SYNTHESIZE boption(REC_FUNC) LSQUARE require_funcs suggest_funcs RSQUARE RBRACE";
       "Reducing production list(RAW) ->";
       "Reducing production list(RAW) -> RAW list(RAW)";
       "Reducing production list(decl) ->";
@@ -2998,6 +3154,8 @@ module Tables = struct
       "Reducing production loption(separated_nonempty_list(COMMA,arg)) ->";
       "Reducing production loption(separated_nonempty_list(COMMA,arg)) -> separated_nonempty_list(COMMA,arg)";
       "Reducing production prog -> list(decl) EOF";
+      "Reducing production require_funcs ->";
+      "Reducing production require_funcs -> USE separated_nonempty_list(COMMA,ID) SEMICOLON";
       "Reducing production s_type -> ID";
       "Reducing production s_type -> ATOMIC";
       "Reducing production s_type -> INTERNALCHOICE LT choice GT";
@@ -3019,7 +3177,7 @@ module Tables = struct
       "Reducing production s_type -> RELEASE";
       "Reducing production s_type -> ACQUIRE";
       "Reducing production scheme_args -> separated_nonempty_list(COMMA,ATOMIC)";
-      "Reducing production scheme_func -> FUNC ID LT scheme_args GT LPAR loption(separated_nonempty_list(COMMA,arg)) RPAR MINUS GT s_type LBRACE AT SYNTHESIZE LSQUARE used_funcs RSQUARE RBRACE";
+      "Reducing production scheme_func -> FUNC ID LT scheme_args GT LPAR loption(separated_nonempty_list(COMMA,arg)) RPAR MINUS GT s_type LBRACE AT SYNTHESIZE boption(REC_FUNC) LSQUARE require_funcs suggest_funcs RSQUARE RBRACE";
       "Reducing production separated_nonempty_list(COMMA,ATOMIC) -> ATOMIC";
       "Reducing production separated_nonempty_list(COMMA,ATOMIC) -> ATOMIC COMMA separated_nonempty_list(COMMA,ATOMIC)";
       "Reducing production separated_nonempty_list(COMMA,ID) -> ID";
@@ -3028,10 +3186,10 @@ module Tables = struct
       "Reducing production separated_nonempty_list(COMMA,arg) -> arg COMMA separated_nonempty_list(COMMA,arg)";
       "Reducing production separated_nonempty_list(COMMA,choice_branch) -> choice_branch";
       "Reducing production separated_nonempty_list(COMMA,choice_branch) -> choice_branch COMMA separated_nonempty_list(COMMA,choice_branch)";
+      "Reducing production suggest_funcs ->";
+      "Reducing production suggest_funcs -> SUGGEST separated_nonempty_list(COMMA,ID) SEMICOLON";
       "Reducing production type_def -> TYPE_KEYWORD ID EQ s_type SEMICOLON";
-      "Reducing production unit_ret_func -> FUNC ID LPAR loption(separated_nonempty_list(COMMA,arg)) RPAR LBRACE AT SYNTHESIZE LSQUARE used_funcs RSQUARE RBRACE";
-      "Reducing production used_funcs ->";
-      "Reducing production used_funcs -> USE separated_nonempty_list(COMMA,ID) SEMICOLON";
+      "Reducing production unit_ret_func -> FUNC ID LPAR loption(separated_nonempty_list(COMMA,arg)) RPAR LBRACE AT SYNTHESIZE boption(REC_FUNC) LSQUARE require_funcs suggest_funcs RSQUARE RBRACE";
       "Reducing production z_type -> Z";
       "Reducing production z_type -> S LT z_type GT";
     |])
@@ -3054,6 +3212,7 @@ module MenhirInterpreter = struct
       | T_USE : unit terminal
       | T_TYPE_KEYWORD : unit terminal
       | T_SYNTHESIZE : unit terminal
+      | T_SUGGEST : unit terminal
       | T_SHAREDTOLINEAR : unit terminal
       | T_SESSION : unit terminal
       | T_SENDVALUE : unit terminal
@@ -3063,6 +3222,7 @@ module MenhirInterpreter = struct
       | T_RSQUARE : unit terminal
       | T_RPAR : unit terminal
       | T_RELEASE : unit terminal
+      | T_REC_FUNC : unit terminal
       | T_RECEIVEVALUE : unit terminal
       | T_RECEIVECHANNEL : unit terminal
       | T_REC : unit terminal
@@ -3070,7 +3230,7 @@ module MenhirInterpreter = struct
       | T_RAW : (
 # 5 "lib/parser.mly"
        (string)
-# 3074 "lib/parser.ml"
+# 3234 "lib/parser.ml"
     ) terminal
       | T_MINUS : unit terminal
       | T_LT : unit terminal
@@ -3082,7 +3242,7 @@ module MenhirInterpreter = struct
       | T_ID : (
 # 6 "lib/parser.mly"
        (string)
-# 3086 "lib/parser.ml"
+# 3246 "lib/parser.ml"
     ) terminal
       | T_GT : unit terminal
       | T_FUNC : unit terminal
@@ -3098,16 +3258,16 @@ module MenhirInterpreter = struct
       | T_ATOMIC : (
 # 7 "lib/parser.mly"
        (string)
-# 3102 "lib/parser.ml"
+# 3262 "lib/parser.ml"
     ) terminal
       | T_AT : unit terminal
       | T_ACQUIRE : unit terminal
     
     type _ nonterminal = 
       | N_z_type : (int) nonterminal
-      | N_used_funcs : (string list) nonterminal
       | N_unit_ret_func : (Mini_ast.decl) nonterminal
       | N_type_def : (Mini_ast.decl) nonterminal
+      | N_suggest_funcs : (string list) nonterminal
       | N_separated_nonempty_list_COMMA_choice_branch_ : ((string * Mini_ast.ty) list) nonterminal
       | N_separated_nonempty_list_COMMA_arg_ : ((string * Mini_ast.ty) list) nonterminal
       | N_separated_nonempty_list_COMMA_ID_ : (string list) nonterminal
@@ -3115,6 +3275,7 @@ module MenhirInterpreter = struct
       | N_scheme_func : (Mini_ast.decl) nonterminal
       | N_scheme_args : (Mini_ast.ty list) nonterminal
       | N_s_type : (Mini_ast.ty) nonterminal
+      | N_require_funcs : (string list) nonterminal
       | N_prog : (Mini_ast.decl list) nonterminal
       | N_loption_separated_nonempty_list_COMMA_arg__ : ((string * Mini_ast.ty) list) nonterminal
       | N_list_decl_ : (Mini_ast.decl list) nonterminal
@@ -3125,6 +3286,7 @@ module MenhirInterpreter = struct
       | N_closed_func : (Mini_ast.decl) nonterminal
       | N_choice_branch : (string * Mini_ast.ty) nonterminal
       | N_choice : (Mini_ast.choice) nonterminal
+      | N_boption_REC_FUNC_ : (bool) nonterminal
       | N_arg_type : (Mini_ast.ty) nonterminal
       | N_arg : (string * Mini_ast.ty) nonterminal
     
@@ -3154,76 +3316,80 @@ module MenhirInterpreter = struct
         | 4 ->
             X (T T_SYNTHESIZE)
         | 5 ->
-            X (T T_SHAREDTOLINEAR)
+            X (T T_SUGGEST)
         | 6 ->
-            X (T T_SESSION)
+            X (T T_SHAREDTOLINEAR)
         | 7 ->
-            X (T T_SENDVALUE)
+            X (T T_SESSION)
         | 8 ->
-            X (T T_SENDCHANNEL)
+            X (T T_SENDVALUE)
         | 9 ->
-            X (T T_SEMICOLON)
+            X (T T_SENDCHANNEL)
         | 10 ->
-            X (T T_S)
+            X (T T_SEMICOLON)
         | 11 ->
-            X (T T_RSQUARE)
+            X (T T_S)
         | 12 ->
-            X (T T_RPAR)
+            X (T T_RSQUARE)
         | 13 ->
-            X (T T_RELEASE)
+            X (T T_RPAR)
         | 14 ->
-            X (T T_RECEIVEVALUE)
+            X (T T_RELEASE)
         | 15 ->
-            X (T T_RECEIVECHANNEL)
+            X (T T_REC_FUNC)
         | 16 ->
-            X (T T_REC)
+            X (T T_RECEIVEVALUE)
         | 17 ->
-            X (T T_RBRACE)
+            X (T T_RECEIVECHANNEL)
         | 18 ->
-            X (T T_RAW)
+            X (T T_REC)
         | 19 ->
-            X (T T_MINUS)
+            X (T T_RBRACE)
         | 20 ->
-            X (T T_LT)
+            X (T T_RAW)
         | 21 ->
-            X (T T_LSQUARE)
+            X (T T_MINUS)
         | 22 ->
-            X (T T_LPAR)
+            X (T T_LT)
         | 23 ->
-            X (T T_LINEARTOSHARED)
+            X (T T_LSQUARE)
         | 24 ->
-            X (T T_LBRACE)
+            X (T T_LPAR)
         | 25 ->
-            X (T T_INTERNALCHOICE)
+            X (T T_LINEARTOSHARED)
         | 26 ->
-            X (T T_ID)
+            X (T T_LBRACE)
         | 27 ->
-            X (T T_GT)
+            X (T T_INTERNALCHOICE)
         | 28 ->
-            X (T T_FUNC)
+            X (T T_ID)
         | 29 ->
-            X (T T_EXTERNALCHOICE)
+            X (T T_GT)
         | 30 ->
-            X (T T_EXCLAMATION)
+            X (T T_FUNC)
         | 31 ->
-            X (T T_EQ)
+            X (T T_EXTERNALCHOICE)
         | 32 ->
-            X (T T_EOF)
+            X (T T_EXCLAMATION)
         | 33 ->
-            X (T T_END)
+            X (T T_EQ)
         | 34 ->
-            X (T T_EITHER)
+            X (T T_EOF)
         | 35 ->
-            X (T T_DEFINE_CHOICE)
+            X (T T_END)
         | 36 ->
-            X (T T_COMMA)
+            X (T T_EITHER)
         | 37 ->
-            X (T T_COLON)
+            X (T T_DEFINE_CHOICE)
         | 38 ->
-            X (T T_ATOMIC)
+            X (T T_COMMA)
         | 39 ->
-            X (T T_AT)
+            X (T T_COLON)
         | 40 ->
+            X (T T_ATOMIC)
+        | 41 ->
+            X (T T_AT)
+        | 42 ->
             X (T T_ACQUIRE)
         | _ ->
             assert false
@@ -3231,30 +3397,34 @@ module MenhirInterpreter = struct
     and nonterminal =
       fun nt ->
         match nt with
-        | 23 ->
+        | 25 ->
             X (N N_arg)
-        | 22 ->
+        | 24 ->
             X (N N_arg_type)
-        | 21 ->
+        | 23 ->
+            X (N N_boption_REC_FUNC_)
+        | 22 ->
             X (N N_choice)
-        | 20 ->
+        | 21 ->
             X (N N_choice_branch)
-        | 19 ->
+        | 20 ->
             X (N N_closed_func)
-        | 18 ->
+        | 19 ->
             X (N N_decl)
-        | 17 ->
+        | 18 ->
             X (N N_define_choice)
-        | 16 ->
+        | 17 ->
             X (N N_func)
-        | 15 ->
+        | 16 ->
             X (N N_list_RAW_)
-        | 14 ->
+        | 15 ->
             X (N N_list_decl_)
-        | 13 ->
+        | 14 ->
             X (N N_loption_separated_nonempty_list_COMMA_arg__)
-        | 12 ->
+        | 13 ->
             X (N N_prog)
+        | 12 ->
+            X (N N_require_funcs)
         | 11 ->
             X (N N_s_type)
         | 10 ->
@@ -3270,33 +3440,33 @@ module MenhirInterpreter = struct
         | 5 ->
             X (N N_separated_nonempty_list_COMMA_choice_branch_)
         | 4 ->
-            X (N N_type_def)
+            X (N N_suggest_funcs)
         | 3 ->
-            X (N N_unit_ret_func)
+            X (N N_type_def)
         | 2 ->
-            X (N N_used_funcs)
+            X (N N_unit_ret_func)
         | 1 ->
             X (N N_z_type)
         | _ ->
             assert false
     
     and lr0_incoming =
-      (8, "\000\b6@\004\012*\014*\016*6J\018*\022*\0038\028\030*6J *\"*0*4*68F*6<*68+8DNR\003\023J\0238+8\0238\0238\023J\0238\0238NJ\0238\023J\0238\0238NJ\0238\0238\0238\023\020&:6*NJ\017\017\0218.6L\023-\r\027\026(8\0232&\031P\n,\0066J\015\015\020\005\024$\031$/J\r.\027\026(8\0232P\n,\005\024$\031$2P\n,\005\024$H>26\0206L\023\011$)J\011\007\t\019\025\029B!#%\029'")
+      (8, "\000\b:D\004\014.\016.\018.:N\020.\024.\003<\030\".:N$.&.4.8.:<J.:@.:<-<HRV\003\023N\023<-<\023<\023<\023N\023<\023<RN\023<\023N\023<\023<RN\023<\023<\023<\023\022*>:.RN\017\017\021<2:P\0231\r\029\028,<\0236*!T\n /0\006:N\015\015\022\025\012\015\022\t\026(!(3N\r2\029\028,<\0236T\n/0\025\t\026(!(6T\n/0\025\t\026(LB6:\022:P\023\011(+N\011\005\007\019\027\031F#%'\031)")
     
     and rhs =
-      ((8, "\0256L-\023F*\023J\02386L\023:6.\027\026(8\0232\031$:6*\0218.\027\026(8\0232\031$&\t#!\007'\019H>26\020\011$:6.\027\026(8\0232P\n,\005\024$&\031%\029\r\029B6N4*+8<*+84*68<*68\018*\023J\0238 *\023J\0238\016*6J\0238\016*NJ\0238\030*6J\0238\030*NJ\0238D\012*\02380*\0238\014*\0238\"*\0238\003\028R\017:6*\0218.\027\026(8\0232P\n,\005\024$NNJ\01766J\015//J\r))J\011\b6@\023\020:6.\027\0262P\n,\005\024$\006\015\020\004\022*\0038"), (8, "\000\001\004\005\011\014\025'()*+,-.5DDFFHHIKLMQUY]ciou{\129\130\134\138\142\146\147\148\149\150\168\169\172\173\176\177\180\181\184\189\201\201\204\205\209"))
+      ((8, "\027:P1\023 J.\023N\023<:P\023>:2\029\028,<\0236!(>:.\021<2\029\028,<\0236!(*\007%#\005)\019LB6:\022\011(>:2\029\028,<\0236T\n/0\025\t\026(*!'\031\r\031F\006\015\022:R8.-<@.-<8.:<@.:<\020.\023N\023<$.\023N\023<\018.:N\023<\018.RN\023<\".:N\023<\".RN\023<H\014.\023<4.\023<\016.\023<&.\023<\003\030V\017>:.\021<2\029\028,<\0236T\n/0\025\t\026(RRN\017::N\01533N\r++N\011\012\015\022\b:D\023\022>:2\029\0286T\n/0\025\t\026(\004\024.\003<"), (8, "\000\001\004\005\005\006\012\015\026()*+,-./6GGIIKKLNNQRSW[_ciou{\129\135\136\140\144\148\152\153\154\155\156\176\177\180\181\184\185\188\189\192\192\195\200\214\215\219"))
     
     and lr0_core =
-      (8, "\000\001\002\003\004\005\006\007\b\t\n\011\012\r\014\015\016\017\018\019\020\021\022\023\024\025\026\027\028\029\030\031 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\127\128\129\130\131\132\133\134\135\136\137\138\139\140\141\142\143\144\145\146\147\148\149\150\151\152\153\154\155\156\157\158\159\160\161\162\163\164\165\166\167\168\169")
+      (8, "\000\001\002\003\004\005\006\007\b\t\n\011\012\r\014\015\016\017\018\019\020\021\022\023\024\025\026\027\028\029\030\031 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\127\128\129\130\131\132\133\134\135\136\137\138\139\140\141\142\143\144\145\146\147\148\149\150\151\152\153\154\155\156\157\158\159\160\161\162\163\164\165\166\167\168\169\170\171\172\173\174\175\176\177\178\179")
     
     and lr0_items =
-      ((16, "\000\000\212\001\212\002\212\003\228\001\144\001\144\002\152\001\152\002\128\001|\001\128\002|\002|\003|\004t\001t\002\232\001\232\002\232\003\232\004\164\001\136\001\132\001\136\002\132\002\132\003\132\004x\001x\002\156\001\156\002\148\001\148\002l\001d\001l\002d\002l\003l\004\012\001\012\002\\\001p\001h\001p\002h\002p\003p\004h\003h\004\140\001`\001\168\001\160\001\012\003\012\004\012\005\012\006d\003d\004\148\003\148\004\156\003\156\004x\003x\004x\005x\006\132\005\132\006\136\003\136\004\136\005\136\006t\003t\004t\005t\006|\005|\006\128\003\128\004\128\005\128\006\152\003\152\004\144\003\144\004\212\004\212\005\028\001\216\001\176\001<\001\024\001\020\001\216\002\176\002<\002\024\002\020\002\176\003\024\003\184\001\180\001\184\002\184\003\172\001\176\004\024\004\176\005\024\005\176\006\024\006\004\001\004\002\b\001\004\003T\001\176\007\024\007\176\b\024\b\176\t\024\t\176\n\024\n\176\011\024\011\176\012\024\012D\001D\002\176\r\176\014\176\015\224\001\192\001\188\001\192\002\192\003\224\002\224\003\176\016\176\017\176\018\024\r\024\014\200\001\196\001\200\002\200\003\216\003<\003\020\003\216\004<\004\020\004\216\005<\005\020\005<\006\020\006<\007\020\007<\b\020\b<\t\020\t<\n<\011<\012<\r<\014<\015\020\n\020\011\216\006\216\007\216\b\216\t\216\n\216\011\216\0128\0018\0028\0038\0048\005\016\001\016\002\016\0038\0068\007\208\001\204\001\208\002\208\003,\001 \0014\001\000\001X\001X\002(\001$\001L\001L\0020\001"), (8, "\000\001\002\003\004\005\006\007\b\t\011\r\014\015\016\017\018\019\020\021\022\024\026\027\028\029\030\031 !\"$&'()*+-/0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\afhjklmoqstuvwxz|~\128\130\132\133\134\135\136\137\138\140\141\142\143\144\145\146\147\148\149\151\152\153\156\159\162\164\166\168\170\171\172\173\174\175\176\177\178\179\180\181\182\183\184\185\186\187\188\189\190\191\192\193\194\195\197\198\199\200\201\202\203\204\205\206\207\208\209\210"))
+      ((16, "\000\000\236\001\236\002\236\003\244\001\160\001\160\002\168\001\168\002\144\001\140\001\144\002\140\002\140\003\140\004\132\001\132\002\248\001\248\002\248\003\248\004\180\001\152\001\148\001\152\002\148\002\148\003\148\004\136\001\136\002\172\001\172\002\164\001\164\002|\001t\001|\002t\002|\003|\004\020\001\020\002l\001\128\001x\001\128\002x\002\128\003\128\004x\003x\004\156\001p\001\184\001\176\001\020\003\020\004\020\005\020\006t\003t\004\164\003\164\004\172\003\172\004\136\003\136\004\136\005\136\006\148\005\148\006\152\003\152\004\152\005\152\006\132\003\132\004\132\005\132\006\140\005\140\006\144\003\144\004\144\005\144\006\168\003\168\004\160\003\160\004\236\004\236\005$\001\240\001\192\001D\001 \001\028\001\240\002\192\002D\002 \002\028\002\192\003 \003\200\001\196\001\200\002\200\003\188\001\192\004 \004\192\005 \005\192\006 \006\004\001\004\002\b\001\004\003\\\001\192\007 \007\192\b \b\192\t \t\192\n \n\192\011 \011\192\012 \012L\001L\002\192\r\192\014\016\001\192\015\192\016h\001\208\001\204\001\208\002\208\003h\002h\003\192\017\232\001\232\002\232\003\192\018\192\019\192\020 \r \014\216\001\212\001\216\002\216\003\240\003D\003\028\003\240\004D\004\028\004\240\005D\005\028\005D\006\028\006D\007\028\007D\b\028\bD\t\028\tD\nD\011D\012D\rD\014D\015D\016D\017\028\n\028\011\240\006\240\007\240\b\240\t\240\n\240\011\240\012\240\r\240\014@\001@\002@\003@\004@\005\024\001\024\002\024\003@\006@\007\224\001\220\001\224\002\224\0034\001(\001<\001\000\001`\001`\0020\001,\001T\001T\0028\001"), (8, "\000\001\002\003\004\005\006\007\b\t\011\r\014\015\016\017\018\019\020\021\022\024\026\027\028\029\030\031 !\"$&'()*+-/0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\afhjklmoqstuvwxz|~\128\130\132\133\134\135\136\137\138\139\140\142\143\144\145\146\147\148\149\150\151\152\153\154\155\157\158\159\162\165\168\170\172\174\176\177\178\179\180\181\182\183\184\185\186\187\188\189\190\191\192\193\194\195\196\197\198\199\200\201\202\203\204\205\207\208\209\210\211\212\213\214\215\216\217\218\219\220"))
     
     and nullable =
-      " \007\000"
+      "\b\011\129\000"
     
     and first =
-      (41, "\016\000 \b\144 \016\000\000\000\b\000\000\000\000\000\000\000\001\000\001\000\000\000\000\000\000\000\001\000\000\000\000\000\128\000\000\000\000@\000\000\000\000\000\002\000\000\000\004\000\000\000\000\000\000\136\244\240,\136Q\000\002\000\137\000\000\000\001\000\000@\000\128 @\000\000@\000\000\000\000\000\b\000\000\000\000\000\b\004\000\b\002\004\000\000\000\001\000\000\000\000\002\000\000\000\000\000\001\001\030\158\005\145\n\000\000\000@\000")
+      (43, "\016\000\b\002$\b\002\000\000\000\000\000\000\000\b\000\b\000\000\000\000\000@\000\000\000\000\000\000\000\016\000\000\000\000\002\000\000\000\000\000@\000\000\000\000\000\000\128\000\000\000@\000\000\000\000\000\002!\233p,\136R\000\000\000\000\000 \000\016\004H\000\000\000\002\000\000\128\000@\016 \000\000\b\000\000\000\000\000\000@\000\000\000\000\000\016\b\000\004\001\002\000\000\000\000 \000\000\000\000\016\000\000\000\000\000\002\000\000\b\000\000\000C\210\224Y\016\160\000\000\001\000\000")
     
   end) (ET) (TI)
   

@@ -6,6 +6,7 @@ type token =
   | USE
   | TYPE_KEYWORD
   | SYNTHESIZE
+  | SUGGEST
   | SHAREDTOLINEAR
   | SESSION
   | SENDVALUE
@@ -15,6 +16,7 @@ type token =
   | RSQUARE
   | RPAR
   | RELEASE
+  | REC_FUNC
   | RECEIVEVALUE
   | RECEIVECHANNEL
   | REC
@@ -66,6 +68,7 @@ module MenhirInterpreter : sig
     | T_USE : unit terminal
     | T_TYPE_KEYWORD : unit terminal
     | T_SYNTHESIZE : unit terminal
+    | T_SUGGEST : unit terminal
     | T_SHAREDTOLINEAR : unit terminal
     | T_SESSION : unit terminal
     | T_SENDVALUE : unit terminal
@@ -75,6 +78,7 @@ module MenhirInterpreter : sig
     | T_RSQUARE : unit terminal
     | T_RPAR : unit terminal
     | T_RELEASE : unit terminal
+    | T_REC_FUNC : unit terminal
     | T_RECEIVEVALUE : unit terminal
     | T_RECEIVECHANNEL : unit terminal
     | T_REC : unit terminal
@@ -107,9 +111,9 @@ module MenhirInterpreter : sig
   
   type _ nonterminal = 
     | N_z_type : (int) nonterminal
-    | N_used_funcs : (string list) nonterminal
     | N_unit_ret_func : (Mini_ast.decl) nonterminal
     | N_type_def : (Mini_ast.decl) nonterminal
+    | N_suggest_funcs : (string list) nonterminal
     | N_separated_nonempty_list_COMMA_choice_branch_ : ((string * Mini_ast.ty) list) nonterminal
     | N_separated_nonempty_list_COMMA_arg_ : ((string * Mini_ast.ty) list) nonterminal
     | N_separated_nonempty_list_COMMA_ID_ : (string list) nonterminal
@@ -117,6 +121,7 @@ module MenhirInterpreter : sig
     | N_scheme_func : (Mini_ast.decl) nonterminal
     | N_scheme_args : (Mini_ast.ty list) nonterminal
     | N_s_type : (Mini_ast.ty) nonterminal
+    | N_require_funcs : (string list) nonterminal
     | N_prog : (Mini_ast.decl list) nonterminal
     | N_loption_separated_nonempty_list_COMMA_arg__ : ((string * Mini_ast.ty) list) nonterminal
     | N_list_decl_ : (Mini_ast.decl list) nonterminal
@@ -127,6 +132,7 @@ module MenhirInterpreter : sig
     | N_closed_func : (Mini_ast.decl) nonterminal
     | N_choice_branch : (string * Mini_ast.ty) nonterminal
     | N_choice : (Mini_ast.choice) nonterminal
+    | N_boption_REC_FUNC_ : (bool) nonterminal
     | N_arg_type : (Mini_ast.ty) nonterminal
     | N_arg : (string * Mini_ast.ty) nonterminal
   

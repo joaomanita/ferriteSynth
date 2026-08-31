@@ -51,8 +51,10 @@ let () =
             Printf.fprintf out_channel "type %s = %s;" v.name
               (print_type v.body);
             Synthesizer.append_type_ctxt v.name v.body
-        | Function fType -> (
-            let results = Synthesizer.synthesize fType in
+        | Function (fType, recursive, (required_funcs, usable_funcs)) -> (
+            let results =
+              Synthesizer.synthesize fType recursive required_funcs usable_funcs
+            in
             let tms = List.map snd results in
 
             match tms with

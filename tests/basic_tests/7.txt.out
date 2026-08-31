@@ -4,12 +4,4 @@ use ferrite_session::prelude::*;
 
 type myType = Session<ReceiveChannel<A, B>>;
 
-fn myFunc(arg1: Session<ReceiveChannel<A, B>>, arg2: A) -> Session<B> {
-    myFunc(
-        receive_channel(|chan_19| {
-            cut! { [L, R]; arg1; binder_31 => {send_channel_to(binder_31, chan_19, forward(binder_31))}}
-        }),
-        forward(arg2),
-    )
-}
-// fn myFunc(arg1: Session<ReceiveChannel<A, B>>, arg2: A) -> Session<B> { cut! { [L]; arg1; binder_33 => {myFunc(receive_channel(|chan_27| {send_channel_to(binder_33, chan_27, forward(binder_33))}), forward(arg2))}} }
+// couldnt synthesize function

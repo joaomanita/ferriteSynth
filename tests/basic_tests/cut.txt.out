@@ -5,6 +5,4 @@ use tokio::time::sleep;
 
 type Producer = SendValue<String, End>;
 
-fn client() -> Session<SendValue<String, Producer>> {
-    client()
-}
+// couldnt synthesize function

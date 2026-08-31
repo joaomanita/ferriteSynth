@@ -4,13 +4,44 @@ use ferrite_session::prelude::*;
 
 type myType = ReceiveChannel<
     ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
-    ReceiveChannel<A, ExternalChoice<Either<B, C>>>,
+    ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>,
 >;
 
 fn myFunc() -> Session<myType> {
     receive_channel(|chan_0| {
         receive_channel(|chan_1| {
-            offer_choice! { Left: choose!(chan_0, Left, send_channel_to(chan_0, chan_1, forward(chan_0))), Right: choose!(chan_0, Right, send_channel_to(chan_0, chan_1, forward(chan_0))) }
+            offer_choice! { Left: choose!(chan_0, Left, send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))), Right: choose!(chan_0, Right, send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))) }
         })
     })
 }
+
+fn user(
+    arg1: A,
+    arg2: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
+) -> Session<ReceiveChannel<myType, SendChannel<C, End>>> {
+    receive_channel(|chan_2| {
+        send_channel_to(
+            chan_2,
+            arg2,
+            send_channel_to(
+                chan_2,
+                arg1,
+                choose!(
+                    chan_2,
+                    Right,
+                    receive_channel_from(chan_2, |binder_99| {
+                        wait(chan_2, send_channel_from(binder_99, terminate()))
+                    })
+                ),
+            ),
+        )
+    })
+}
+
+fn main(
+    arg1: A,
+    arg2: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
+) -> Session<SendChannel<C, End>> {
+    cut! { [L, R]; user(arg1, offer_choice!{ Left: receive_channel(|chan_13| {choose!(arg2, Left, send_channel_to(arg2, chan_13, forward(arg2)))}), Right: receive_channel(|chan_14| {choose!(arg2, Right, send_channel_to(arg2, chan_14, forward(arg2)))}) }); binder_259 => {cut! { [R]; myFunc(); binder_263 => {send_channel_to(binder_259, binder_263, receive_channel_from(binder_259, |binder_265| {wait(binder_259, send_channel_from(binder_265, terminate ()))}))}}}}
+}
+// fn main(arg1: A, arg2: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>) -> Session<SendChannel<C, End>> { cut! { [R]; user(forward(arg1), offer_choice!{ Left: receive_channel(|chan_5| {choose!(arg2, Left, send_channel_to(arg2, chan_5, forward(arg2)))}), Right: receive_channel(|chan_6| {choose!(arg2, Right, send_channel_to(arg2, chan_6, forward(arg2)))}) }); binder_231 => {cut! { [R]; myFunc(); binder_235 => {send_channel_to(binder_231, binder_235, receive_channel_from(binder_231, |binder_237| {wait(binder_231, send_channel_from(binder_237, terminate ()))}))}}}} }

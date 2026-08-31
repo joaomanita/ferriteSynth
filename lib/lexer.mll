@@ -82,6 +82,8 @@ rule read = parse
   | '['   { match !current_mode with | Raw -> RAW "[" | _ -> LSQUARE }
   | ']'   { match !current_mode with | Raw -> RAW "]" | _ -> RSQUARE }
   | "use" { match !current_mode with | Raw -> RAW "use" | _ -> USE }
+  | "suggest" { match !current_mode with | Raw -> RAW "suggest" | _ -> SUGGEST }
+  | "REC" { match !current_mode with | Raw -> RAW "REC" | _ -> REC_FUNC }
   | "!"   { match !current_mode with | Raw -> RAW "!" | _ -> EXCLAMATION }
 
   (* ---- KEYWORDS ---- *)
