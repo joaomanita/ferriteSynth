@@ -26,6 +26,7 @@ type token =
   | LINEARTOSHARED
   | LBRACE
   | INTERNALCHOICE
+  | INT of int
   | ID of string
   | GT
   | FUNC
@@ -48,17 +49,20 @@ val xv_type_def : Mini_ast.decl
 val xv_suggest_funcs : string list
 val xv_separated_nonempty_list_COMMA_choice_branch_ :
   (string * Mini_ast.ty) list
-val xv_separated_nonempty_list_COMMA_arg_ : (string * Mini_ast.ty) list
+val xv_separated_nonempty_list_COMMA_arg_ :
+  ((string * Mini_ast.ty) * int) list
 val xv_separated_nonempty_list_COMMA_ID_ : string list
 val xv_separated_nonempty_list_COMMA_ATOMIC_ : string list
-val xv_separated_list_COMMA_arg_ : (string * Mini_ast.ty) list
+val xv_separated_list_COMMA_arg_ : ((string * Mini_ast.ty) * int) list
 val xv_scheme_func : Mini_ast.decl
 val xv_scheme_args : Mini_ast.ty list
 val xv_s_type : Mini_ast.ty
 val xv_require_funcs : string list
 val xv_prog : Mini_ast.decl list
+val xv_preceded_COLON_INT_ : int
+val xv_option_preceded_COLON_INT__ : int option
 val xv_loption_separated_nonempty_list_COMMA_arg__ :
-  (string * Mini_ast.ty) list
+  ((string * Mini_ast.ty) * int) list
 val xv_list_decl_ : Mini_ast.decl list
 val xv_list_RAW_ : string list
 val xv_func : Mini_ast.decl
@@ -69,5 +73,5 @@ val xv_choice_branch : string * Mini_ast.ty
 val xv_choice : Mini_ast.choice
 val xv_boption_REC_FUNC_ : bool
 val xv_arg_type : Mini_ast.ty
-val xv_arg : string * Mini_ast.ty
+val xv_arg : (string * Mini_ast.ty) * int
 val menhir_end_marker : int

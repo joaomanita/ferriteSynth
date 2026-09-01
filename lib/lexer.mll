@@ -17,6 +17,7 @@ let white = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
 let id = ['a'-'z' 'A'-'Z' '_']['a'-'z' 'A'-'Z' '0'-'9' '_']*
 let uppercaseid = ['A'-'Z']+
+let number = ['0'-'9']+
 
 rule read = parse
   | white   { match !current_mode with | Raw -> RAW (Lexing.lexeme lexbuf) | _ -> read lexbuf }
@@ -117,6 +118,12 @@ rule read = parse
       | Raw -> RAW id_s
       | _   -> ID id_s
     }
+
+   | number as n {
+    match !current_mode with
+    | Raw -> RAW n
+    | _ -> INT (int_of_string n)
+  }
 
   (* ---- RAW FALLBACK ---- *)
   | _ as c {

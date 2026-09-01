@@ -9,8 +9,8 @@ define_choice! {
 
 type RecBankOps = Rec<ExternalChoice<BankOps>>;
 
-fn bankops(arg1: Int) -> Session<RecBankOps> { @SYNTHESIZE [] }
+fn bankops(arg1: Int: 2) -> Session<RecBankOps> { @SYNTHESIZE REC [] }
 
-fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, RecBankOps>> { @SYNTHESIZE [use bankops;] }
+fn bank_session(withdraw_value: Int: 1) -> Session<ReceiveValue<String, RecBankOps>> { @SYNTHESIZE [use bankops;] }
 
-fn client_session(myId: String, depositAmt: Int) -> Session< ReceiveChannel< ReceiveValue<String, RecBankOps>, End>> { @SYNTHESIZE [] }
+fn client_session(myId: String: 1, depositAmt: Int: 1) -> Session< ReceiveChannel< ReceiveValue<String, RecBankOps>, End>> { @SYNTHESIZE [] }

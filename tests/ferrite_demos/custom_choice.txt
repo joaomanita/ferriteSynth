@@ -7,9 +7,9 @@ define_choice! {
     Baz: End
 }
 
-fn provider(arg1: String) -> Session<ExternalChoice<FooBarBaz>> { @SYNTHESIZE  []}
+fn provider(arg1: String: 1) -> Session<ExternalChoice<FooBarBaz>> { @SYNTHESIZE  []}
 
 fn client() -> Session<ReceiveChannel<ExternalChoice<FooBarBaz>, End>> { @SYNTHESIZE  []}
 
-fn main(arg1:String) { @SYNTHESIZE [use provider, client;] }
+fn main(arg1:String: 1) { @SYNTHESIZE [use provider, client;] }
 

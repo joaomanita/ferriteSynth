@@ -29,6 +29,7 @@ type token =
   | LINEARTOSHARED
   | LBRACE
   | INTERNALCHOICE
+  | INT of (int)
   | ID of (string)
   | GT
   | FUNC
@@ -91,6 +92,7 @@ module MenhirInterpreter : sig
     | T_LINEARTOSHARED : unit terminal
     | T_LBRACE : unit terminal
     | T_INTERNALCHOICE : unit terminal
+    | T_INT : (int) terminal
     | T_ID : (string) terminal
     | T_GT : unit terminal
     | T_FUNC : unit terminal
@@ -115,7 +117,7 @@ module MenhirInterpreter : sig
     | N_type_def : (Mini_ast.decl) nonterminal
     | N_suggest_funcs : (string list) nonterminal
     | N_separated_nonempty_list_COMMA_choice_branch_ : ((string * Mini_ast.ty) list) nonterminal
-    | N_separated_nonempty_list_COMMA_arg_ : ((string * Mini_ast.ty) list) nonterminal
+    | N_separated_nonempty_list_COMMA_arg_ : (((string * Mini_ast.ty) * int) list) nonterminal
     | N_separated_nonempty_list_COMMA_ID_ : (string list) nonterminal
     | N_separated_nonempty_list_COMMA_ATOMIC_ : (string list) nonterminal
     | N_scheme_func : (Mini_ast.decl) nonterminal
@@ -123,7 +125,8 @@ module MenhirInterpreter : sig
     | N_s_type : (Mini_ast.ty) nonterminal
     | N_require_funcs : (string list) nonterminal
     | N_prog : (Mini_ast.decl list) nonterminal
-    | N_loption_separated_nonempty_list_COMMA_arg__ : ((string * Mini_ast.ty) list) nonterminal
+    | N_option_preceded_COLON_INT__ : (int option) nonterminal
+    | N_loption_separated_nonempty_list_COMMA_arg__ : (((string * Mini_ast.ty) * int) list) nonterminal
     | N_list_decl_ : (Mini_ast.decl list) nonterminal
     | N_list_RAW_ : (string list) nonterminal
     | N_func : (Mini_ast.decl) nonterminal
@@ -134,7 +137,7 @@ module MenhirInterpreter : sig
     | N_choice : (Mini_ast.choice) nonterminal
     | N_boption_REC_FUNC_ : (bool) nonterminal
     | N_arg_type : (Mini_ast.ty) nonterminal
-    | N_arg : (string * Mini_ast.ty) nonterminal
+    | N_arg : ((string * Mini_ast.ty) * int) nonterminal
   
   (* The inspection API. *)
   

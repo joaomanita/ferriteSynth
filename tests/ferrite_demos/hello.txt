@@ -6,4 +6,4 @@ type HelloSession = ReceiveValue<String, SendValue<String, End>>;
 
 fn server() -> Session<HelloSession> { @SYNTHESIZE []}
 
-fn client(arg1: String) -> Session<ReceiveChannel<HelloSession, End>> { @SYNTHESIZE []}
+fn client(arg1: String: 1) -> Session<ReceiveChannel<HelloSession, End>> { @SYNTHESIZE []}

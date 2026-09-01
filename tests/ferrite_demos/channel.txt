@@ -25,8 +25,8 @@ type Receiver = Rec<ExternalChoice<ActionsReceiver>>;
 
 type Channel = LinearToShared<ExternalChoice<ActionsChannel>>;
 
-fn make_channel(val: Int) -> Session<Channel> { @SYNTHESIZE  []}
+fn make_channel(val: Int: 2) -> Session<Channel> { @SYNTHESIZE  REC []}
 
-fn make_receiver(val: Int) -> Session<Receiver> { @SYNTHESIZE [] }
+fn make_receiver(val: Int: 2) -> Session<Receiver> { @SYNTHESIZE  REC [] }
 
 

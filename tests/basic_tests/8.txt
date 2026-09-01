@@ -4,6 +4,6 @@ use ferrite_session::prelude::*;
 
 type myType = ReceiveChannel<A, B>;
 
-fn myFunc(arg1: myType, arg2: A) -> Session<B> {}
+fn myFunc(arg1: myType: 1, arg2: A: 1) -> Session<B> {}
 
 fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> { @SYNTHESIZE [use myFunc;] }

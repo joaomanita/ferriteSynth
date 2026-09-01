@@ -2,7 +2,7 @@ type program = decl list
 
 and decl =
   | TypeDef of type_def
-  | Function of ty * bool * (label list * label list)
+  | Function of ty * int list * bool * (label list * label list)
   | Raw of string
   | ClosedFunction of ty * string
   | ChoiceDef of choice

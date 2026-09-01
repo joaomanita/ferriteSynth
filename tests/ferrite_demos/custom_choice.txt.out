@@ -13,20 +13,15 @@ fn provider(arg1: String) -> Session<ExternalChoice<FooBarBaz>> {
 // fn provider(arg1: String) -> Session<ExternalChoice<FooBarBaz>> { offer_choice!{ Foo: send_value(arg1, terminate ()), Bar: receive_value(move |val_0| {terminate ()}), Baz: terminate () } }
 
 fn client() -> Session<ReceiveChannel<ExternalChoice<FooBarBaz>, End>> {
-    receive_channel(|chan_0| {
-        choose!(
-            chan_0,
-            Foo,
-            receive_value_from(chan_0, move |binder_1| { wait(chan_0, terminate()) })
-        )
-    })
+    receive_channel(|chan_0| choose!(chan_0, Baz, wait(chan_0, terminate())))
 }
+// fn client() -> Session<ReceiveChannel<ExternalChoice<FooBarBaz>, End>> { receive_channel(|chan_0| {choose!(chan_0, Foo, receive_value_from(chan_0, move |binder_1| {wait(chan_0, terminate ())}))}) }
 
 #[tokio::main]
 pub async fn main(arg1: String) {
-    run_session(cut! { [R, R]; client(); binder_63 => {cut! { [R, L]; provider(arg1); binder_67 => {send_channel_to(binder_63, binder_67, wait(binder_63, terminate ()))}}}}).await
+    run_session(cut! { [R]; client(); binder_9 => {cut! { [L, R]; provider(arg1); binder_25 => {send_channel_to(binder_9, binder_25, wait(binder_9, terminate ()))}}}}).await
 }
 // #[tokio::main]
 pub async fn main(arg1: String) {
-    run_session(cut! { [R]; client(); binder_23 => {cut! { [R]; provider(arg1); binder_27 => {send_channel_to(binder_23, binder_27, wait(binder_23, terminate ()))}}}}).await
+    run_session(cut! { [R]; client(); binder_9 => {cut! { [R]; provider(arg1); binder_13 => {send_channel_to(binder_9, binder_13, wait(binder_9, terminate ()))}}}}).await
 }

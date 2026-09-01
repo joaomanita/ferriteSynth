@@ -5,6 +5,7 @@
 %token <string> RAW
 %token <string> ID
 %token <string> ATOMIC
+%token <int> INT
 %token TYPE_KEYWORD
 %token SESSION
 %token LT
@@ -116,7 +117,9 @@ func:
     RSQUARE;
     RBRACE
     {
-      Function (TyFunc (((name, ars), ret)), recursive, (required_funcs, suggested_funcs))
+      let args = List.map (fun a -> fst a) ars in
+      let argcounts = List.map (fun a -> snd a) ars in
+      Function (TyFunc (((name, args), ret)), argcounts, recursive, (required_funcs, suggested_funcs))
     }
 
 unit_ret_func:
@@ -131,7 +134,9 @@ unit_ret_func:
     RSQUARE;
     RBRACE
     {
-      Function (TyUnitRetFunc (name, ars), recursive, (required_funcs, suggested_funcs))
+      let args = List.map (fun a -> fst a) ars in
+      let argcounts = List.map (fun a -> snd a) ars in
+      Function (TyUnitRetFunc (name, args), argcounts, recursive, (required_funcs, suggested_funcs))
     }
 
 require_funcs:
@@ -145,19 +150,17 @@ suggest_funcs:
                                 { ids }
 
 closed_func:
-  | FUNC; name = ID; LPAR; ars = separated_list(COMMA, arg); RPAR; MINUS; GT; ret = s_type LBRACE; body = list(RAW); RBRACE { ClosedFunction((TyFunc((name, ars), ret), String.concat "" body)) }
   | FUNC; name = ID;
-    LT; tList = scheme_args; GT;
     LPAR; ars = separated_list(COMMA, arg); RPAR;
     MINUS; GT; ret = s_type;
     LBRACE;
     body = list(RAW);
     RBRACE
     {
-      ClosedFunction
-        ((TySchemeFunc
-           (tList,
-            ((name, ars), ret))), String.concat "" body)
+      ClosedFunction(
+        (TyFunc((name, List.map fst ars), ret),
+         String.concat "" body)
+      )
     }
 
 scheme_args:
@@ -178,14 +181,19 @@ scheme_func:
     RSQUARE;
     RBRACE
     {
+      let args = List.map (fun a -> fst a) ars in
+      let argcounts = List.map (fun a -> snd a) ars in
       Function
         (TySchemeFunc
            (tList,
-            ((name, ars), ret)), recursive, (required_funcs, suggested_funcs))
+            ((name, args), ret)), argcounts,  recursive, (required_funcs, suggested_funcs))
     }
 
 arg:
-  | arg_name = ID; COLON; t = arg_type { (arg_name, t) }
+  | arg_name = ID; COLON; t = arg_type; count = option(preceded(COLON, INT))
+    {
+      ((arg_name, t), Option.value count ~default:0)
+    }
 
 arg_type:
   | t = s_type  { t }

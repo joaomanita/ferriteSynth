@@ -6,6 +6,6 @@ type myType = ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveC
 
 fn myFunc() -> Session<myType> { @SYNTHESIZE [] }
 
-fn user(arg1: A, arg2: ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>) -> Session<ReceiveChannel<myType, SendChannel<C, End>>> { @SYNTHESIZE [] }
+fn user(arg1: A: 1, arg2: ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>: 1) -> Session<ReceiveChannel<myType, SendChannel<C, End>>> { @SYNTHESIZE [] }
 
-fn main(arg1: A, arg2: ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>) -> Session<SendChannel<C, End>> { @SYNTHESIZE [use myFunc, user;] }
+fn main(arg1: A: 1, arg2: ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>: 1) -> Session<SendChannel<C, End>> { @SYNTHESIZE [use myFunc, user;] }

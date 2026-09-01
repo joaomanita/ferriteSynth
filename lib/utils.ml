@@ -3,7 +3,7 @@ open Printf
 
 exception Fail
 
-let debug_enabled = false
+let debug_enabled = true
 let debug_out = if debug_enabled then Some (open_out "debug.log") else None
 
 let log fmt =
@@ -257,11 +257,11 @@ and searchAndRemoveFocusCtx focus_ctx id t =
         let res = searchAndRemoveFocusCtx xs id t in
         (id1, t1) :: res
 
-and incTimesUsedGamma id acc = function
+and decTimesUsedGamma id acc = function
   | [] -> raise Fail
   | ((id1, t), timesUsed) :: rest ->
-      if id1 = id then List.rev_append acc (((id1, t), timesUsed + 1) :: rest)
-      else incTimesUsedGamma id (((id1, t), timesUsed) :: acc) rest
+      if id1 = id then List.rev_append acc (((id1, t), timesUsed - 1) :: rest)
+      else decTimesUsedGamma id (((id1, t), timesUsed) :: acc) rest
 
 and searchZeta id t = function
   | [] -> false

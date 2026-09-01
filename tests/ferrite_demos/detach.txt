@@ -5,6 +5,6 @@ use ferrite_session::{
 
 type Counter = LinearToShared<SendValue<u64, Release>>;
 
-fn shared_provider_1(count: u64) -> Session<Counter> { @SYNTHESIZE [] }
+fn shared_provider_1(count: u64: 2) -> Session<Counter> { @SYNTHESIZE REC [] }
 
 fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> { @SYNTHESIZE [] }

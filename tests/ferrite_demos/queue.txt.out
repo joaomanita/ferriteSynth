@@ -5,4 +5,12 @@ use tokio::time::sleep;
 
 type StringQueue = Rec<InternalChoice<Either<End, SendValue<String, Z>>>>;
 
-// couldnt synthesize function
+fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> {
+    receive_channel(|chan_0| {
+        unfix_session(
+            chan_0,
+            case! { chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_19| {cut! { [R]; read_queue(); binder_43 => {send_channel_to(binder_43, chan_0, wait(binder_43, terminate ()))}}}) },
+        )
+    })
+}
+// fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> { receive_channel(|chan_0| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_19| {unfix_session(chan_0, case!{ chan_0 ; Left: wait(chan_0, terminate ()), Right: receive_value_from(chan_0, move |binder_29| {cut! { [R]; read_queue(); binder_37 => {send_channel_to(binder_37, chan_0, wait(binder_37, terminate ()))}}}) })}) })}) }

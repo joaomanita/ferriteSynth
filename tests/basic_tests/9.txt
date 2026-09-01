@@ -9,4 +9,4 @@ fn myFunc() -> Session<
       Z>
     >
   >
-> { @SYNTHESIZE [] }
+> { @SYNTHESIZE REC [] }
