@@ -1,6 +1,9 @@
 use std::format;
 
-use ferrite_session::prelude::*;
+use ferrite_session::{
+  either::*,
+  prelude::*,
+};
 
 type myType = ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>;
 

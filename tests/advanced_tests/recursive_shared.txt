@@ -1,6 +1,9 @@
 use std::format;
 
-use ferrite_session::prelude::*;
+use ferrite_session::{
+  either::*,
+  prelude::*,
+};
 
 type SharedService = LinearToShared<ExternalChoice<Either<SendValue<String, Release>, ReceiveValue<String, Release>>>>;
 

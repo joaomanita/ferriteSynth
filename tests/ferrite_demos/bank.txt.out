@@ -11,17 +11,17 @@ type RecBankOps = Rec<TyExternalChoiceId>;
 
 fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> {
     fix_session(
-        offer_choice! { deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: cut! { []; bankops(arg1); binder_3 => {unfix_session(binder_3, choose!(binder_3, deposit, send_value_to(binder_3, arg1, unfix_session(binder_3, choose!(binder_3, Terminate, wait(binder_3, terminate ()))))))}} },
+        offer_choice! { deposit => receive_value(move |val_0| {bankops(val_0)}), withdraw => send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate => cut! { []; bankops(arg1); binder_3 => {unfix_session(binder_3, choose!(binder_3, deposit, send_value_to(binder_3, arg1, unfix_session(binder_3, choose!(binder_3, Terminate, wait(binder_3, terminate ()))))))}} },
     )
 }
-// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit: receive_value(move |val_0| {bankops(val_0)}), withdraw: send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate: terminate () }) }
+// fn bankops(arg1: Int) -> Session<Rec<ExternalChoice<BankOps>>> { fix_session(offer_choice!{ deposit => receive_value(move |val_0| {bankops(val_0)}), withdraw => send_value(arg1, receive_value(move |val_1| {bankops(val_1)})), Terminate => terminate () }) }
 
 fn bank_session(
     withdraw_value: Int,
 ) -> Session<ReceiveValue<String, Rec<ExternalChoice<BankOps>>>> {
     receive_value(move |val_2| {
         fix_session(
-            offer_choice! { deposit: receive_value(move |val_3| {bankops(val_3)}), withdraw: send_value(withdraw_value, receive_value(move |val_24| {bankops(val_24)})), Terminate: cut! { []; bankops(withdraw_value); binder_21 => {unfix_session(binder_21, choose!(binder_21, withdraw, receive_value_from(binder_21, move |binder_23| {send_value_to(binder_21, binder_23, unfix_session(binder_21, choose!(binder_21, Terminate, wait(binder_21, terminate ()))))})))}} },
+            offer_choice! { deposit => receive_value(move |val_3| {bankops(val_3)}), withdraw => send_value(withdraw_value, receive_value(move |val_24| {bankops(val_24)})), Terminate => cut! { []; bankops(withdraw_value); binder_21 => {unfix_session(binder_21, choose!(binder_21, withdraw, receive_value_from(binder_21, move |binder_23| {send_value_to(binder_21, binder_23, unfix_session(binder_21, choose!(binder_21, Terminate, wait(binder_21, terminate ()))))})))}} },
         )
     })
 }

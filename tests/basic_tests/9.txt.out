@@ -3,6 +3,8 @@ use std::format;
 use ferrite_session::prelude::*;
 
 fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> {
-    fix_session(offer_choice! { Left: receive_value(move |val_0| {terminate ()}), Right: myFunc() })
+    fix_session(
+        offer_choice! { Left => receive_value(move |val_0| {terminate ()}), Right => myFunc() },
+    )
 }
-// fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left: receive_value(move |val_0| {terminate ()}), Right: myFunc() }) }
+// fn myFunc() -> Session<Rec<ExternalChoice<Either<ReceiveValue<Int, End>, Z>>>> { fix_session(offer_choice!{ Left => receive_value(move |val_0| {terminate ()}), Right => myFunc() }) }

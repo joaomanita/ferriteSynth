@@ -3,7 +3,7 @@ use ferrite_session::{either::*, prelude::*};
 fn creator() -> Session<SendChannel<A, End>> {}
 
 fn provider() -> Session<ExternalChoice<Either<SendChannel<A, End>, ReceiveValue<u64, End>>>> {
-    offer_choice! { Left: creator(), Right: receive_value(move |val_0| {terminate ()}) }
+    offer_choice! { Left => creator(), Right => receive_value(move |val_0| {terminate ()}) }
 }
 
 fn client() -> Session<

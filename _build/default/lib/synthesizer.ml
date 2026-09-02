@@ -1238,12 +1238,11 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
           Choice.fail)
         else
           let t2 = unfoldShared foc in
-          let x1 = fresh_channel_id () in
           if List.exists (fun ((_, ty), _) -> equal_type ty t2) gamma then
             Choice.fail
           else
             inversionR
-              (((x1, t2), 1) :: gamma)
+              (((id, t2), 1) :: gamma)
               delta_in [] t psi zeta theta focus_ctx (ident + 1)
             >>= fun (ctxts_out, e1) -> return (ctxts_out, Release (id, e1))
     | TyLinearToShared (_, counter) ->

@@ -8,16 +8,16 @@ define_choice! {
 }
 
 fn bankops(arg1: Int) -> Session<ExternalChoice<BankOps>> {
-    offer_choice! { deposit: receive_value(move |val_0| {terminate ()}), withdraw: send_value(arg1, receive_value(move |val_3| {terminate ()})), Terminate: terminate () }
+    offer_choice! { deposit => receive_value(move |val_0| {terminate ()}), withdraw => send_value(arg1, receive_value(move |val_3| {terminate ()})), Terminate => terminate () }
 }
-// fn bankops(arg1: Int) -> Session<ExternalChoice<BankOps>> { offer_choice!{ deposit: receive_value(move |val_0| {terminate ()}), withdraw: send_value(arg1, receive_value(move |val_1| {terminate ()})), Terminate: terminate () } }
+// fn bankops(arg1: Int) -> Session<ExternalChoice<BankOps>> { offer_choice!{ deposit => receive_value(move |val_0| {terminate ()}), withdraw => send_value(arg1, receive_value(move |val_1| {terminate ()})), Terminate => terminate () } }
 
 fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, ExternalChoice<BankOps>>> {
     receive_value(move |val_4| {
-        offer_choice! { deposit: receive_value(move |val_5| {terminate ()}), withdraw: send_value(withdraw_value, receive_value(move |val_8| {terminate ()})), Terminate: terminate () }
+        offer_choice! { deposit => receive_value(move |val_5| {terminate ()}), withdraw => send_value(withdraw_value, receive_value(move |val_8| {terminate ()})), Terminate => terminate () }
     })
 }
-// fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, ExternalChoice<BankOps>>> { receive_value(move |val_4| {offer_choice!{ deposit: receive_value(move |val_5| {terminate ()}), withdraw: send_value(withdraw_value, receive_value(move |val_6| {terminate ()})), Terminate: terminate () }}) }
+// fn bank_session(withdraw_value: Int) -> Session<ReceiveValue<String, ExternalChoice<BankOps>>> { receive_value(move |val_4| {offer_choice!{ deposit => receive_value(move |val_5| {terminate ()}), withdraw => send_value(withdraw_value, receive_value(move |val_6| {terminate ()})), Terminate => terminate () }}) }
 
 fn client_session(
     myId: String,

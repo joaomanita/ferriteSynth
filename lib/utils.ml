@@ -44,9 +44,10 @@ let fresh_existential_id =
 let rec print_labeled_choices l print_func =
   match l with
   | [] -> ""
-  | (label, tx) :: [] -> label ^ ": " ^ print_func tx
+  | (label, tx) :: [] -> label ^ " => " ^ print_func tx
   | (label, tx) :: xs ->
-      label ^ ": " ^ print_func tx ^ ", " ^ print_labeled_choices xs print_func
+      label ^ " => " ^ print_func tx ^ ", "
+      ^ print_labeled_choices xs print_func
 
 let rec print_choice c =
   match c with
