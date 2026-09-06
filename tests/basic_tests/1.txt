@@ -5,10 +5,10 @@ use ferrite_session::{
   prelude::*,
 };
 
-type myType = ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>;
+type myType<A, B, C> = ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>;
 
-fn myFunc() -> Session<myType> { @SYNTHESIZE [] }
+fn myFunc<A, B, C>() -> Session<myType> { @SYNTHESIZE [] }
 
-fn user(arg1: A: 1, arg2: ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>: 1) -> Session<ReceiveChannel<myType, SendChannel<C, End>>> { @SYNTHESIZE [] }
+fn user<A, B, C>(arg1: A: 1, arg2: ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>: 1) -> Session<ReceiveChannel<myType, SendChannel<C, End>>> { @SYNTHESIZE [] }
 
 fn main(arg1: A: 1, arg2: ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>: 1) -> Session<SendChannel<C, End>> { @SYNTHESIZE [use myFunc, user;] }

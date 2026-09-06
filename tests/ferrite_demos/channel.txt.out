@@ -30,7 +30,7 @@ fn make_channel(val: Int) -> Session<LinearToShared<ExternalChoice<ActionsChanne
 
 fn make_receiver(val: Int) -> Session<Rec<ExternalChoice<ActionsReceiver>>> {
     fix_session(
-        offer_choice! { Next => send_value(val, make_receiver(val)), Close => cut! { []; make_receiver(val); binder_9 => {unfix_session(binder_9, choose!(binder_9, Next, receive_value_from(binder_9, move |binder_11| {unfix_session(binder_9, choose!(binder_9, Close, wait(binder_9, terminate ())))})))}} },
+        offer_choice! { Next => send_value(val, make_receiver(val)), Close => cut::<HList![]>(make_receiver(val), |binder_9| {unfix_session(binder_9, choose!(binder_9, Next, receive_value_from(binder_9, move |binder_11| {unfix_session(binder_9, choose!(binder_9, Close, wait(binder_9, terminate ())))})))}) },
     )
 }
 // fn make_receiver(val: Int) -> Session<Rec<ExternalChoice<ActionsReceiver>>> { fix_session(offer_choice!{ Next => send_value(val, make_receiver(val)), Close => terminate () }) }

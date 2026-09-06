@@ -1,0 +1,1000 @@
+< InversionR: SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+< InversionR: FN<<myFunc, >, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+ < InversionR: ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>
+  < InversionR: ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>
+   < InversionR: ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>
+    < InversionR: SendChannel<B_0, End>
+     < inversionL: A_0 with goal SendChannel<B_0, End> 
+      < inversionL: ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>> with goal SendChannel<B_0, End> 
+       < inversionL: Empty with goal SendChannel<B_0, End> 
+       < [] [(chan_0, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_1, A_0), ]
+        < decideFocus: SendChannel<B_0, End>
+        < [] [(chan_0, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_1, A_0), ]
+    < InversionR: SendChannel<C_0, End>
+     < inversionL: A_0 with goal SendChannel<C_0, End> 
+      < inversionL: ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>> with goal SendChannel<C_0, End> 
+       < inversionL: Empty with goal SendChannel<C_0, End> 
+       < [] [(chan_0, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_1, A_0), ]
+        < decideFocus: SendChannel<C_0, End>
+        < [] [(chan_0, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_1, A_0), ]
+         < focusL: SendChannel<B_0, End>
+         < [] [(chan_0, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_1, A_0), ]
+          < FocusL': ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>
+          < [] [(chan_1, A_0), ]
+           < InversionR: SendChannel<B_0, End>
+            < inversionL: ReceiveChannel<A_0, B_0> with goal SendChannel<B_0, End> 
+             < inversionL: Empty with goal SendChannel<B_0, End> 
+             < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+              < decideFocus: SendChannel<B_0, End>
+              < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+               < focusL: SendChannel<B_0, End>
+               < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+                < FocusL': ReceiveChannel<A_0, B_0>
+                 < inversionL: B_0 with goal SendChannel<B_0, End> 
+                  < inversionL: Empty with goal SendChannel<B_0, End> 
+                  < [] [(chan_0, B_0), ]
+                   < decideFocus: SendChannel<B_0, End>
+                   < [] [(chan_0, B_0), ]
+                    < focusL: SendChannel<B_0, End>
+                    < [] [(chan_0, B_0), ]
+                     < FocusL': B_0
+                     < focusL: fail
+                     < FocusL': B_0
+                     < focusL: fail
+                    < FocusR: SendChannel<B_0, End>
+                     < decideFocus: End
+                     < [] []
+                      < focusL: End
+                      < [] []
+                      < FocusR: End
+                       success
+                < FocusL': ReceiveChannel<A_0, B_0>
+                 < inversionL: B_0 with goal SendChannel<B_0, End> 
+                  < inversionL: Empty with goal SendChannel<B_0, End> 
+                  < [] [(chan_0, B_0), ]
+                   < decideFocus: SendChannel<B_0, End>
+                   < [] [(chan_0, B_0), ]
+                    < focusL: fail
+                    < focusL: SendChannel<B_0, End>
+                    < [] [(chan_0, B_0), ]
+                    < FocusR: SendChannel<B_0, End>
+                     < decideFocus: End
+                     < [] []
+                      < focusL: fail
+                      < focusL: End
+                      < [] []
+                      < FocusR: End
+                       success
+          < FocusL': ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>
+          < [] [(chan_1, A_0), ]
+           < InversionR: SendChannel<B_0, End>
+            < inversionL: ReceiveChannel<A_0, B_0> with goal SendChannel<B_0, End> 
+             < inversionL: Empty with goal SendChannel<B_0, End> 
+             < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+              < decideFocus: SendChannel<B_0, End>
+              < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+               < focusL: SendChannel<B_0, End>
+               < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+                < FocusL': ReceiveChannel<A_0, B_0>
+                 < inversionL: B_0 with goal SendChannel<B_0, End> 
+                  < inversionL: Empty with goal SendChannel<B_0, End> 
+                  < [] [(chan_0, B_0), ]
+                   < decideFocus: SendChannel<B_0, End>
+                   < [] [(chan_0, B_0), ]
+                    < focusL: fail
+                    < focusL: SendChannel<B_0, End>
+                    < [] [(chan_0, B_0), ]
+                    < FocusR: SendChannel<B_0, End>
+                     < decideFocus: End
+                     < [] []
+                      < focusL: fail
+                      < focusL: End
+                      < [] []
+                      < FocusR: End
+                       success
+                < FocusL': ReceiveChannel<A_0, B_0>
+                 < inversionL: B_0 with goal SendChannel<B_0, End> 
+                  < inversionL: Empty with goal SendChannel<B_0, End> 
+                  < [] [(chan_0, B_0), ]
+                   < decideFocus: SendChannel<B_0, End>
+                   < [] [(chan_0, B_0), ]
+                    < focusL: fail
+                    < focusL: SendChannel<B_0, End>
+                    < [] [(chan_0, B_0), ]
+                    < FocusR: SendChannel<B_0, End>
+                     < decideFocus: End
+                     < [] []
+                      < focusL: fail
+                      < focusL: End
+                      < [] []
+                      < FocusR: End
+                       success
+         < focusL: SendChannel<C_0, End>
+         < [] [(chan_0, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_1, A_0), ]
+          < FocusL': ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>
+          < [] [(chan_1, A_0), ]
+           < InversionR: SendChannel<C_0, End>
+            < inversionL: ReceiveChannel<A_0, B_0> with goal SendChannel<C_0, End> 
+             < inversionL: Empty with goal SendChannel<C_0, End> 
+             < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+              < decideFocus: SendChannel<C_0, End>
+              < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+               < focusL: SendChannel<C_0, End>
+               < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+                < FocusL': ReceiveChannel<A_0, B_0>
+                 < inversionL: B_0 with goal SendChannel<C_0, End> 
+                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                  < [] [(chan_0, B_0), ]
+                   < decideFocus: SendChannel<C_0, End>
+                   < [] [(chan_0, B_0), ]
+                    < focusL: SendChannel<C_0, End>
+                    < [] [(chan_0, B_0), ]
+                     < FocusL': B_0
+                     < focusL: fail
+                     < FocusL': B_0
+                     < focusL: fail
+                    < FocusR: SendChannel<C_0, End>
+                    < focusR: fail
+                < FocusL': A_0
+                < focusL: fail
+                < FocusL': ReceiveChannel<A_0, B_0>
+                 < inversionL: B_0 with goal SendChannel<C_0, End> 
+                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                  < [] [(chan_0, B_0), ]
+                   < decideFocus: SendChannel<C_0, End>
+                   < [] [(chan_0, B_0), ]
+                    < focusL: fail
+                    < focusL: SendChannel<C_0, End>
+                    < [] [(chan_0, B_0), ]
+                    < FocusR: SendChannel<C_0, End>
+                    < focusR: fail
+                    < focusGamma: fail
+                < FocusL': A_0
+                < focusL: fail
+               < FocusR: SendChannel<C_0, End>
+               < focusR: fail
+           < InversionR: SendChannel<C_0, End>
+            < inversionL: ReceiveChannel<A_0, C_0> with goal SendChannel<C_0, End> 
+             < inversionL: Empty with goal SendChannel<C_0, End> 
+             < [] [(chan_0, ReceiveChannel<A_0, C_0>), (chan_1, A_0), ]
+              < decideFocus: SendChannel<C_0, End>
+              < [] [(chan_0, ReceiveChannel<A_0, C_0>), (chan_1, A_0), ]
+               < focusL: SendChannel<C_0, End>
+               < [] [(chan_0, ReceiveChannel<A_0, C_0>), (chan_1, A_0), ]
+                < FocusL': ReceiveChannel<A_0, C_0>
+                 < inversionL: C_0 with goal SendChannel<C_0, End> 
+                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                  < [] [(chan_0, C_0), ]
+                   < decideFocus: SendChannel<C_0, End>
+                   < [] [(chan_0, C_0), ]
+                    < focusL: SendChannel<C_0, End>
+                    < [] [(chan_0, C_0), ]
+                     < FocusL': C_0
+                     < focusL: fail
+                     < FocusL': C_0
+                     < focusL: fail
+                    < FocusR: SendChannel<C_0, End>
+                     < decideFocus: End
+                     < [] []
+                      < focusL: fail
+                      < focusL: End
+                      < [] []
+                      < FocusR: End
+                       success
+                < FocusL': ReceiveChannel<A_0, C_0>
+                 < inversionL: C_0 with goal SendChannel<C_0, End> 
+                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                  < [] [(chan_0, C_0), ]
+                   < decideFocus: SendChannel<C_0, End>
+                   < [] [(chan_0, C_0), ]
+                    < focusL: fail
+                    < focusL: SendChannel<C_0, End>
+                    < [] [(chan_0, C_0), ]
+                    < FocusR: SendChannel<C_0, End>
+                     < decideFocus: End
+                     < [] []
+                      < focusL: fail
+                      < focusL: End
+                      < [] []
+                      < FocusR: End
+                       success
+          < FocusL': ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>
+          < [] [(chan_1, A_0), ]
+           < InversionR: SendChannel<C_0, End>
+            < inversionL: ReceiveChannel<A_0, B_0> with goal SendChannel<C_0, End> 
+             < inversionL: Empty with goal SendChannel<C_0, End> 
+             < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+              < decideFocus: SendChannel<C_0, End>
+              < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+               < focusL: fail
+               < focusL: SendChannel<C_0, End>
+               < [] [(chan_0, ReceiveChannel<A_0, B_0>), (chan_1, A_0), ]
+               < FocusR: SendChannel<C_0, End>
+               < focusR: fail
+               < focusGamma: fail
+           < InversionR: SendChannel<C_0, End>
+            < inversionL: ReceiveChannel<A_0, C_0> with goal SendChannel<C_0, End> 
+             < inversionL: Empty with goal SendChannel<C_0, End> 
+             < [] [(chan_0, ReceiveChannel<A_0, C_0>), (chan_1, A_0), ]
+              < decideFocus: SendChannel<C_0, End>
+              < [] [(chan_0, ReceiveChannel<A_0, C_0>), (chan_1, A_0), ]
+               < focusL: SendChannel<C_0, End>
+               < [] [(chan_0, ReceiveChannel<A_0, C_0>), (chan_1, A_0), ]
+                < FocusL': ReceiveChannel<A_0, C_0>
+                 < inversionL: C_0 with goal SendChannel<C_0, End> 
+                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                  < [] [(chan_0, C_0), ]
+                   < decideFocus: SendChannel<C_0, End>
+                   < [] [(chan_0, C_0), ]
+                    < focusL: fail
+                    < focusL: SendChannel<C_0, End>
+                    < [] [(chan_0, C_0), ]
+                    < FocusR: SendChannel<C_0, End>
+                     < decideFocus: End
+                     < [] []
+                      < focusL: fail
+                      < focusL: End
+                      < [] []
+                      < FocusR: End
+                       success
+                < FocusL': ReceiveChannel<A_0, C_0>
+                 < inversionL: C_0 with goal SendChannel<C_0, End> 
+                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                  < [] [(chan_0, C_0), ]
+                   < decideFocus: SendChannel<C_0, End>
+                   < [] [(chan_0, C_0), ]
+                    < focusL: fail
+                    < focusL: SendChannel<C_0, End>
+                    < [] [(chan_0, C_0), ]
+                    < FocusR: SendChannel<C_0, End>
+                     < decideFocus: End
+                     < [] []
+                      < focusL: fail
+                      < focusL: End
+                      < [] []
+                      < FocusR: End
+                       success
+                < FocusL': A_0
+                < focusL: fail
+               < FocusR: SendChannel<C_0, End>
+               < focusR: fail
+          < FocusL': A_0
+          < focusL: fail
+         < FocusR: SendChannel<C_0, End>
+         < focusR: fail
+                      < focusGamma: fail
+                < FocusL': A_0
+                < focusL: fail
+               < FocusR: SendChannel<B_0, End>
+               < focusR: fail
+           < InversionR: SendChannel<B_0, End>
+            < inversionL: ReceiveChannel<A_0, C_0> with goal SendChannel<B_0, End> 
+             < inversionL: Empty with goal SendChannel<B_0, End> 
+             < [] [(chan_0, ReceiveChannel<A_0, C_0>), (chan_1, A_0), ]
+              < decideFocus: SendChannel<B_0, End>
+              < [] [(chan_0, ReceiveChannel<A_0, C_0>), (chan_1, A_0), ]
+               < focusL: SendChannel<B_0, End>
+               < [] [(chan_0, ReceiveChannel<A_0, C_0>), (chan_1, A_0), ]
+                < FocusL': ReceiveChannel<A_0, C_0>
+                 < inversionL: C_0 with goal SendChannel<B_0, End> 
+                  < inversionL: Empty with goal SendChannel<B_0, End> 
+                  < [] [(chan_0, C_0), ]
+                   < decideFocus: SendChannel<B_0, End>
+                   < [] [(chan_0, C_0), ]
+                    < focusL: SendChannel<B_0, End>
+                    < [] [(chan_0, C_0), ]
+                     < FocusL': C_0
+                     < focusL: fail
+                     < FocusL': C_0
+                     < focusL: fail
+                    < FocusR: SendChannel<B_0, End>
+                    < focusR: fail
+                < FocusL': A_0
+                < focusL: fail
+                < FocusL': ReceiveChannel<A_0, C_0>
+                 < inversionL: C_0 with goal SendChannel<B_0, End> 
+                  < inversionL: Empty with goal SendChannel<B_0, End> 
+                  < [] [(chan_0, C_0), ]
+                   < decideFocus: SendChannel<B_0, End>
+                   < [] [(chan_0, C_0), ]
+                    < focusL: fail
+                    < focusL: SendChannel<B_0, End>
+                    < [] [(chan_0, C_0), ]
+                    < FocusR: SendChannel<B_0, End>
+                    < focusR: fail
+                    < focusGamma: fail
+                < FocusL': A_0
+                < focusL: fail
+               < FocusR: SendChannel<B_0, End>
+               < focusR: fail
+          < FocusL': A_0
+          < focusL: fail
+         < FocusR: SendChannel<B_0, End>
+         < focusR: fail
+< InversionR: SCHEMEFN<<user<A, B, C>, arg1 => A, arg2 => ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>>, Session<ReceiveChannel<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>, SendChannel<C, End>>>>
+< InversionR: FN<<user, arg1 => A_0, arg2 => ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>>, Session<ReceiveChannel<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>, SendChannel<C_0, End>>>>
+ < InversionR: Session<ReceiveChannel<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>, SendChannel<C_0, End>>>
+  < InversionR: ReceiveChannel<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>, SendChannel<C_0, End>>
+   < InversionR: SendChannel<C_0, End>
+    < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+     < inversionL: Empty with goal SendChannel<C_0, End> 
+     < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+      < decideFocus: SendChannel<C_0, End>
+      < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+       < focusL: SendChannel<C_0, End>
+       < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+        < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+         < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+          < inversionL: Empty with goal SendChannel<C_0, End> 
+          < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+           < decideFocus: SendChannel<C_0, End>
+           < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+            < focusL: fail
+            < focusL: SendChannel<C_0, End>
+            < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+            < FocusR: SendChannel<C_0, End>
+            < focusR: fail
+            < focusGamma: A_0
+            < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+             < InversionR: SendChannel<C_0, End>
+              < inversionL: Empty with goal SendChannel<C_0, End> 
+              < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+               < decideFocus: SendChannel<C_0, End>
+               < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                < focusL: SendChannel<C_0, End>
+                < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                 < FocusL': A_0
+                 < focusL: fail
+                 < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                  < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                   < inversionL: Empty with goal SendChannel<C_0, End> 
+                   < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), ]
+                    < decideFocus: SendChannel<C_0, End>
+                    < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), ]
+                     < focusL: fail
+                     < focusL: SendChannel<C_0, End>
+                     < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), ]
+                     < FocusR: SendChannel<C_0, End>
+                     < focusR: fail
+                     < focusGamma: ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>
+                     < [((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), ]
+                     < boas
+                     < focusGamma: ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>
+                     < [((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), ]
+                     < boas
+                 < FocusL': A_0
+                 < focusL: fail
+                 < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                  < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                   < inversionL: Empty with goal SendChannel<C_0, End> 
+                   < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), ]
+                    < decideFocus: SendChannel<C_0, End>
+                    < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), ]
+                     < focusL: fail
+                     < focusL: SendChannel<C_0, End>
+                     < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), ]
+                     < FocusR: SendChannel<C_0, End>
+                     < focusR: fail
+                     < focusGamma: fail
+                < FocusR: SendChannel<C_0, End>
+                < focusR: fail
+                < focusGamma: fail
+            < focusGamma: ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>
+            < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+             < InversionR: SendChannel<C_0, End>
+              < inversionL: Empty with goal SendChannel<C_0, End> 
+              < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+               < decideFocus: SendChannel<C_0, End>
+               < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                < focusL: SendChannel<C_0, End>
+                < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                 < FocusL': ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>
+                 < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                  < InversionR: SendChannel<C_0, End>
+                   < inversionL: ReceiveChannel<A_0, B_0> with goal SendChannel<C_0, End> 
+                    < inversionL: Empty with goal SendChannel<C_0, End> 
+                    < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, B_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                     < decideFocus: SendChannel<C_0, End>
+                     < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, B_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                      < focusL: SendChannel<C_0, End>
+                      < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, B_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                       < FocusL': ReceiveChannel<A_0, B_0>
+                       < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                        < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                         < inversionL: Empty with goal SendChannel<C_0, End> 
+                         < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                          < decideFocus: SendChannel<C_0, End>
+                          < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                           < focusL: fail
+                           < focusL: SendChannel<C_0, End>
+                           < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                           < FocusR: SendChannel<C_0, End>
+                           < focusR: fail
+                           < focusGamma: A_0
+                           < [((arg1, A_0), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                            < InversionR: SendChannel<C_0, End>
+                             < inversionL: Empty with goal SendChannel<C_0, End> 
+                             < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                              < decideFocus: SendChannel<C_0, End>
+                              < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                               < focusL: SendChannel<C_0, End>
+                               < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                                < FocusL': A_0
+                                < focusL: fail
+                                < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                                 < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                                  < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, B_0>), ]
+                                   < decideFocus: SendChannel<C_0, End>
+                                   < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, B_0>), ]
+                                    < focusL: fail
+                                    < focusL: SendChannel<C_0, End>
+                                    < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, B_0>), ]
+                                    < FocusR: SendChannel<C_0, End>
+                                    < focusR: fail
+                                < FocusL': ReceiveChannel<A_0, B_0>
+                                 < inversionL: B_0 with goal SendChannel<C_0, End> 
+                                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                                  < [((arg1, A_0), 0), ] [(arg2, B_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                   < decideFocus: SendChannel<C_0, End>
+                                   < [((arg1, A_0), 0), ] [(arg2, B_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                    < focusL: SendChannel<C_0, End>
+                                    < [((arg1, A_0), 0), ] [(arg2, B_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                     < FocusL': B_0
+                                     < focusL: fail
+                                     < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                                      < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                                       < inversionL: Empty with goal SendChannel<C_0, End> 
+                                       < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, B_0), ]
+                                        < decideFocus: SendChannel<C_0, End>
+                                        < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, B_0), ]
+                                         < focusL: fail
+                                         < focusL: SendChannel<C_0, End>
+                                         < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, B_0), ]
+                                         < FocusR: SendChannel<C_0, End>
+                                         < focusR: fail
+                                     < FocusL': B_0
+                                     < focusL: fail
+                                     < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                                      < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                                       < inversionL: Empty with goal SendChannel<C_0, End> 
+                                       < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, B_0), ]
+                                        < decideFocus: SendChannel<C_0, End>
+                                        < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, B_0), ]
+                                         < focusL: fail
+                                         < focusL: SendChannel<C_0, End>
+                                         < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, B_0), ]
+                                         < FocusR: SendChannel<C_0, End>
+                                         < focusR: fail
+                                         < focusGamma: fail
+                                    < FocusR: SendChannel<C_0, End>
+                                    < focusR: fail
+                                    < focusGamma: fail
+                                < FocusL': A_0
+                                < focusL: fail
+                                < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                                 < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                                  < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, B_0>), ]
+                                   < decideFocus: SendChannel<C_0, End>
+                                   < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, B_0>), ]
+                                    < focusL: fail
+                                    < focusL: SendChannel<C_0, End>
+                                    < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, B_0>), ]
+                                    < FocusR: SendChannel<C_0, End>
+                                    < focusR: fail
+                                    < focusGamma: fail
+                                < FocusL': ReceiveChannel<A_0, B_0>
+                                 < inversionL: B_0 with goal SendChannel<C_0, End> 
+                                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                                  < [((arg1, A_0), 0), ] [(arg2, B_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                   < decideFocus: SendChannel<C_0, End>
+                                   < [((arg1, A_0), 0), ] [(arg2, B_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                    < focusL: fail
+                                    < focusL: SendChannel<C_0, End>
+                                    < [((arg1, A_0), 0), ] [(arg2, B_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                    < FocusR: SendChannel<C_0, End>
+                                    < focusR: fail
+                                    < focusGamma: fail
+                               < FocusR: SendChannel<C_0, End>
+                               < focusR: fail
+                               < focusGamma: fail
+                           < focusGamma: A_0
+                           < [((arg1, A_0), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                            < InversionR: SendChannel<C_0, End>
+                             < inversionL: Empty with goal SendChannel<C_0, End> 
+                             < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                              < decideFocus: SendChannel<C_0, End>
+                              < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                               < focusL: fail
+                               < focusL: SendChannel<C_0, End>
+                               < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                               < FocusR: SendChannel<C_0, End>
+                               < focusR: fail
+                               < focusGamma: fail
+                       < FocusL': ReceiveChannel<A_0, B_0>
+                       < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                        < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                         < inversionL: Empty with goal SendChannel<C_0, End> 
+                         < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                          < decideFocus: SendChannel<C_0, End>
+                          < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                           < focusL: fail
+                           < focusL: SendChannel<C_0, End>
+                           < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, B_0>), ]
+                           < FocusR: SendChannel<C_0, End>
+                           < focusR: fail
+                           < focusGamma: fail
+                      < FocusR: SendChannel<C_0, End>
+                      < focusR: fail
+                      < focusGamma: fail
+                  < InversionR: SendChannel<C_0, End>
+                   < inversionL: ReceiveChannel<A_0, C_0> with goal SendChannel<C_0, End> 
+                    < inversionL: Empty with goal SendChannel<C_0, End> 
+                    < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, C_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                     < decideFocus: SendChannel<C_0, End>
+                     < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, C_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                      < focusL: SendChannel<C_0, End>
+                      < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, C_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                       < FocusL': ReceiveChannel<A_0, C_0>
+                       < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                        < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                         < inversionL: Empty with goal SendChannel<C_0, End> 
+                         < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                          < decideFocus: SendChannel<C_0, End>
+                          < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                           < focusL: fail
+                           < focusL: SendChannel<C_0, End>
+                           < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                           < FocusR: SendChannel<C_0, End>
+                           < focusR: fail
+                           < focusGamma: A_0
+                           < [((arg1, A_0), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                            < InversionR: SendChannel<C_0, End>
+                             < inversionL: Empty with goal SendChannel<C_0, End> 
+                             < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                              < decideFocus: SendChannel<C_0, End>
+                              < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                               < focusL: SendChannel<C_0, End>
+                               < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                                < FocusL': A_0
+                                < focusL: fail
+                                < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                                 < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                                  < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, C_0>), ]
+                                   < decideFocus: SendChannel<C_0, End>
+                                   < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, C_0>), ]
+                                    < focusL: fail
+                                    < focusL: SendChannel<C_0, End>
+                                    < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, C_0>), ]
+                                    < FocusR: SendChannel<C_0, End>
+                                    < focusR: fail
+                                < FocusL': ReceiveChannel<A_0, C_0>
+                                 < inversionL: C_0 with goal SendChannel<C_0, End> 
+                                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                                  < [((arg1, A_0), 0), ] [(arg2, C_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                   < decideFocus: SendChannel<C_0, End>
+                                   < [((arg1, A_0), 0), ] [(arg2, C_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                    < focusL: SendChannel<C_0, End>
+                                    < [((arg1, A_0), 0), ] [(arg2, C_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                     < FocusL': C_0
+                                     < focusL: fail
+                                     < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                                      < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                                       < inversionL: Empty with goal SendChannel<C_0, End> 
+                                       < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, C_0), ]
+                                        < decideFocus: SendChannel<C_0, End>
+                                        < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, C_0), ]
+                                         < focusL: fail
+                                         < focusL: SendChannel<C_0, End>
+                                         < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, C_0), ]
+                                         < FocusR: SendChannel<C_0, End>
+                                          < decideFocus: End
+                                          < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                           < focusL: End
+                                           < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                            < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                                             < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal End 
+                                              < inversionL: Empty with goal End 
+                                              < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                               < decideFocus: End
+                                               < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                                < focusL: fail
+                                                < focusL: End
+                                                < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                                < FocusR: End
+                                                < focusR: fail
+                                            < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                                             < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal End 
+                                              < inversionL: Empty with goal End 
+                                              < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                               < decideFocus: End
+                                               < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                                < focusL: fail
+                                                < focusL: End
+                                                < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                                < FocusR: End
+                                                < focusR: fail
+                                                < focusGamma: fail
+                                           < FocusR: End
+                                           < focusR: fail
+                                           < focusGamma: fail
+                                     < FocusL': C_0
+                                     < focusL: fail
+                                     < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                                      < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                                       < inversionL: Empty with goal SendChannel<C_0, End> 
+                                       < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, C_0), ]
+                                        < decideFocus: SendChannel<C_0, End>
+                                        < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, C_0), ]
+                                         < focusL: fail
+                                         < focusL: SendChannel<C_0, End>
+                                         < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, C_0), ]
+                                         < FocusR: SendChannel<C_0, End>
+                                          < decideFocus: End
+                                          < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                           < focusL: fail
+                                           < focusL: End
+                                           < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                           < FocusR: End
+                                           < focusR: fail
+                                           < focusGamma: fail
+                                         < focusGamma: fail
+                                    < FocusR: SendChannel<C_0, End>
+                                     < decideFocus: End
+                                     < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                      < focusL: fail
+                                      < focusL: End
+                                      < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                      < FocusR: End
+                                      < focusR: fail
+                                      < focusGamma: fail
+                                    < focusGamma: fail
+                                < FocusL': A_0
+                                < focusL: fail
+                                < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                                 < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                                  < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, C_0>), ]
+                                   < decideFocus: SendChannel<C_0, End>
+                                   < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, C_0>), ]
+                                    < focusL: fail
+                                    < focusL: SendChannel<C_0, End>
+                                    < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg1, A_0), (arg2, ReceiveChannel<A_0, C_0>), ]
+                                    < FocusR: SendChannel<C_0, End>
+                                    < focusR: fail
+                                    < focusGamma: fail
+                                < FocusL': ReceiveChannel<A_0, C_0>
+                                 < inversionL: C_0 with goal SendChannel<C_0, End> 
+                                  < inversionL: Empty with goal SendChannel<C_0, End> 
+                                  < [((arg1, A_0), 0), ] [(arg2, C_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                   < decideFocus: SendChannel<C_0, End>
+                                   < [((arg1, A_0), 0), ] [(arg2, C_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                    < focusL: fail
+                                    < focusL: SendChannel<C_0, End>
+                                    < [((arg1, A_0), 0), ] [(arg2, C_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                    < FocusR: SendChannel<C_0, End>
+                                     < decideFocus: End
+                                     < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                      < focusL: fail
+                                      < focusL: End
+                                      < [((arg1, A_0), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                                      < FocusR: End
+                                      < focusR: fail
+                                      < focusGamma: fail
+                                    < focusGamma: fail
+                               < FocusR: SendChannel<C_0, End>
+                               < focusR: fail
+                               < focusGamma: fail
+                           < focusGamma: A_0
+                           < [((arg1, A_0), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                            < InversionR: SendChannel<C_0, End>
+                             < inversionL: Empty with goal SendChannel<C_0, End> 
+                             < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                              < decideFocus: SendChannel<C_0, End>
+                              < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                               < focusL: fail
+                               < focusL: SendChannel<C_0, End>
+                               < [((arg1, A_0), 0), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                               < FocusR: SendChannel<C_0, End>
+                               < focusR: fail
+                               < focusGamma: fail
+                       < FocusL': ReceiveChannel<A_0, C_0>
+                       < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                        < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                         < inversionL: Empty with goal SendChannel<C_0, End> 
+                         < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                          < decideFocus: SendChannel<C_0, End>
+                          < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                           < focusL: fail
+                           < focusL: SendChannel<C_0, End>
+                           < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ReceiveChannel<A_0, C_0>), ]
+                           < FocusR: SendChannel<C_0, End>
+                           < focusR: fail
+                           < focusGamma: fail
+                      < FocusR: SendChannel<C_0, End>
+                      < focusR: fail
+                      < focusGamma: fail
+                 < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                  < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                   < inversionL: Empty with goal SendChannel<C_0, End> 
+                   < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), ]
+                    < decideFocus: SendChannel<C_0, End>
+                    < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), ]
+                     < focusL: fail
+                     < focusL: SendChannel<C_0, End>
+                     < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), ]
+                     < FocusR: SendChannel<C_0, End>
+                     < focusR: fail
+                     < focusGamma: A_0
+                     < [((arg1, A_0), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), ]
+                     < boas
+                     < focusGamma: A_0
+                     < [((arg1, A_0), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), ]
+                     < boas
+                 < FocusL': ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>
+                 < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                  < InversionR: SendChannel<C_0, End>
+                   < inversionL: ReceiveChannel<A_0, B_0> with goal SendChannel<C_0, End> 
+                    < inversionL: Empty with goal SendChannel<C_0, End> 
+                    < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, B_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                     < decideFocus: SendChannel<C_0, End>
+                     < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, B_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                      < focusL: fail
+                      < focusL: SendChannel<C_0, End>
+                      < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, B_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                      < FocusR: SendChannel<C_0, End>
+                      < focusR: fail
+                      < focusGamma: fail
+                  < InversionR: SendChannel<C_0, End>
+                   < inversionL: ReceiveChannel<A_0, C_0> with goal SendChannel<C_0, End> 
+                    < inversionL: Empty with goal SendChannel<C_0, End> 
+                    < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, C_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                     < decideFocus: SendChannel<C_0, End>
+                     < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, C_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                      < focusL: fail
+                      < focusL: SendChannel<C_0, End>
+                      < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ReceiveChannel<A_0, C_0>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                      < FocusR: SendChannel<C_0, End>
+                      < focusR: fail
+                      < focusGamma: fail
+                 < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+                  < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+                   < inversionL: Empty with goal SendChannel<C_0, End> 
+                   < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), ]
+                    < decideFocus: SendChannel<C_0, End>
+                    < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), ]
+                     < focusL: fail
+                     < focusL: SendChannel<C_0, End>
+                     < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), (arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), ]
+                     < FocusR: SendChannel<C_0, End>
+                     < focusR: fail
+                     < focusGamma: fail
+                < FocusR: SendChannel<C_0, End>
+                < focusR: fail
+                < focusGamma: fail
+            < focusGamma: A_0
+            < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+             < InversionR: SendChannel<C_0, End>
+              < inversionL: Empty with goal SendChannel<C_0, End> 
+              < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+               < decideFocus: SendChannel<C_0, End>
+               < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                < focusL: fail
+                < focusL: SendChannel<C_0, End>
+                < [((arg1, A_0), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(arg1, A_0), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                < FocusR: SendChannel<C_0, End>
+                < focusR: fail
+                < focusGamma: fail
+            < focusGamma: ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>
+            < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+             < InversionR: SendChannel<C_0, End>
+              < inversionL: Empty with goal SendChannel<C_0, End> 
+              < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+               < decideFocus: SendChannel<C_0, End>
+               < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                < focusL: fail
+                < focusL: SendChannel<C_0, End>
+                < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 0), ] [(arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), (chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+                < FocusR: SendChannel<C_0, End>
+                < focusR: fail
+                < focusGamma: fail
+        < FocusL': Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>
+         < inversionL: Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>> with goal SendChannel<C_0, End> 
+          < inversionL: Empty with goal SendChannel<C_0, End> 
+          < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+           < decideFocus: SendChannel<C_0, End>
+           < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+            < focusL: fail
+            < focusL: SendChannel<C_0, End>
+            < [((arg1, A_0), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>), 1), ] [(chan_2, Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A_0, B_0>, ReceiveChannel<A_0, C_0>>>, ReceiveChannel<A_0, ExternalChoice<Either<SendChannel<B_0, End>, SendChannel<C_0, End>>>>>>), ]
+            < FocusR: SendChannel<C_0, End>
+            < focusR: fail
+            < focusGamma: fail
+       < FocusR: SendChannel<C_0, End>
+       < focusR: fail
+       < focusGamma: fail
+< InversionR: FN<<main, arg1 => A, arg2 => ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>>, Session<SendChannel<C, End>>>
+ < InversionR: Session<SendChannel<C, End>>
+  < InversionR: SendChannel<C, End>
+   < inversionL: Empty with goal SendChannel<C, End> 
+   < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(user, SCHEMEFN<<user<A, B, C>, arg1 => A, arg2 => ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>>, Session<ReceiveChannel<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>, SendChannel<C, End>>>>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+    < decideFocus: SendChannel<C, End>
+    < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(user, SCHEMEFN<<user<A, B, C>, arg1 => A, arg2 => ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>>, Session<ReceiveChannel<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>, SendChannel<C, End>>>>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+     < focusL: SendChannel<C, End>
+     < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(user, SCHEMEFN<<user<A, B, C>, arg1 => A, arg2 => ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>>, Session<ReceiveChannel<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>, SendChannel<C, End>>>>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+      < FocusL': SCHEMEFN<<user<A, B, C>, arg1 => A, arg2 => ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>>, Session<ReceiveChannel<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>, SendChannel<C, End>>>>
+       < FocusL': FN<<user, arg1 => ?0, arg2 => ExternalChoice<Either<ReceiveChannel<?0, ?1>, ReceiveChannel<?0, ?2>>>>, Session<ReceiveChannel<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?0, ?1>, ReceiveChannel<?0, ?2>>>, ReceiveChannel<?0, ExternalChoice<Either<SendChannel<?1, End>, SendChannel<?2, End>>>>>, SendChannel<?2, End>>>>
+        < InversionR: App<FN<<user, arg1 => ?0, arg2 => ExternalChoice<Either<ReceiveChannel<?0, ?1>, ReceiveChannel<?0, ?2>>>>, Session<ReceiveChannel<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?0, ?1>, ReceiveChannel<?0, ?2>>>, ReceiveChannel<?0, ExternalChoice<Either<SendChannel<?1, End>, SendChannel<?2, End>>>>>, SendChannel<?2, End>>>>>
+         < InversionR: ?0
+          < inversionL: Empty with goal ?0 
+          < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+           < decideFocus: ?0
+           < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+            < focusL: ?0
+            < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+             < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+              < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?6, ?7>, ReceiveChannel<?6, ?8>>>, ReceiveChannel<?6, ExternalChoice<Either<SendChannel<?7, End>, SendChannel<?8, End>>>>>>>
+             < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+              < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?12, ?13>, ReceiveChannel<?12, ?14>>>, ReceiveChannel<?12, ExternalChoice<Either<SendChannel<?13, End>, SendChannel<?14, End>>>>>>>
+            < FocusR: ?0
+            < focusGamma: A
+            < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+             < InversionR: ?0
+              < inversionL: Empty with goal ?0 
+              < [((arg1, A), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(arg1, A), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+               < decideFocus: ?0
+               < [((arg1, A), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(arg1, A), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                < focusL: ?0
+                < [((arg1, A), 0), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(arg1, A), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                 < FocusL': A
+                 < focusL: fail
+                 < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                  < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?18, ?19>, ReceiveChannel<?18, ?20>>>, ReceiveChannel<?18, ExternalChoice<Either<SendChannel<?19, End>, SendChannel<?20, End>>>>>>>
+                 < FocusL': A
+                 < focusL: fail
+                 < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                  < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?24, ?25>, ReceiveChannel<?24, ?26>>>, ReceiveChannel<?24, ExternalChoice<Either<SendChannel<?25, End>, SendChannel<?26, End>>>>>>>
+                < FocusR: ?0
+                < focusGamma: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>
+                < [((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(arg1, A), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                < boas
+                < focusGamma: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>
+                < [((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(arg1, A), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                < boas
+            < focusGamma: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>
+            < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 1), ] [(myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+             < InversionR: ?0
+              < inversionL: Empty with goal ?0 
+              < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 0), ] [(arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+               < decideFocus: ?0
+               < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 0), ] [(arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                < focusL: ?0
+                < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 0), ] [(arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                 < FocusL': ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>
+                 < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 0), ] [(myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                  < InversionR: ?0
+                   < inversionL: ReceiveChannel<A, B> with goal ?0 
+                    < inversionL: Empty with goal ?0 
+                    < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 0), ] [(arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                     < decideFocus: ?0
+                     < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 0), ] [(arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                      < focusL: ?0
+                      < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 0), ] [(arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                       < FocusL': ReceiveChannel<A, B>
+                       < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                        < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?30, ?31>, ReceiveChannel<?30, ?32>>>, ReceiveChannel<?30, ExternalChoice<Either<SendChannel<?31, End>, SendChannel<?32, End>>>>>>>
+                       < FocusL': ReceiveChannel<A, B>
+                       < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                        < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?36, ?37>, ReceiveChannel<?36, ?38>>>, ReceiveChannel<?36, ExternalChoice<Either<SendChannel<?37, End>, SendChannel<?38, End>>>>>>>
+                      < FocusR: ?0
+                      < focusGamma: A
+                      < [((arg1, A), 1), ] [(arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                       < InversionR: ?0
+                        < inversionL: Empty with goal ?0 
+                        < [((arg1, A), 0), ] [(arg1, A), (arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                         < decideFocus: ?0
+                         < [((arg1, A), 0), ] [(arg1, A), (arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                          < focusL: ?0
+                          < [((arg1, A), 0), ] [(arg1, A), (arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                           < FocusL': A
+                           < focusL: fail
+                           < FocusL': ReceiveChannel<A, B>
+                            < inversionL: B with goal ?0 
+                             < inversionL: Empty with goal ?0 
+                             < [((arg1, A), 0), ] [(arg2, B), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                              < decideFocus: ?0
+                              < [((arg1, A), 0), ] [(arg2, B), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                               < focusL: ?0
+                               < [((arg1, A), 0), ] [(arg2, B), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                                < FocusL': B
+                                < focusL: fail
+                                < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                                 < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?42, ?43>, ReceiveChannel<?42, ?44>>>, ReceiveChannel<?42, ExternalChoice<Either<SendChannel<?43, End>, SendChannel<?44, End>>>>>>>
+                                < FocusL': B
+                                < focusL: fail
+                                < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                                 < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?48, ?49>, ReceiveChannel<?48, ?50>>>, ReceiveChannel<?48, ExternalChoice<Either<SendChannel<?49, End>, SendChannel<?50, End>>>>>>>
+                               < FocusR: ?0
+                           < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                            < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?54, ?55>, ReceiveChannel<?54, ?56>>>, ReceiveChannel<?54, ExternalChoice<Either<SendChannel<?55, End>, SendChannel<?56, End>>>>>>>
+                           < FocusL': A
+                           < focusL: fail
+                           < FocusL': ReceiveChannel<A, B>
+                            < inversionL: B with goal ?0 
+                             < inversionL: Empty with goal ?0 
+                             < [((arg1, A), 0), ] [(arg2, B), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                              < decideFocus: ?0
+                              < [((arg1, A), 0), ] [(arg2, B), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                               < focusL: fail
+                               < focusL: ?0
+                               < [((arg1, A), 0), ] [(arg2, B), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                               < FocusR: ?0
+                               < focusGamma: fail
+                           < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                            < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?60, ?61>, ReceiveChannel<?60, ?62>>>, ReceiveChannel<?60, ExternalChoice<Either<SendChannel<?61, End>, SendChannel<?62, End>>>>>>>
+                          < FocusR: ?0
+                      < focusGamma: A
+                      < [((arg1, A), 1), ] [(arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                       < InversionR: ?0
+                        < inversionL: Empty with goal ?0 
+                        < [((arg1, A), 0), ] [(arg1, A), (arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                         < decideFocus: ?0
+                         < [((arg1, A), 0), ] [(arg1, A), (arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                          < focusL: fail
+                          < focusL: ?0
+                          < [((arg1, A), 0), ] [(arg1, A), (arg2, ReceiveChannel<A, B>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                          < FocusR: ?0
+                          < focusGamma: fail
+                  < InversionR: ?0
+                   < inversionL: ReceiveChannel<A, C> with goal ?0 
+                    < inversionL: Empty with goal ?0 
+                    < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 0), ] [(arg2, ReceiveChannel<A, C>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                     < decideFocus: ?0
+                     < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 0), ] [(arg2, ReceiveChannel<A, C>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                      < focusL: ?0
+                      < [((arg1, A), 1), ((arg2, ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>), 0), ] [(arg2, ReceiveChannel<A, C>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                       < FocusL': ReceiveChannel<A, C>
+                       < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                        < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?66, ?67>, ReceiveChannel<?66, ?68>>>, ReceiveChannel<?66, ExternalChoice<Either<SendChannel<?67, End>, SendChannel<?68, End>>>>>>>
+                       < FocusL': ReceiveChannel<A, C>
+                       < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                        < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?72, ?73>, ReceiveChannel<?72, ?74>>>, ReceiveChannel<?72, ExternalChoice<Either<SendChannel<?73, End>, SendChannel<?74, End>>>>>>>
+                      < FocusR: ?0
+                      < focusGamma: A
+                      < [((arg1, A), 1), ] [(arg2, ReceiveChannel<A, C>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                       < InversionR: ?0
+                        < inversionL: Empty with goal ?0 
+                        < [((arg1, A), 0), ] [(arg1, A), (arg2, ReceiveChannel<A, C>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                         < decideFocus: ?0
+                         < [((arg1, A), 0), ] [(arg1, A), (arg2, ReceiveChannel<A, C>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                          < focusL: ?0
+                          < [((arg1, A), 0), ] [(arg1, A), (arg2, ReceiveChannel<A, C>), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                           < FocusL': A
+                           < focusL: fail
+                           < FocusL': ReceiveChannel<A, C>
+                            < inversionL: C with goal ?0 
+                             < inversionL: Empty with goal ?0 
+                             < [((arg1, A), 0), ] [(arg2, C), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                              < decideFocus: ?0
+                              < [((arg1, A), 0), ] [(arg2, C), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                               < focusL: ?0
+                               < [((arg1, A), 0), ] [(arg2, C), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]
+                                < FocusL': C
+                                < focusL: fail
+                                < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                                 < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?78, ?79>, ReceiveChannel<?78, ?80>>>, ReceiveChannel<?78, ExternalChoice<Either<SendChannel<?79, End>, SendChannel<?80, End>>>>>>>
+                                < FocusL': C
+                                < focusL: fail
+                                < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                                 < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?84, ?85>, ReceiveChannel<?84, ?86>>>, ReceiveChannel<?84, ExternalChoice<Either<SendChannel<?85, End>, SendChannel<?86, End>>>>>>>
+                               < FocusR: ?0
+                           < FocusL': SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>
+                            < FocusL': FN<<myFunc, >, Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<?90, ?91>, ReceiveChannel<?90, ?92>>>, ReceiveChannel<?90, ExternalChoice<Either<SendChannel<?91, End>, SendChannel<?92, End>>>>>>>
+                           < FocusL': A
+                           < focusL: fail
+                           < FocusL': ReceiveChannel<A, C>
+                            < inversionL: C with goal ?0 
+                             < inversionL: Empty with goal ?0 
+                             < [((arg1, A), 0), ] [(arg2, C), (myFunc, SCHEMEFN<<myFunc<A, B, C>, >, Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>>>), ]

@@ -45,6 +45,8 @@
 %token DEFINE_CHOICE
 %token EITHER
 %token EXCLAMATION
+%token INT_T
+%token STRING_T
 %start <decl list> prog
 %%
 
@@ -62,9 +64,13 @@ decl:
 
 type_def:
   | TYPE_KEYWORD; _name = ID; EQ; t = s_type; SEMICOLON { TypeDef({name = _name; body = t}) }
+  | TYPE_KEYWORD; _name = ID; LT; schemelist = scheme_args; GT; EQ; t = s_type; SEMICOLON { TypeDef({name = _name; body = TyScheme(schemelist, t)}) }
 
 s_type:
+  | INT_T                                                                { TyPrimitive("Int")}
+  | STRING_T                                                             { TyPrimitive("String")}
   | id = ID                                                              { TyPrimitive(id) }
+  | id = ID; LT; schemelist = scheme_args; GT                            { ignore schemelist; TyPrimitive(id) }
   | uppercaseid = ATOMIC                                                 { TyAtomic(uppercaseid) }
   | INTERNALCHOICE; LT; c = choice; GT                                   { TyInternalChoice(c) }
   | EXTERNALCHOICE; LT; c = choice; GT                                   { TyExternalChoice(c) }
@@ -184,9 +190,9 @@ scheme_func:
       let args = List.map (fun a -> fst a) ars in
       let argcounts = List.map (fun a -> snd a) ars in
       Function
-        (TySchemeFunc
-           (tList,
-            ((name, args), ret)), argcounts,  recursive, (required_funcs, suggested_funcs))
+        (TyScheme 
+           (tList, TyFunc (
+            ((name, args), ret))), argcounts,  recursive, (required_funcs, suggested_funcs))
     }
 
 arg:

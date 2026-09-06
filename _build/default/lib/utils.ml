@@ -96,12 +96,6 @@ and print_type t =
       "Scheme<<"
       ^ String.concat ", " (List.map print_type tList)
       ^ ">, " ^ print_type tau ^ ">"
-  | TySchemeFunc (tList, ((name, tyArgs), tyRet)) ->
-      "SCHEMEFN<<" ^ name ^ "<"
-      ^ String.concat ", " (List.map print_type tList)
-      ^ ">, "
-      ^ print_labeled_choices tyArgs print_type
-      ^ ">, " ^ print_type tyRet ^ ">"
 
 and print_type_internal t =
   match t with
@@ -138,12 +132,6 @@ and print_type_internal t =
       "Scheme<<"
       ^ String.concat ", " (List.map print_type tList)
       ^ ">, " ^ print_type tau ^ ">"
-  | TySchemeFunc (tList, ((name, tyArgs), tyRet)) ->
-      "SCHEMEFN<<" ^ name ^ "<"
-      ^ String.concat ", " (List.map print_type tList)
-      ^ ">, "
-      ^ print_labeled_choices tyArgs print_type
-      ^ ">, " ^ print_type tyRet ^ ">"
 
 and print_peano i =
   match i with 0 -> "Z" | x -> "S<" ^ print_peano (x - 1) ^ ">"
@@ -153,8 +141,6 @@ and equal_type t1 t2 =
   | TyPrimitive p1, TyPrimitive p2 -> p1 = p2
   | TyAtomic a1, TyAtomic a2 -> a1 = a2
   | TyExistential a1, TyExistential a2 -> a1 = a2
-  | TyExistential _, _ -> true
-  | _, TyExistential _ -> true
   | TyInternalChoice c1, TyInternalChoice c2 -> equal_choice c1 c2
   | TyExternalChoice c1, TyExternalChoice c2 -> equal_choice c1 c2
   | TyInternalChoiceId id1, TyInternalChoiceId id2 -> id1 = id2
@@ -182,13 +168,6 @@ and equal_type t1 t2 =
       List.length ts1 = List.length ts2
       && List.for_all2 equal_type ts1 ts2
       && equal_type tau1 tau2
-  | ( TySchemeFunc (ts1, ((name1, args1), ret1)),
-      TySchemeFunc (ts2, ((name2, args2), ret2)) ) ->
-      List.length ts1 = List.length ts2
-      && List.for_all2 equal_type ts1 ts2
-      && name1 = name2
-      && equal_labeled_types args1 args2
-      && equal_type ret1 ret2
   | _ -> false
 
 and equal_labeled_types l1 l2 =

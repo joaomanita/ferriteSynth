@@ -7,6 +7,7 @@ type token =
   | TYPE_KEYWORD
   | SYNTHESIZE
   | SUGGEST
+  | STRING_T
   | SHAREDTOLINEAR
   | SESSION
   | SENDVALUE
@@ -28,6 +29,7 @@ type token =
   | LPAR
   | LINEARTOSHARED
   | LBRACE
+  | INT_T
   | INTERNALCHOICE
   | INT of (int)
   | ID of (string)
@@ -70,6 +72,7 @@ module MenhirInterpreter : sig
     | T_TYPE_KEYWORD : unit terminal
     | T_SYNTHESIZE : unit terminal
     | T_SUGGEST : unit terminal
+    | T_STRING_T : unit terminal
     | T_SHAREDTOLINEAR : unit terminal
     | T_SESSION : unit terminal
     | T_SENDVALUE : unit terminal
@@ -91,6 +94,7 @@ module MenhirInterpreter : sig
     | T_LPAR : unit terminal
     | T_LINEARTOSHARED : unit terminal
     | T_LBRACE : unit terminal
+    | T_INT_T : unit terminal
     | T_INTERNALCHOICE : unit terminal
     | T_INT : (int) terminal
     | T_ID : (string) terminal

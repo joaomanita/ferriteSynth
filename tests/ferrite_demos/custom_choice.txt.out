@@ -19,9 +19,19 @@ fn client() -> Session<ReceiveChannel<ExternalChoice<FooBarBaz>, End>> {
 
 #[tokio::main]
 pub async fn main(arg1: String) {
-    run_session(cut! { [R]; client(); binder_9 => {cut! { [L, R]; provider(arg1); binder_25 => {send_channel_to(binder_9, binder_25, wait(binder_9, terminate ()))}}}}).await
+    run_session(cut::<HList![R]>(client(), |binder_9| {
+        cut::<HList![L, R]>(provider(arg1), |binder_25| {
+            send_channel_to(binder_9, binder_25, wait(binder_9, terminate()))
+        })
+    }))
+    .await
 }
 // #[tokio::main]
 pub async fn main(arg1: String) {
-    run_session(cut! { [R]; client(); binder_9 => {cut! { [R]; provider(arg1); binder_13 => {send_channel_to(binder_9, binder_13, wait(binder_9, terminate ()))}}}}).await
+    run_session(cut::<HList![R]>(client(), |binder_9| {
+        cut::<HList![R]>(provider(arg1), |binder_13| {
+            send_channel_to(binder_9, binder_13, wait(binder_9, terminate()))
+        })
+    }))
+    .await
 }

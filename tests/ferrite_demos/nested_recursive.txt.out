@@ -8,7 +8,7 @@ type Stream = Rec<
 
 fn producer(arg1: String) -> Session<Stream> {
     fix_session(
-        offer_choice! { Left => fix_session(offer_case!(Right, producer(arg1))), Right => receive_value(move |val_0| {cut! { []; producer(val_0); binder_373 => {unfix_session(binder_373, choose!(binder_373, Right, send_value_to(binder_373, val_0, wait(binder_373, terminate ()))))}}}) },
+        offer_choice! { Left => fix_session(offer_case!(Right, producer(arg1))), Right => receive_value(move |val_0| {cut::<HList![]>(producer(val_0), |binder_373| {unfix_session(binder_373, choose!(binder_373, Right, send_value_to(binder_373, val_0, wait(binder_373, terminate ()))))})}) },
     )
 }
 // fn producer(arg1: String) -> Session<Stream> { fix_session(offer_choice!{ Left => fix_session(offer_case!(Right, producer(arg1))), Right => receive_value(move |val_0| {terminate ()}) }) }
@@ -29,9 +29,19 @@ fn user(arg2: String) -> Session<ReceiveChannel<Stream, End>> {
 
 #[tokio::main]
 pub async fn main(arg3: String) {
-    run_session(cut! { [R]; producer(arg3); binder_613 => {cut! { [L, R]; user(arg3); binder_772 => {send_channel_to(binder_772, binder_613, wait(binder_772, terminate ()))}}}}).await
+    run_session(cut::<HList![R]>(producer(arg3), |binder_613| {
+        cut::<HList![L, R]>(user(arg3), |binder_772| {
+            send_channel_to(binder_772, binder_613, wait(binder_772, terminate()))
+        })
+    }))
+    .await
 }
 // #[tokio::main]
 pub async fn main(arg3: String) {
-    run_session(cut! { [R]; producer(arg3); binder_613 => {cut! { [R]; user(arg3); binder_739 => {send_channel_to(binder_739, binder_613, wait(binder_739, terminate ()))}}}}).await
+    run_session(cut::<HList![R]>(producer(arg3), |binder_613| {
+        cut::<HList![R]>(user(arg3), |binder_739| {
+            send_channel_to(binder_739, binder_613, wait(binder_739, terminate()))
+        })
+    }))
+    .await
 }

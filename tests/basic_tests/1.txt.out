@@ -1,47 +1,17 @@
 use std::format;
 
-use ferrite_session::{either::*, prelude::*};
+use ferrite_session::{
+  either::*,
+  prelude::*,
+};
 
-type myType = ReceiveChannel<
-    ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
-    ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>,
->;
+type myType = Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>;
 
-fn myFunc() -> Session<myType> {
-    receive_channel(|chan_0| {
-        receive_channel(|chan_1| {
-            offer_choice! { Left => choose!(chan_0, Left, send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))), Right => choose!(chan_0, Right, send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))) }
-        })
-    })
-}
+fn myFunc<A, B, C>() -> Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>> { receive_channel(|chan_0| {receive_channel(|chan_1| {offer_choice!{ Left => choose!(chan_0, Left, send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))), Right => choose!(chan_0, Right, send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))) }})}) }
 
-fn user(
-    arg1: A,
-    arg2: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
-) -> Session<ReceiveChannel<myType, SendChannel<C, End>>> {
-    receive_channel(|chan_2| {
-        send_channel_to(
-            chan_2,
-            arg2,
-            send_channel_to(
-                chan_2,
-                arg1,
-                choose!(
-                    chan_2,
-                    Right,
-                    receive_channel_from(chan_2, |binder_63| {
-                        wait(chan_2, send_channel_from(binder_63, terminate()))
-                    })
-                ),
-            ),
-        )
-    })
-}
 
-fn main(
-    arg1: A,
-    arg2: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
-) -> Session<SendChannel<C, End>> {
-    cut! { [R]; myFunc(); binder_78 => {cut! { [R]; user(forward(arg1), offer_choice!{ Left => receive_channel(|chan_13| {choose!(arg2, Left, send_channel_to(arg2, chan_13, forward(arg2)))}), Right => receive_channel(|chan_14| {choose!(arg2, Right, send_channel_to(arg2, chan_14, forward(arg2)))}) }); binder_82 => {send_channel_to(binder_82, binder_78, receive_channel_from(binder_82, |binder_84| {wait(binder_82, send_channel_from(binder_84, terminate ()))}))}}}}
-}
-// fn main(arg1: A, arg2: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>) -> Session<SendChannel<C, End>> { cut! { [R]; user(forward(arg1), offer_choice!{ Left => receive_channel(|chan_5| {choose!(arg2, Left, send_channel_to(arg2, chan_5, forward(arg2)))}), Right => receive_channel(|chan_6| {choose!(arg2, Right, send_channel_to(arg2, chan_6, forward(arg2)))}) }); binder_71 => {cut! { [R]; myFunc(); binder_75 => {send_channel_to(binder_71, binder_75, receive_channel_from(binder_71, |binder_77| {wait(binder_71, send_channel_from(binder_77, terminate ()))}))}}}} }
+// couldnt synthesize function
+
+
+// couldnt synthesize function
+

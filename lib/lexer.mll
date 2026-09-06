@@ -105,6 +105,8 @@ rule read = parse
   | "S"              { S }
   | "SYNTHESIZE"     { SYNTHESIZE }
   | "Either"         { EITHER }
+  | "Int"            { INT_T }
+  | "String"         { STRING_T }
 
   (* ---- IDENTIFIERS ---- *)
   | uppercaseid as id_s {

@@ -17,10 +17,10 @@ fn rec_provider(
     arg1: String,
 ) -> Session<Rec<ExternalChoice<Either<SendChannel<SharedService, Z>, End>>>> {
     fix_session(
-        offer_choice! { Left => cut! { []; shared_provider(arg1); binder_4455 => {acquire_shared_session(binder_4455, move |chan_565| {choose!(chan_565, Left, receive_value_from(chan_565, move |binder_4459| {release_shared_session(chan_565, send_channel_from(chan_565, rec_provider(binder_4459)))}))})}}, Right => cut! { []; rec_provider(arg1); binder_4493 => {unfix_session(binder_4493, choose!(binder_4493, Left, receive_channel_from(binder_4493, |binder_4499| {acquire_shared_session(binder_4499, move |chan_581| {choose!(chan_581, Left, receive_value_from(chan_581, move |binder_4503| {release_shared_session(chan_581, unfix_session(binder_4493, wait(binder_4493, terminate ())))}))})})))}} },
+        offer_choice! { Left => cut::<HList![]>(shared_provider(arg1), |binder_4455| {acquire_shared_session(binder_4455, move |chan_565| {choose!(chan_565, Left, receive_value_from(chan_565, move |binder_4459| {release_shared_session(chan_565, send_channel_from(chan_565, rec_provider(binder_4459)))}))})}), Right => cut::<HList![]>(rec_provider(arg1), |binder_4493| {unfix_session(binder_4493, choose!(binder_4493, Left, receive_channel_from(binder_4493, |binder_4499| {acquire_shared_session(binder_4499, move |chan_581| {choose!(chan_581, Left, receive_value_from(chan_581, move |binder_4503| {release_shared_session(chan_581, unfix_session(binder_4493, wait(binder_4493, terminate ())))}))})})))}) },
     )
 }
-// fn rec_provider(arg1: String) -> Session<Rec<ExternalChoice<Either<SendChannel<SharedService, Z>, End>>>> { fix_session(offer_choice!{ Left => cut! { []; shared_provider(arg1); binder_4455 => {acquire_shared_session(binder_4455, move |chan_565| {choose!(chan_565, Left, receive_value_from(chan_565, move |binder_4459| {release_shared_session(chan_565, send_channel_from(chan_565, rec_provider(binder_4459)))}))})}}, Right => terminate () }) }
+// fn rec_provider(arg1: String) -> Session<Rec<ExternalChoice<Either<SendChannel<SharedService, Z>, End>>>> { fix_session(offer_choice!{ Left => cut::<HList![]>(shared_provider(arg1), |binder_4455| {acquire_shared_session(binder_4455, move |chan_565| {choose!(chan_565, Left, receive_value_from(chan_565, move |binder_4459| {release_shared_session(chan_565, send_channel_from(chan_565, rec_provider(binder_4459)))}))})}), Right => terminate () }) }
 
 fn user() -> Session<
     ReceiveChannel<

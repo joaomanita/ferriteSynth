@@ -4,6 +4,7 @@ type token =
   | TYPE_KEYWORD
   | SYNTHESIZE
   | SUGGEST
+  | STRING_T
   | SHAREDTOLINEAR
   | SESSION
   | SENDVALUE
@@ -25,6 +26,7 @@ type token =
   | LPAR
   | LINEARTOSHARED
   | LBRACE
+  | INT_T
   | INTERNALCHOICE
   | INT of int
   | ID of string

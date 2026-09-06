@@ -9,8 +9,16 @@ fn combiner<A, B>(arg1: A, arg2: B) -> Session<ExternalChoice<Either<A, B>>> {
 fn chooser() -> Session<ReceiveValue<String, ReceiveValue<Int, SendValue<Int, End>>>> {
     receive_value(move |val_0| {
         receive_value(move |val_1| {
-            cut! { []; combiner(val_1, val_1); binder_5 => {choose!(binder_5, Left, receive_value_from(binder_5, move |binder_9| {wait(binder_5, send_value(binder_9, terminate ()))}))}}
+            cut::<HList![]>(combiner(val_1, val_1), |binder_5| {
+                choose!(
+                    binder_5,
+                    Left,
+                    receive_value_from(binder_5, move |binder_9| {
+                        wait(binder_5, send_value(binder_9, terminate()))
+                    })
+                )
+            })
         })
     })
 }
-// fn chooser() -> Session<ReceiveValue<String, ReceiveValue<Int, SendValue<Int, End>>>> { receive_value(move |val_0| {receive_value(move |val_1| {cut! { []; combiner(val_1, val_1); binder_5 => {choose!(binder_5, Left, receive_value_from(binder_5, move |binder_9| {wait(binder_5, send_value(binder_9, terminate ()))}))}}})}) }
+// fn chooser() -> Session<ReceiveValue<String, ReceiveValue<Int, SendValue<Int, End>>>> { receive_value(move |val_0| {receive_value(move |val_1| {cut::<HList![]>(combiner(val_1, val_1), |binder_5| {choose!(binder_5, Left, receive_value_from(binder_5, move |binder_9| {wait(binder_5, send_value(binder_9, terminate ()))}))})})}) }
