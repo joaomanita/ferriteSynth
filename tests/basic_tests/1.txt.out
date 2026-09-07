@@ -5,13 +5,11 @@ use ferrite_session::{
   prelude::*,
 };
 
-type myType = Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>;
-
-fn myFunc<A, B, C>() -> Session<Scheme<<A, B, C>, ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>>> { receive_channel(|chan_0| {receive_channel(|chan_1| {offer_choice!{ Left => choose!(chan_0, Left, send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))), Right => choose!(chan_0, Right, send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))) }})}) }
-
+type myType<A, B, C> = ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>;
 
 // couldnt synthesize function
 
 
 // couldnt synthesize function
+
 

@@ -92,10 +92,7 @@ and print_type t =
   | TyZ i -> print_peano i
   | TyUnitRetFunc (name, argList) ->
       "FN<<" ^ name ^ ", " ^ print_labeled_choices argList print_type ^ ">, >"
-  | TyScheme (tList, tau) ->
-      "Scheme<<"
-      ^ String.concat ", " (List.map print_type tList)
-      ^ ">, " ^ print_type tau ^ ">"
+  | TyScheme (_, tau) -> print_type tau
 
 and print_type_internal t =
   match t with
@@ -164,6 +161,8 @@ and equal_type t1 t2 =
   | TyApp f1, TyApp f2 -> equal_type f1 f2
   | TyRec t1, TyRec t2 -> equal_type t1 t2
   | TyZ n1, TyZ n2 -> n1 = n2
+  | TyExistential _, _ -> true
+  | _, TyExistential _ -> true
   | TyScheme (ts1, tau1), TyScheme (ts2, tau2) ->
       List.length ts1 = List.length ts2
       && List.for_all2 equal_type ts1 ts2

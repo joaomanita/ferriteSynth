@@ -110,6 +110,7 @@ let rec rev_resolve_type t =
       | TySession t1 -> TySession (rev_resolve_type t1)
       | TyApp ty -> TyApp (rev_resolve_type ty)
       | TyRec t1 -> TyRec (rev_resolve_type t1)
+      | TyScheme (tList, ty) -> TyScheme (tList, rev_resolve_type ty)
       | _ -> t)
 
 and rev_resolve_atomic t ctxt =
@@ -604,7 +605,14 @@ let process_closed_function closed =
   | _ -> raise Fail
 
 let rec synthesize t argcountlist add_rec required_funcs usable_funcs =
-  let new_id = fresh_binder_id () in
+  let name_func =
+    match t with
+    | TyFunc ((name, _), _)
+    | TyScheme (_, TyFunc ((name, _), _))
+    | TyUnitRetFunc (name, _) ->
+        name
+    | _ -> raise Fail
+  in
   let delta_in =
     List.filter (fun (name, _) -> List.mem name required_funcs) !fn_ctxt
   in
@@ -612,13 +620,13 @@ let rec synthesize t argcountlist add_rec required_funcs usable_funcs =
     List.map
       (fun (name, ty) -> ((name, ty), 1))
       (if add_rec then
-         (new_id, resolve_type t)
+         (name_func, resolve_type t)
          :: List.filter (fun (name, _) -> List.mem name usable_funcs) !fn_ctxt
        else List.filter (fun (name, _) -> List.mem name usable_funcs) !fn_ctxt)
   in
   argcounts := argcountlist;
   let t_resolved = resolve_type t in
-  fn_ctxt := (new_id, t_resolved) :: !fn_ctxt;
+  fn_ctxt := (name_func, t_resolved) :: !fn_ctxt;
   let programs =
     delay (fun () ->
         inversionR gamma delta_in [] t_resolved [] [] [] [] 0
@@ -662,36 +670,53 @@ and inversionR gamma delta_in omega t psi zeta theta focus_ctx ident =
             tList
         in
         let _ty = apply_all_subst ty subst in
-        match _ty with
-        | TyFunc ((name, _argList), _tRet) ->
-            inversionR gamma delta_in omega ty psi zeta theta focus_ctx ident
-            >>= fun (ctxts_out, e) ->
+        inversionR gamma delta_in omega _ty psi zeta theta focus_ctx ident
+        >>= fun (ctxts_out, e) ->
+        match e with
+        | Func ((_, _), (_, e1)) ->
+            let (name, argList), tRet =
+              match ty with
+              | TyFunc ((name, argList), tRet) -> ((name, argList), tRet)
+              | _ -> raise Fail
+            in
             return
-              (ctxts_out, SchemeFunc (tList, ((name, _argList), (_tRet, e))))
-        | _ -> raise Fail)
-    | TyApp ty ->
-        let name, tyArgList =
-          match ty with
-          | TyFunc ((name, argList), _) -> (name, argList)
-          | _ -> raise Fail
-        in
-        let tyArgList = List.map (fun (_, t1) -> t1) tyArgList in
-        let rec synth_args gamma delta theta focus_ctx = function
-          | [] -> return ((gamma, ((delta, theta), focus_ctx)), [])
-          | t :: rest ->
-              let res =
-                decideFocus gamma (delta @ omega) t psi zeta theta focus_ctx
-                  (ident + 1)
-              in
-              res >>= fun ((gamma', ((delta', theta'), focus_ctx')), arg_tm) ->
-              synth_args gamma' delta' theta' focus_ctx' rest
-              >>= fun ((gamma'', ((delta'', theta''), focus_ctx'')), arg_tms) ->
-              return
-                ((gamma'', ((delta'', theta''), focus_ctx'')), arg_tm :: arg_tms)
-        in
-        synth_args gamma delta_in theta focus_ctx tyArgList
-        >>= fun (ctxts_out, arg_tm_list) ->
-        return (ctxts_out, App (Var name, arg_tm_list))
+              ( ctxts_out,
+                SchemeFunc
+                  (tList, ((name, argList), (rev_resolve_type tRet, e1))) )
+        | _ -> return (ctxts_out, e))
+    | TyApp ret_ty -> (
+        try
+          let subst, ((id, func_ty), delta_in') =
+            searchAndRemoveFuncType ret_ty delta_in []
+          in
+          let subst_func_ty = apply_all_subst func_ty subst in
+          let name, tyArgList =
+            match subst_func_ty with
+            | TyFunc ((name, argList), _) -> (name, argList)
+            | _ -> raise Fail
+          in
+          let focus_ctx' = searchAndRemoveFocusCtx focus_ctx id func_ty in
+          let tyArgList = List.map (fun (_, t1) -> t1) tyArgList in
+          let rec synth_args gamma delta theta focus_ctx = function
+            | [] -> return ((gamma, ((delta, theta), focus_ctx)), [])
+            | t :: rest ->
+                let res =
+                  decideFocus gamma (delta @ omega) t psi zeta theta focus_ctx
+                    (ident + 1)
+                in
+                res
+                >>= fun ((gamma', ((delta', theta'), focus_ctx')), arg_tm) ->
+                synth_args gamma' delta' theta' focus_ctx' rest
+                >>=
+                fun ((gamma'', ((delta'', theta''), focus_ctx'')), arg_tms) ->
+                return
+                  ( (gamma'', ((delta'', theta''), focus_ctx'')),
+                    arg_tm :: arg_tms )
+          in
+          synth_args gamma delta_in' theta focus_ctx' tyArgList
+          >>= fun (ctxts_out, arg_tm_list) ->
+          return (ctxts_out, App (Var name, arg_tm_list))
+        with Fail -> Choice.fail)
     | TySession t ->
         inversionR gamma delta_in omega t psi zeta theta focus_ctx (ident + 1)
         >>= fun ((gamma_out, ((delta_out, theta_out), focus_ctx')), e) ->
@@ -939,12 +964,8 @@ and focusR gamma delta_in t psi zeta theta focus_ctx ident =
             SendValue (e1, e2) )
     | TyRec _ ->
         if List.mem t psi then
-          try
-            let (id, func_ty), delta_in' = searchAndRemoveFuncType t delta_in in
-            let focus_ctx' = searchAndRemoveFocusCtx focus_ctx id func_ty in
-            inversionR gamma delta_in' [] (TyApp func_ty) psi zeta theta
-              focus_ctx' (ident + 1)
-          with Fail -> Choice.fail
+          inversionR gamma delta_in [] (TyApp t) psi zeta theta focus_ctx
+            (ident + 1)
         else
           let unfolded_t = unfold t in
           inversionR gamma delta_in [] unfolded_t (t :: psi) zeta theta
@@ -956,14 +977,8 @@ and focusR gamma delta_in t psi zeta theta focus_ctx ident =
           if counter = 0 then
             inversionR gamma delta_in [] t2 psi zeta theta focus_ctx (ident + 1)
           else
-            try
-              let (id, func_ty), delta_in' =
-                searchAndRemoveFuncType t1 delta_in
-              in
-              let focus_ctx' = searchAndRemoveFocusCtx focus_ctx id func_ty in
-              inversionR gamma delta_in' [] (TyApp func_ty) psi zeta theta
-                focus_ctx' (ident + 1)
-            with Fail -> Choice.fail
+            inversionR gamma delta_in [] (TyApp t1) psi zeta theta focus_ctx
+              (ident + 1)
         in
         result >>= fun (ctxts_out, e1) -> return (ctxts_out, Detach e1)
     | TyLinearToShared (t1, counter) ->
@@ -972,14 +987,8 @@ and focusR gamma delta_in t psi zeta theta focus_ctx ident =
           if counter = 0 then
             inversionR gamma delta_in [] t2 psi zeta theta focus_ctx (ident + 1)
           else
-            try
-              let (id, func_ty), delta_in' =
-                searchAndRemoveFuncType t1 delta_in
-              in
-              let focus_ctx' = searchAndRemoveFocusCtx focus_ctx id t1 in
-              inversionR gamma delta_in' [] (TyApp func_ty) psi zeta theta
-                focus_ctx' (ident + 1)
-            with Fail -> Choice.fail
+            inversionR gamma delta_in [] (TyApp t1) psi zeta theta focus_ctx
+              (ident + 1)
         in
         result >>= fun (ctxts_out, e1) -> return (ctxts_out, Accept e1)
     | TyEnd ->
@@ -1006,13 +1015,13 @@ and searchAndRemoveFuncType t delta_in subst =
   | [] -> raise Fail
   | ((id, TyFunc ((_, _), retType)) as x) :: rest -> (
       try
-        let subst = unifyT subst retType (TySession t) in
+        let subst = unifyT subst retType (TySession t) @ subst in
         (subst, ((id, snd x), rest))
       with CannotUnify ->
-        let res, rest' = searchAndRemoveFuncType t rest subst in
+        let subst, (res, rest') = searchAndRemoveFuncType t rest subst in
         (subst, (res, x :: rest')))
   | x :: rest ->
-      let res, rest' = searchAndRemoveFuncType t rest subst in
+      let subst, (res, rest') = searchAndRemoveFuncType t rest subst in
       (subst, (res, x :: rest'))
 
 and focusL gamma delta_in t psi zeta theta focus_ctx ident =
@@ -1084,11 +1093,11 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
         return (ctxts_out, Cut ([ L ] @ cut_dirs, Var id, (x1, e)))
     | TyFunc ((_, _), TySession tRet) ->
         if equal_type tRet t then
-          inversionR gamma delta_in [] (TyApp foc) psi zeta theta focus_ctx
-            (ident + 1)
+          inversionR gamma ((id, foc) :: delta_in) [] (TyApp tRet) psi zeta
+            theta focus_ctx (ident + 1)
         else if uses_typeR tRet t || uses_typeDelta tRet delta_in then
-          inversionR gamma delta_in [] (TyApp foc) psi zeta theta focus_ctx
-            (ident + 1)
+          inversionR gamma ((id, foc) :: delta_in) [] (TyApp tRet) psi zeta
+            theta focus_ctx (ident + 1)
           >>= fun ((gamma', ((delta', theta'), focus_ctx')), cutL) ->
           let cut_dirs =
             List.map

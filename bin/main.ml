@@ -48,9 +48,9 @@ let () =
                   branches;
                 Printf.fprintf out_channel "}\n")
         | TypeDef v ->
+            Synthesizer.append_type_ctxt v.name v.body;
             Printf.fprintf out_channel "type %s = %s;" v.name
-              (print_type v.body);
-            Synthesizer.append_type_ctxt v.name v.body
+              (print_type v.body)
         | Function (fType, argcounts, recursive, (required_funcs, usable_funcs))
           -> (
             let results =

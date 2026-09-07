@@ -1,5 +1,6 @@
 %{
   open Mini_ast
+  open Utils
 %}
 
 %token <string> RAW
@@ -64,13 +65,13 @@ decl:
 
 type_def:
   | TYPE_KEYWORD; _name = ID; EQ; t = s_type; SEMICOLON { TypeDef({name = _name; body = t}) }
-  | TYPE_KEYWORD; _name = ID; LT; schemelist = scheme_args; GT; EQ; t = s_type; SEMICOLON { TypeDef({name = _name; body = TyScheme(schemelist, t)}) }
+  | TYPE_KEYWORD; _name = ID; LT; schemelist = scheme_args; GT; EQ; t = s_type; SEMICOLON { TypeDef({name = _name ^ "<" ^ (String.concat ", " (List.map print_type schemelist)) ^ ">"; body = TyScheme(schemelist, t)}) }
 
 s_type:
   | INT_T                                                                { TyPrimitive("Int")}
   | STRING_T                                                             { TyPrimitive("String")}
   | id = ID                                                              { TyPrimitive(id) }
-  | id = ID; LT; schemelist = scheme_args; GT                            { ignore schemelist; TyPrimitive(id) }
+  | id = ID; LT; schemelist = scheme_args; GT                            { TyPrimitive(id ^ "<" ^ (String.concat ", " (List.map print_type schemelist)) ^ ">" )}
   | uppercaseid = ATOMIC                                                 { TyAtomic(uppercaseid) }
   | INTERNALCHOICE; LT; c = choice; GT                                   { TyInternalChoice(c) }
   | EXTERNALCHOICE; LT; c = choice; GT                                   { TyExternalChoice(c) }
@@ -78,10 +79,8 @@ s_type:
   | EXTERNALCHOICE; LT; id = ID; GT                                      { TyExternalChoiceId(id) }
   | SENDCHANNEL; LT; t = s_type; COMMA; cont = s_type; GT                { TySendChannel(t, cont) }
   | RECEIVECHANNEL; LT; t = s_type; COMMA; cont = s_type; GT             { TyReceiveChannel(t, cont) }
-  | SENDVALUE; LT; id = ID; COMMA; cont = s_type; GT                     { TySendValue(TyPrimitive id, cont) }
-  | SENDVALUE; LT; a = ATOMIC; COMMA; cont = s_type; GT                  { TySendValue(TyAtomic a, cont) }
-  | RECEIVEVALUE; LT; id  = ID; COMMA; cont = s_type; GT                 { TyReceiveValue(TyPrimitive id, cont) }
-  | RECEIVEVALUE; LT; a = ATOMIC; COMMA; cont = s_type; GT               { TyReceiveValue(TyAtomic a, cont) }
+  | SENDVALUE; LT; t1 = s_type; COMMA; cont = s_type; GT                 { TySendValue(t1, cont) }
+  | RECEIVEVALUE; LT; t1 = s_type; COMMA; cont = s_type; GT              { TyReceiveValue(t1, cont) }
   | END                                                                  { TyEnd }
   | SHAREDTOLINEAR; LT; t = s_type; GT                                   { TySharedToLinear(t, 0) }
   | LINEARTOSHARED; LT; t = s_type; GT                                   { TyLinearToShared(t, 0) }
@@ -167,6 +166,20 @@ closed_func:
         (TyFunc((name, List.map fst ars), ret),
          String.concat "" body)
       )
+    }
+    | FUNC; name = ID;
+    LT; tList = scheme_args; GT;
+    LPAR; ars = separated_list(COMMA, arg); RPAR;
+    MINUS; GT; ret = s_type;
+    LBRACE;
+    body = list(RAW);
+    RBRACE
+    {
+      let args = List.map (fun a -> fst a) ars in
+      ClosedFunction
+        (TyScheme 
+           (tList, TyFunc (
+            ((name, args), ret))), String.concat "" body)
     }
 
 scheme_args:

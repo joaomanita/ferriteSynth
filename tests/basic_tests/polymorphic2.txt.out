@@ -1,0 +1,9 @@
+use std::format;
+
+use ferrite_session::prelude::*;
+
+type myType<A, B> = ExternalChoice<Either<A, B>>;
+
+fn provider<A, B>(arg1: A, arg2: B) -> Session<myType<A, B>> {
+    offer_choice! { Left => forward(arg1), Right => forward(arg2) }
+}
