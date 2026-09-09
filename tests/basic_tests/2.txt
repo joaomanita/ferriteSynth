@@ -1,4 +1,4 @@
-use ferrite_session::prelude::*;
-type myType1 = ReceiveChannel<ExternalChoice<Either<A, A>>, A>;
+use ferrite_session::{either::*, prelude::*};
+type myType1<A> = ReceiveChannel<ExternalChoice<Either<A, A>>, A>;
 
-fn myFunc2() -> Session<myType1> { @SYNTHESIZE [] }
+fn myFunc2<A>() -> Session<myType1<A>> where A: Protocol { @SYNTHESIZE [] }

@@ -83,7 +83,7 @@ and print_type t =
   | TyLinearToShared (t, _) -> "LinearToShared<" ^ print_type t ^ ">"
   | TyFixShared -> "Release"
   | TySession t -> "Session<" ^ print_type t ^ ">"
-  | TyFunc ((name, tyArgs), tyRet) ->
+  | TyFunc (((name, tyArgs), tyRet), _) ->
       "FN<<" ^ name ^ ", "
       ^ print_labeled_choices tyArgs print_type
       ^ ">, " ^ print_type tyRet ^ ">"
@@ -116,7 +116,7 @@ and print_type_internal t =
   | TyLinearToShared (t, _) -> "LinearToShared<" ^ print_type t ^ ">"
   | TyFixShared -> "FixShared"
   | TySession t -> "Session<" ^ print_type t ^ ">"
-  | TyFunc ((name, tyArgs), tyRet) ->
+  | TyFunc (((name, tyArgs), tyRet), _) ->
       "FN<<" ^ name ^ ", "
       ^ print_labeled_choices tyArgs print_type
       ^ ">, " ^ print_type tyRet ^ ">"
@@ -154,7 +154,7 @@ and equal_type t1 t2 =
       equal_type t1 t2
   | TyFixShared, TyFixShared -> true
   | TySession t1, TySession t2 -> equal_type t1 t2
-  | TyFunc ((name1, args1), ret1), TyFunc ((name2, args2), ret2) ->
+  | TyFunc (((name1, args1), ret1), _), TyFunc (((name2, args2), ret2), _) ->
       name1 = name2 && equal_labeled_types args1 args2 && equal_type ret1 ret2
   | TyUnitRetFunc (name1, args1), TyUnitRetFunc (name2, args2) ->
       name1 = name2 && equal_labeled_types args1 args2
@@ -186,21 +186,23 @@ let rec print_ctxt_delta ctxt =
   match ctxt with
   | [] -> ""
   | (id, t) :: xs ->
-      sprintf "(%s, %s), %s" id (print_type t) (print_ctxt_delta xs)
+      sprintf "(%s, %s), %s" id (print_type_internal t) (print_ctxt_delta xs)
 
 let rec print_ctxt_gamma ctxt =
   match ctxt with
   | [] -> ""
   | ((id, t), timesUsed) :: xs ->
-      sprintf "((%s, %s), %s), %s" id (print_type t) (string_of_int timesUsed)
-        (print_ctxt_gamma xs)
+      sprintf "((%s, %s), %s), %s" id (print_type_internal t)
+        (string_of_int timesUsed) (print_ctxt_gamma xs)
 
 and print_zeta zeta =
   let elems = List.map (fun (id, n) -> Printf.sprintf "(%s, %d)" id n) zeta in
   log "[%s]\n" (String.concat "; " elems)
 
 and print_psi psi =
-  let elems = List.map (fun t -> Printf.sprintf "(%s)" (print_type t)) psi in
+  let elems =
+    List.map (fun t -> Printf.sprintf "(%s)" (print_type_internal t)) psi
+  in
   log "[%s]\n" (String.concat "; " elems)
 
 and searchAndRemove t = function
@@ -264,11 +266,11 @@ let print_fail func_name ident =
   log "%s< %s: fail\n" (String.make ident ' ') func_name
 
 let print_func_entry func_name t ident =
-  log "%s< %s: %s\n" (String.make ident ' ') func_name (print_type t)
+  log "%s< %s: %s\n" (String.make ident ' ') func_name (print_type_internal t)
 
 let print_func_entry_withgoal func_name t ident goal =
   log "%s< %s: %s with goal %s \n" (String.make ident ' ') func_name
-    (print_type t) (print_type goal)
+    (print_type_internal t) (print_type_internal goal)
 
 let print_ctxts_with_ident gamma delta ident =
   log "%s< [%s] [%s]\n" (String.make ident ' ') (print_ctxt_gamma gamma)

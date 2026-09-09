@@ -15,4 +15,4 @@ fn myFunc2() -> Session<myType> {
         })
     })
 }
-// fn myFunc2() -> Session<myType> { receive_channel(|chan_0| {receive_channel(|chan_1| {acquire_shared_session(chan_0, move |chan_5| {acquire_shared_session(chan_1, move |chan_7| {send_channel_to(chan_5, chan_7, accept_shared_session(forward(chan_5)))})})})}) }
+// fn myFunc2() -> Session<myType>  { receive_channel(|chan_0| {receive_channel(|chan_1| {acquire_shared_session(chan_0, move |chan_5| {acquire_shared_session(chan_1, move |chan_7| {send_channel_to(chan_5, chan_7, accept_shared_session(forward(chan_5)))})})})}) }

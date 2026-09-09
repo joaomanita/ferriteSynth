@@ -1,5 +1,6 @@
 type token =
     Z
+  | WHERE
   | USE
   | TYPE_KEYWORD
   | SYNTHESIZE
@@ -20,6 +21,7 @@ type token =
   | REC
   | RBRACE
   | RAW of string
+  | PROTOCOL
   | MINUS
   | LT
   | LSQUARE
@@ -48,7 +50,10 @@ val menhir_begin_marker : int
 val xv_z_type : int
 val xv_unit_ret_func : Mini_ast.decl
 val xv_type_def : Mini_ast.decl
+val xv_traits : string
+val xv_trait : string
 val xv_suggest_funcs : string list
+val xv_separated_nonempty_list_COMMA_trait_ : string list
 val xv_separated_nonempty_list_COMMA_choice_branch_ :
   (string * Mini_ast.ty) list
 val xv_separated_nonempty_list_COMMA_arg_ :

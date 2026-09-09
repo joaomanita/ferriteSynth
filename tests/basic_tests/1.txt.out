@@ -1,15 +1,76 @@
 use std::format;
 
-use ferrite_session::{
-  either::*,
-  prelude::*,
-};
+use ferrite_session::{either::*, prelude::*};
 
-type myType<A, B, C> = ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>>;
+type myType<A, B, C> = ReceiveChannel<
+    ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
+    ReceiveChannel<A, ExternalChoice<Either<SendChannel<B, End>, SendChannel<C, End>>>>,
+>;
 
-// couldnt synthesize function
+fn myFunc<A, B, C>() -> Session<myType<A, B, C>>
+where
+    A: Protocol,
+    B: Protocol,
+    C: Protocol,
+{
+    receive_channel(|chan_0| {
+        receive_channel(|chan_1| {
+            offer_choice! { Left => choose!(chan_0, Left, send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))), Right => choose!(chan_0, Right, send_channel_to(chan_0, chan_1, send_channel_from(chan_0, terminate ()))) }
+        })
+    })
+}
 
+fn user<A, B, C>(
+    arg1: A,
+    arg2: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>,
+) -> Session<ReceiveChannel<myType<A, B, C>, SendChannel<C, End>>> {
+    receive_channel(|chan_2| {
+        send_channel_to(
+            chan_2,
+            arg2,
+            send_channel_to(
+                chan_2,
+                arg1,
+                choose!(
+                    chan_2,
+                    Right,
+                    receive_channel_from(chan_2, |binder_63| {
+                        wait(chan_2, send_channel_from(binder_63, terminate()))
+                    })
+                ),
+            ),
+        )
+    })
+}
 
-// couldnt synthesize function
-
-
+fn main(
+    arg1: D,
+    arg2: ExternalChoice<Either<ReceiveChannel<D, E>, ReceiveChannel<D, F>>>,
+) -> Session<SendChannel<F, End>> {
+    cut::<HList![R]>(
+        user(
+            forward(arg1),
+            offer_choice! { Left => receive_channel(|chan_21| {forward(chan_21)}), Right => receive_channel(|chan_22| {forward(chan_22)}) },
+        ),
+        |binder_174| {
+            cut::<HList![R]>(myFunc(), |binder_192| {
+                send_channel_to(
+                    binder_192,
+                    arg2,
+                    send_channel_to(
+                        binder_192,
+                        binder_174,
+                        choose!(
+                            binder_192,
+                            Left,
+                            receive_channel_from(binder_192, |binder_208| {
+                                wait(binder_192, send_channel_from(binder_208, terminate()))
+                            })
+                        ),
+                    ),
+                )
+            })
+        },
+    )
+}
+// fn main(arg1: D, arg2: ExternalChoice<Either<ReceiveChannel<D, E>, ReceiveChannel<D, F>>>) -> Session<SendChannel<F, End>>  { cut::<HList![R]>(user(forward(arg1), offer_choice!{ Left => receive_channel(|chan_21| {forward(chan_21)}), Right => receive_channel(|chan_22| {forward(chan_22)}) }), |binder_174| {cut::<HList![R]>(myFunc(), |binder_192| {send_channel_to(binder_192, arg2, send_channel_to(binder_192, binder_174, choose!(binder_192, Left, receive_channel_from(binder_192, |binder_208| {wait(binder_192, forward(binder_208))}))))})}) }

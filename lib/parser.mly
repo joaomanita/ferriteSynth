@@ -48,6 +48,8 @@
 %token EXCLAMATION
 %token INT_T
 %token STRING_T
+%token WHERE
+%token PROTOCOL
 %start <decl list> prog
 %%
 
@@ -113,6 +115,7 @@ func:
   | FUNC; name = ID;
     LPAR; ars = separated_list(COMMA, arg); RPAR;
     MINUS; GT; ret = s_type;
+    traits = traits;
     LBRACE;
     AT; SYNTHESIZE;
     recursive = boption(REC_FUNC);
@@ -124,7 +127,7 @@ func:
     {
       let args = List.map (fun a -> fst a) ars in
       let argcounts = List.map (fun a -> snd a) ars in
-      Function (TyFunc (((name, args), ret)), argcounts, recursive, (required_funcs, suggested_funcs))
+      Function (TyFunc ((((name, args), ret)), traits), argcounts, recursive, (required_funcs, suggested_funcs))
     }
 
 unit_ret_func:
@@ -158,39 +161,52 @@ closed_func:
   | FUNC; name = ID;
     LPAR; ars = separated_list(COMMA, arg); RPAR;
     MINUS; GT; ret = s_type;
+    traits = traits;
     LBRACE;
     body = list(RAW);
     RBRACE
     {
       ClosedFunction(
-        (TyFunc((name, List.map fst ars), ret),
+        (TyFunc(((name, List.map fst ars), ret), traits),
          String.concat "" body)
       )
     }
-    | FUNC; name = ID;
+
+  | FUNC; name = ID;
     LT; tList = scheme_args; GT;
     LPAR; ars = separated_list(COMMA, arg); RPAR;
     MINUS; GT; ret = s_type;
+    traits = traits;
     LBRACE;
     body = list(RAW);
     RBRACE
     {
       let args = List.map (fun a -> fst a) ars in
       ClosedFunction
-        (TyScheme 
-           (tList, TyFunc (
-            ((name, args), ret))), String.concat "" body)
+        (TyScheme
+           (tList, TyFunc(((name, args), ret), traits)),
+         String.concat "" body)
     }
 
 scheme_args:
   | ts = separated_nonempty_list(COMMA, ATOMIC)
       { List.map (fun t -> TyAtomic t) ts }
 
+traits:
+  | WHERE; ws = separated_nonempty_list(COMMA, trait)
+    { "where " ^ String.concat ", " ws }
+  | { "" }
+
+trait:
+  | t = ATOMIC; COLON; PROTOCOL
+    { t ^ ": Protocol" }
+
 scheme_func:
   | FUNC; name = ID;
     LT; tList = scheme_args; GT;
     LPAR; ars = separated_list(COMMA, arg); RPAR;
     MINUS; GT; ret = s_type;
+    traits = traits;
     LBRACE;
     AT; SYNTHESIZE;
     recursive = boption(REC_FUNC);
@@ -204,8 +220,8 @@ scheme_func:
       let argcounts = List.map (fun a -> snd a) ars in
       Function
         (TyScheme 
-           (tList, TyFunc (
-            ((name, args), ret))), argcounts,  recursive, (required_funcs, suggested_funcs))
+           (tList, TyFunc ((
+            ((name, args), ret)), traits)), argcounts,  recursive, (required_funcs, suggested_funcs))
     }
 
 arg:

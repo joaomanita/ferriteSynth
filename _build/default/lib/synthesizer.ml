@@ -67,13 +67,14 @@ let rec resolve_type t =
   | TyLinearToShared (t, counter) -> TyLinearToShared (resolve_type t, counter)
   | TyFixShared -> t
   | TySession t -> TySession (resolve_type t)
-  | TyFunc ((name, argList), tRet) ->
+  | TyFunc (((name, argList), tRet), traits) ->
       TyFunc
-        ( ( name,
-            List.map
-              (fun (argName, argType) -> (argName, resolve_type argType))
-              argList ),
-          resolve_type tRet )
+        ( ( ( name,
+              List.map
+                (fun (argName, argType) -> (argName, resolve_type argType))
+                argList ),
+            resolve_type tRet ),
+          traits )
   | TyApp ty -> TyApp (resolve_type ty)
   | TyRec t -> TyRec (resolve_type t)
   | TyZ _ -> t
@@ -142,14 +143,14 @@ type tm =
   | Acquire of id * (id * tm)
   | Forward of id
   | Cut of side list * tm * (id * tm)
-  | Func of (id * (id * ty) list) * (ty * tm)
+  | Func of ((id * (id * ty) list) * (ty * tm)) * string
   | App of tm * tm list
   | Fix of tm
   | Unfix of id * tm
   | UnitRetFunc of (id * (id * ty) list) * tm
   | RunSession of tm
   | ApplyChannel of tm * tm
-  | SchemeFunc of ty list * ((id * (id * ty) list) * (ty * tm))
+  | SchemeFunc of (ty list * ((id * (id * ty) list) * (ty * tm))) * string
 
 and side = L | R
 
@@ -197,13 +198,13 @@ let rec print_exp e =
       sprintf "cut::<HList![%s]>(%s, |%s| {%s})"
         (String.concat ", " (List.map print_side cut_dirs))
         (print_exp session_tm) binder (print_exp tm)
-  | Func ((name, argList), (t, tm)) ->
+  | Func (((name, argList), (t, tm)), traits) ->
       let args_str =
         argList
         |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
         |> String.concat ", "
       in
-      sprintf "fn %s(%s) -> %s { %s }" name args_str (print_type t)
+      sprintf "fn %s(%s) -> %s %s { %s }" name args_str (print_type t) traits
         (print_exp tm)
   | App (func_name, arg_tmList) ->
       sprintf "%s(%s)" (print_exp func_name)
@@ -224,15 +225,15 @@ let rec print_exp e =
   | RunSession tm -> sprintf "run_session(%s).await" (print_exp tm)
   | ApplyChannel (tm1, tm2) ->
       sprintf "apply_channel(%s, %s)" (print_exp tm1) (print_exp tm2)
-  | SchemeFunc (tList, ((name, argList), (t, tm))) ->
+  | SchemeFunc ((tList, ((name, argList), (t, tm))), traits) ->
       let args_str =
         argList
         |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
         |> String.concat ", "
       in
-      sprintf "fn %s<%s>(%s) -> %s { %s }" name
+      sprintf "fn %s<%s>(%s) -> %s %s { %s }" name
         (String.concat ", " (List.map print_type tList))
-        args_str (print_type t) (print_exp tm)
+        args_str (print_type t) traits (print_exp tm)
 
 (* Substitutes x in type t1 with replacement *)
 let rec substT x replacement t1 =
@@ -258,10 +259,11 @@ let rec substT x replacement t1 =
         TyLinearToShared (substT x replacement t, counter)
     | TySession t -> TySession (substT x replacement t)
     | TyRec t -> TyRec (substT x replacement t)
-    | TyFunc ((n, args), ret) ->
+    | TyFunc (((n, args), ret), traits) ->
         TyFunc
-          ( (n, List.map (fun (l, t) -> (l, substT x replacement t)) args),
-            substT x replacement ret )
+          ( ( (n, List.map (fun (l, t) -> (l, substT x replacement t)) args),
+              substT x replacement ret ),
+            traits )
     | TyScheme (ts, tau) -> TyScheme (ts, substT x replacement tau)
     | _ -> t1
 
@@ -302,10 +304,10 @@ let rec subst e1 x e2 =
   | Cut (sideList, session_tm, (binder, tm)) ->
       if x <> binder then Cut (sideList, session_tm, (binder, subst tm x e2))
       else e1
-  | Func ((name, argList), (t, tm)) ->
+  | Func (((name, argList), (t, tm)), traits) ->
       let binders = List.map fst argList in
       if List.mem x binders then e1
-      else Func ((name, argList), (t, subst tm x e2))
+      else Func (((name, argList), (t, subst tm x e2)), traits)
   | App (func_tm, arg_tmList) ->
       App (subst func_tm x e2, List.map (fun tm -> subst tm x e2) arg_tmList)
   | Fix tm -> Fix (subst tm x e2)
@@ -389,7 +391,7 @@ let rec contains_type target ty =
   | TyRec t1 ->
       contains_type target t1
   | TyApp ty -> contains_type target ty
-  | TyFunc ((_, _), tRet) -> contains_type target tRet
+  | TyFunc (((_, _), tRet), _) -> contains_type target tRet
   | TyUnitRetFunc (_, argList) ->
       List.exists (fun (_, t1) -> contains_type target t1) argList
   | _ -> false
@@ -411,7 +413,7 @@ let rec uses_typeR target ty =
   | TyRec t1 ->
       uses_typeR target t1
   | TyApp t1 -> uses_typeR target t1
-  | TyFunc ((_, _), tRet) -> uses_typeR target tRet
+  | TyFunc (((_, _), tRet), _) -> uses_typeR target tRet
   | TyUnitRetFunc (_, argList) ->
       List.exists (fun (_, t1) -> uses_typeR target t1) argList
   | TyAtomic _ | TyPrimitive _ -> equal_type target ty
@@ -435,7 +437,7 @@ let rec uses_typeL target ty =
       | _ -> uses_typeL target t1)
   | TyRec t1 -> uses_typeL target t1
   | TyApp t1 -> uses_typeL target t1
-  | TyFunc ((_, _), tRet) -> uses_typeL target tRet
+  | TyFunc (((_, _), tRet), _) -> uses_typeL target tRet
   | TyUnitRetFunc (_, argList) ->
       List.exists (fun (_, t1) -> uses_typeL target t1) argList
   | TyAtomic _ | TyPrimitive _ -> equal_type target ty
@@ -521,10 +523,11 @@ let rec instantiate ty =
   | TyLinearToShared (t, counter) -> TyLinearToShared (instantiate t, counter)
   | TySession t -> TySession (instantiate t)
   | TyRec t -> TyRec (instantiate t)
-  | TyFunc ((name, argList), tRet) ->
+  | TyFunc (((name, argList), tRet), traits) ->
       TyFunc
-        ( (name, List.map (fun (id, ty) -> (id, instantiate ty)) argList),
-          instantiate tRet )
+        ( ( (name, List.map (fun (id, ty) -> (id, instantiate ty)) argList),
+            instantiate tRet ),
+          traits )
   | TyUnitRetFunc (name, argList) ->
       TyUnitRetFunc
         (name, List.map (fun (id, ty) -> (id, instantiate ty)) argList)
@@ -592,23 +595,26 @@ let unify constr theta =
 
 let process_closed_function closed =
   match closed with
-  | TyFunc ((name, argList), tRet), body ->
-      let t_resolved = resolve_type (TyFunc ((name, argList), tRet)) in
-      fn_ctxt := (name, t_resolved) :: !fn_ctxt;
-      Func ((name, argList), (tRet, RawText body))
-  | TyScheme (scheme_list, TyFunc ((name, argList), tRet)), body ->
+  | TyFunc (((name, argList), tRet), traits), body ->
       let t_resolved =
-        resolve_type (TyScheme (scheme_list, TyFunc ((name, argList), tRet)))
+        resolve_type (TyFunc (((name, argList), tRet), traits))
       in
       fn_ctxt := (name, t_resolved) :: !fn_ctxt;
-      SchemeFunc (scheme_list, ((name, argList), (tRet, RawText body)))
+      Func (((name, argList), (tRet, RawText body)), traits)
+  | TyScheme (scheme_list, TyFunc (((name, argList), tRet), traits)), body ->
+      let t_resolved =
+        resolve_type
+          (TyScheme (scheme_list, TyFunc (((name, argList), tRet), traits)))
+      in
+      fn_ctxt := (name, t_resolved) :: !fn_ctxt;
+      SchemeFunc ((scheme_list, ((name, argList), (tRet, RawText body))), traits)
   | _ -> raise Fail
 
 let rec synthesize t argcountlist add_rec required_funcs usable_funcs =
   let name_func =
     match t with
-    | TyFunc ((name, _), _)
-    | TyScheme (_, TyFunc ((name, _), _))
+    | TyFunc (((name, _), _), _)
+    | TyScheme (_, TyFunc (((name, _), _), _))
     | TyUnitRetFunc (name, _) ->
         name
     | _ -> raise Fail
@@ -644,14 +650,16 @@ and inversionR gamma delta_in omega t psi zeta theta focus_ctx ident =
 
   let tm =
     match t with
-    | TyFunc ((name, argList), tRet) ->
+    | TyFunc (((name, argList), tRet), traits) ->
         let argListCounted =
           List.map2 (fun (id, ty) count -> ((id, ty), count)) argList !argcounts
         in
         inversionR (argListCounted @ gamma) delta_in omega tRet psi zeta theta
           focus_ctx (ident + 1)
         >>= fun (ctxts_out, e) ->
-        return (ctxts_out, Func ((name, argList), (rev_resolve_type tRet, e)))
+        return
+          ( ctxts_out,
+            Func (((name, argList), (rev_resolve_type tRet, e)), traits) )
     | TyUnitRetFunc (name, argList) ->
         let argListCounted =
           List.map2 (fun (id, ty) count -> ((id, ty), count)) argList !argcounts
@@ -673,16 +681,17 @@ and inversionR gamma delta_in omega t psi zeta theta focus_ctx ident =
         inversionR gamma delta_in omega _ty psi zeta theta focus_ctx ident
         >>= fun (ctxts_out, e) ->
         match e with
-        | Func ((_, _), (_, e1)) ->
+        | Func (((_, _), (_, e1)), traits) ->
             let (name, argList), tRet =
               match ty with
-              | TyFunc ((name, argList), tRet) -> ((name, argList), tRet)
+              | TyFunc (((name, argList), tRet), _) -> ((name, argList), tRet)
               | _ -> raise Fail
             in
             return
               ( ctxts_out,
                 SchemeFunc
-                  (tList, ((name, argList), (rev_resolve_type tRet, e1))) )
+                  ( (tList, ((name, argList), (rev_resolve_type tRet, e1))),
+                    traits ) )
         | _ -> return (ctxts_out, e))
     | TyApp ret_ty -> (
         try
@@ -692,7 +701,7 @@ and inversionR gamma delta_in omega t psi zeta theta focus_ctx ident =
           let subst_func_ty = apply_all_subst func_ty subst in
           let name, tyArgList =
             match subst_func_ty with
-            | TyFunc ((name, argList), _) -> (name, argList)
+            | TyFunc (((name, argList), _), _) -> (name, argList)
             | _ -> raise Fail
           in
           let focus_ctx' = searchAndRemoveFocusCtx focus_ctx id func_ty in
@@ -1013,7 +1022,7 @@ and choice_to_list c =
 and searchAndRemoveFuncType t delta_in subst =
   match delta_in with
   | [] -> raise Fail
-  | ((id, TyFunc ((_, _), retType)) as x) :: rest -> (
+  | ((id, TyFunc (((_, _), retType), _)) as x) :: rest -> (
       try
         let subst = unifyT subst retType (TySession t) @ subst in
         (subst, ((id, snd x), rest))
@@ -1074,7 +1083,8 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
     | TyExistential _ -> (
         try
           let theta_out = unify (foc, t) theta in
-          focusL' gamma delta_in id t t psi zeta theta_out focus_ctx (ident + 1)
+          log "%s success existential unify\n" (String.make ident ' ');
+          return ((gamma, ((delta_in, theta_out), focus_ctx)), Forward id)
         with Fail -> Choice.fail)
     | TyPrimitive _ ->
         if equal_type foc t then (
@@ -1091,7 +1101,7 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
         >>= fun (ctxts_out, e) ->
         let cut_dirs = List.map (fun (_, _) -> R) delta_in in
         return (ctxts_out, Cut ([ L ] @ cut_dirs, Var id, (x1, e)))
-    | TyFunc ((_, _), TySession tRet) ->
+    | TyFunc (((_, _), TySession tRet), _) ->
         if equal_type tRet t then
           inversionR gamma ((id, foc) :: delta_in) [] (TyApp tRet) psi zeta
             theta focus_ctx (ident + 1)

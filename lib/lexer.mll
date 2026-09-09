@@ -86,6 +86,8 @@ rule read = parse
   | "suggest" { match !current_mode with | Raw -> RAW "suggest" | _ -> SUGGEST }
   | "REC" { match !current_mode with | Raw -> RAW "REC" | _ -> REC_FUNC }
   | "!"   { match !current_mode with | Raw -> RAW "!" | _ -> EXCLAMATION }
+  | "where" { match !current_mode with | Raw -> RAW "where" | _ -> WHERE }
+  | "Protocol" { match !current_mode with | Raw -> RAW "Protocol" | _ -> PROTOCOL }
 
   (* ---- KEYWORDS ---- *)
   | "Session"        { SESSION }

@@ -11,7 +11,7 @@ fn chooser<A, B>(
         send_value(forward(arg1), chooser(forward(arg2), forward(arg1)))
     ))
 }
-// fn chooser<A, B>(arg1: A, arg2: B) -> Session<Rec<InternalChoice<Either<SendValue<A, Z>, SendValue<B, Z>>>>> { fix_session(offer_case!(Left, send_value(forward(arg1), chooser(forward(arg1), forward(arg2))))) }
+// fn chooser<A, B>(arg1: A, arg2: B) -> Session<Rec<InternalChoice<Either<SendValue<A, Z>, SendValue<B, Z>>>>>  { fix_session(offer_case!(Left, send_value(forward(arg1), chooser(forward(arg1), forward(arg2))))) }
 
 fn repeater() -> Session<
     ReceiveValue<
@@ -21,4 +21,4 @@ fn repeater() -> Session<
 > {
     receive_value(move |val_0| receive_value(move |val_1| chooser(val_1, val_0)))
 }
-// fn repeater() -> Session<ReceiveValue<Int, ReceiveValue<String, Rec<InternalChoice<Either<SendValue<Int, Z>, SendValue<String, Z>>>>>>> { receive_value(move |val_0| {receive_value(move |val_1| {chooser(val_1, val_1)})}) }
+// fn repeater() -> Session<ReceiveValue<Int, ReceiveValue<String, Rec<InternalChoice<Either<SendValue<Int, Z>, SendValue<String, Z>>>>>>>  { receive_value(move |val_0| {receive_value(move |val_1| {chooser(val_1, val_1)})}) }

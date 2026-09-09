@@ -39,5 +39,5 @@ and choice =
   | TyDefineChoice of (label * (label * ty) list)
   | TyEither of (ty * ty)
 
-and func_ty = (string * (label * ty) list) * ty
+and func_ty = ((string * (label * ty) list) * ty) * string
 and subst = ty * ty

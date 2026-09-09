@@ -3,6 +3,7 @@
 
 type token = 
   | Z
+  | WHERE
   | USE
   | TYPE_KEYWORD
   | SYNTHESIZE
@@ -23,6 +24,7 @@ type token =
   | REC
   | RBRACE
   | RAW of (string)
+  | PROTOCOL
   | MINUS
   | LT
   | LSQUARE
@@ -68,6 +70,7 @@ module MenhirInterpreter : sig
   type _ terminal = 
     | T_error : unit terminal
     | T_Z : unit terminal
+    | T_WHERE : unit terminal
     | T_USE : unit terminal
     | T_TYPE_KEYWORD : unit terminal
     | T_SYNTHESIZE : unit terminal
@@ -88,6 +91,7 @@ module MenhirInterpreter : sig
     | T_REC : unit terminal
     | T_RBRACE : unit terminal
     | T_RAW : (string) terminal
+    | T_PROTOCOL : unit terminal
     | T_MINUS : unit terminal
     | T_LT : unit terminal
     | T_LSQUARE : unit terminal
@@ -119,7 +123,10 @@ module MenhirInterpreter : sig
     | N_z_type : (int) nonterminal
     | N_unit_ret_func : (Mini_ast.decl) nonterminal
     | N_type_def : (Mini_ast.decl) nonterminal
+    | N_traits : (string) nonterminal
+    | N_trait : (string) nonterminal
     | N_suggest_funcs : (string list) nonterminal
+    | N_separated_nonempty_list_COMMA_trait_ : (string list) nonterminal
     | N_separated_nonempty_list_COMMA_choice_branch_ : ((string * Mini_ast.ty) list) nonterminal
     | N_separated_nonempty_list_COMMA_arg_ : (((string * Mini_ast.ty) * int) list) nonterminal
     | N_separated_nonempty_list_COMMA_ID_ : (string list) nonterminal
