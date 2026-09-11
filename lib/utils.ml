@@ -182,6 +182,15 @@ and equal_choice c1 c2 =
   | TyEither (l1, r1), TyEither (l2, r2) -> equal_type l1 l2 && equal_type r1 r2
   | _ -> false
 
+and is_session_type ty =
+  match ty with
+  | TyAtomic _ | TyExistential _ | TySession _ | TySendChannel _
+  | TyReceiveChannel _ | TySendValue _ | TyReceiveValue _ | TyInternalChoice _
+  | TyExternalChoice _ | TyInternalChoiceId _ | TyExternalChoiceId _ | TyEnd
+  | TySharedToLinear _ | TyLinearToShared _ | TyRec _ | TyFixShared | TyZ _ ->
+      true
+  | TyPrimitive _ | TyFunc _ | TyScheme _ | TyUnitRetFunc _ | TyApp _ -> false
+
 let rec print_ctxt_delta ctxt =
   match ctxt with
   | [] -> ""

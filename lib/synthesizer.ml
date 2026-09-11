@@ -195,7 +195,7 @@ let rec print_exp e =
         (print_exp tm)
   | Forward chan -> sprintf "forward(%s)" chan
   | Cut (cut_dirs, session_tm, (binder, tm)) ->
-      sprintf "cut::<HList![%s]>(%s, |%s| {%s})"
+      sprintf "cut::<HList![%s], _, _, _, _, _, _>(%s, |%s| {%s})"
         (String.concat ", " (List.map print_side cut_dirs))
         (print_exp session_tm) binder (print_exp tm)
   | Func (((name, argList), (t, tm)), traits) ->
@@ -219,7 +219,7 @@ let rec print_exp e =
       in
       match tm with
       | RunSession _ | ApplyChannel _ ->
-          sprintf "#[tokio::main]\n pub async fn %s(%s) { %s }" name args_str
+          sprintf "#[tokio::main] pub async fn %s(%s) { %s }" name args_str
             (print_exp tm)
       | _ -> sprintf "fn %s(%s) { %s }" name args_str (print_exp tm))
   | RunSession tm -> sprintf "run_session(%s).await" (print_exp tm)
@@ -1110,15 +1110,15 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
             theta focus_ctx (ident + 1)
           >>= fun ((gamma', ((delta', theta'), focus_ctx')), cutL) ->
           let cut_dirs =
-            List.map
-              (fun (id, ty) ->
-                if
-                  List.exists
-                    (fun (id', ty') -> id = id' && equal_type ty ty')
-                    delta'
-                then R
-                else L)
-              delta_in
+            delta_in
+            |> List.filter (fun (_, ty) -> is_session_type ty)
+            |> List.map (fun (id, ty) ->
+                   if
+                     List.exists
+                       (fun (id', ty') -> id = id' && equal_type ty ty')
+                       delta'
+                   then R
+                   else L)
           in
 
           let x1 = fresh_binder_id () in
