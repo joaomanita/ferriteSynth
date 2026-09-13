@@ -11,12 +11,12 @@ fn shared_provider_1(count: u64) -> Session<Counter> {
 // fn shared_provider_1(count: u64) -> Session<Counter>  { accept_shared_session(send_value(count, detach_shared_session(shared_provider_1(count)))) }
 
 fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>> {
-    receive_channel(|chan_0| {
-        acquire_shared_session(chan_0, move |chan_2| {
-            receive_value_from(chan_2, move |binder_1| {
-                release_shared_session(chan_2, send_value(binder_1, terminate()))
+    receive_channel(|chan_7| {
+        acquire_shared_session(chan_7, move |chan_9| {
+            receive_value_from(chan_9, move |binder_12| {
+                release_shared_session(chan_9, send_value(binder_12, terminate()))
             })
         })
     })
 }
-// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>>  { receive_channel(|chan_0| {acquire_shared_session(chan_0, move |chan_2| {receive_value_from(chan_2, move |binder_1| {release_shared_session(chan_2, send_value(binder_1, terminate ()))})})}) }
+// fn shared_client() -> Session<ReceiveChannel<Counter, SendValue<u64, End>>>  { receive_channel(|chan_7| {acquire_shared_session(chan_7, move |chan_9| {receive_value_from(chan_9, move |binder_12| {release_shared_session(chan_9, send_value(binder_12, terminate ()))})})}) }

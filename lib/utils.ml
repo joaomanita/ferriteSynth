@@ -160,13 +160,50 @@ and equal_type t1 t2 =
       name1 = name2 && equal_labeled_types args1 args2
   | TyApp f1, TyApp f2 -> equal_type f1 f2
   | TyRec t1, TyRec t2 -> equal_type t1 t2
-  | TyZ n1, TyZ n2 -> n1 = n2
-  | TyExistential _, _ -> true
-  | _, TyExistential _ -> true
+  | TyZ _, TyZ _ -> true
   | TyScheme (ts1, tau1), TyScheme (ts2, tau2) ->
       List.length ts1 = List.length ts2
       && List.for_all2 equal_type ts1 ts2
       && equal_type tau1 tau2
+  | _ -> false
+
+and equal_type_with_existentials t1 t2 =
+  match (t1, t2) with
+  | TyPrimitive p1, TyPrimitive p2 -> p1 = p2
+  | TyAtomic a1, TyAtomic a2 -> a1 = a2
+  | TyInternalChoice c1, TyInternalChoice c2 ->
+      equal_choice_with_existentials c1 c2
+  | TyExternalChoice c1, TyExternalChoice c2 ->
+      equal_choice_with_existentials c1 c2
+  | TyInternalChoiceId id1, TyInternalChoiceId id2 -> id1 = id2
+  | TyExternalChoiceId id1, TyExternalChoiceId id2 -> id1 = id2
+  | TySendChannel (a1, b1), TySendChannel (a2, b2)
+  | TyReceiveChannel (a1, b1), TyReceiveChannel (a2, b2)
+  | TySendValue (a1, b1), TySendValue (a2, b2)
+  | TyReceiveValue (a1, b1), TyReceiveValue (a2, b2) ->
+      equal_type_with_existentials a1 a2 && equal_type_with_existentials b1 b2
+  | TyEnd, TyEnd -> true
+  (* Ignore the counters *)
+  | TySharedToLinear (t1, _), TySharedToLinear (t2, _)
+  | TyLinearToShared (t1, _), TyLinearToShared (t2, _) ->
+      equal_type_with_existentials t1 t2
+  | TyFixShared, TyFixShared -> true
+  | TySession t1, TySession t2 -> equal_type_with_existentials t1 t2
+  | TyFunc (((name1, args1), ret1), _), TyFunc (((name2, args2), ret2), _) ->
+      name1 = name2
+      && equal_labeled_types_with_existentials args1 args2
+      && equal_type_with_existentials ret1 ret2
+  | TyUnitRetFunc (name1, args1), TyUnitRetFunc (name2, args2) ->
+      name1 = name2 && equal_labeled_types_with_existentials args1 args2
+  | TyApp f1, TyApp f2 -> equal_type_with_existentials f1 f2
+  | TyRec t1, TyRec t2 -> equal_type_with_existentials t1 t2
+  | TyZ _, TyZ _ -> true
+  | TyExistential _, _ -> true
+  | _, TyExistential _ -> true
+  | TyScheme (ts1, tau1), TyScheme (ts2, tau2) ->
+      List.length ts1 = List.length ts2
+      && List.for_all2 equal_type_with_existentials ts1 ts2
+      && equal_type_with_existentials tau1 tau2
   | _ -> false
 
 and equal_labeled_types l1 l2 =
@@ -181,6 +218,21 @@ and equal_choice c1 c2 =
       label1 = label2 && equal_labeled_types tys1 tys2
   | TyEither (l1, r1), TyEither (l2, r2) -> equal_type l1 l2 && equal_type r1 r2
   | _ -> false
+
+and equal_choice_with_existentials c1 c2 =
+  match (c1, c2) with
+  | TyDefineChoice (label1, tys1), TyDefineChoice (label2, tys2) ->
+      label1 = label2 && equal_labeled_types_with_existentials tys1 tys2
+  | TyEither (l1, r1), TyEither (l2, r2) ->
+      equal_type_with_existentials l1 l2 && equal_type_with_existentials r1 r2
+  | _ -> false
+
+and equal_labeled_types_with_existentials l1 l2 =
+  List.length l1 = List.length l2
+  && List.for_all2
+       (fun (lbl1, ty1) (lbl2, ty2) ->
+         lbl1 = lbl2 && equal_type_with_existentials ty1 ty2)
+       l1 l2
 
 and is_session_type ty =
   match ty with
@@ -217,7 +269,7 @@ and print_psi psi =
 and searchAndRemove t = function
   | [] -> raise Fail
   | (id, t1) :: xs ->
-      if equal_type t1 t then (id, xs)
+      if equal_type_with_existentials t1 t then (id, xs)
       else
         let id', rest = searchAndRemove t xs in
         (id', (id, t1) :: rest)
@@ -225,7 +277,7 @@ and searchAndRemove t = function
 and removeWithId id t = function
   | [] -> raise Fail
   | (id1, t1) :: xs ->
-      if equal_type t1 t && id1 = id then xs
+      if equal_type_with_existentials t1 t && id1 = id then xs
       else
         let rest = removeWithId id t xs in
         (id1, t1) :: rest
@@ -233,7 +285,7 @@ and removeWithId id t = function
 and removeWithIdGamma id t = function
   | [] -> raise Fail
   | ((id1, t1), count) :: xs ->
-      if equal_type t1 t && id1 = id then xs
+      if equal_type_with_existentials t1 t && id1 = id then xs
       else
         let rest = removeWithIdGamma id t xs in
         ((id1, t1), count) :: rest
@@ -242,7 +294,7 @@ and searchAndRemoveFocusCtx focus_ctx id t =
   match focus_ctx with
   | [] -> []
   | (id1, t1) :: xs ->
-      if equal_type t1 t && id1 = id then xs
+      if equal_type_with_existentials t1 t && id1 = id then xs
       else
         let res = searchAndRemoveFocusCtx xs id t in
         (id1, t1) :: res

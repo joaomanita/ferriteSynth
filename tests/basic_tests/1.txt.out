@@ -34,43 +34,36 @@ fn user<A, B, C>(
                 choose!(
                     chan_2,
                     Right,
-                    receive_channel_from(chan_2, |binder_63| {
-                        wait(chan_2, send_channel_from(binder_63, terminate()))
+                    receive_channel_from(chan_2, |binder_47| {
+                        wait(chan_2, send_channel_from(binder_47, terminate()))
                     })
                 ),
             ),
         )
     })
 }
+// fn user<A, B, C>(arg1: A, arg2: ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>) -> Session<ReceiveChannel<myType<A, B, C>, SendChannel<C, End>>>  { receive_channel(|chan_2| {send_channel_to(chan_2, arg2, send_channel_to(chan_2, arg1, choose!(chan_2, Right, receive_channel_from(chan_2, |binder_15| {wait(chan_2, send_channel_from(binder_15, terminate ()))}))))}) }
 
-fn main(
+fn main<D, E, F>(
     arg1: D,
     arg2: ExternalChoice<Either<ReceiveChannel<D, E>, ReceiveChannel<D, F>>>,
 ) -> Session<SendChannel<F, End>> {
-    cut::<HList![], _, _, _, _, _, _>(
-        user(
-            forward(arg1),
-            offer_choice! { Left => receive_channel(|chan_21| {forward(chan_21)}), Right => receive_channel(|chan_22| {forward(chan_22)}) },
-        ),
-        |binder_174| {
-            cut::<HList![R], _, _, _, _, _, _>(myFunc(), |binder_192| {
+    cut::<HList![], _, _, _, _, _, _>(myFunc(), |binder_107| {
+        cut::<HList![L, R], _, _, _, _, _, _>(
+            user(
+                arg1,
+                offer_choice! { Left => receive_channel(|chan_37| {forward(chan_37)}), Right => receive_channel(|chan_38| {forward(chan_38)}) },
+            ),
+            |binder_183| {
                 send_channel_to(
-                    binder_192,
-                    arg2,
-                    send_channel_to(
-                        binder_192,
-                        binder_174,
-                        choose!(
-                            binder_192,
-                            Left,
-                            receive_channel_from(binder_192, |binder_208| {
-                                wait(binder_192, send_channel_from(binder_208, terminate()))
-                            })
-                        ),
-                    ),
+                    binder_183,
+                    binder_107,
+                    receive_channel_from(binder_183, |binder_187| {
+                        wait(binder_183, send_channel_from(binder_187, terminate()))
+                    }),
                 )
-            })
-        },
-    )
+            },
+        )
+    })
 }
-// fn main(arg1: D, arg2: ExternalChoice<Either<ReceiveChannel<D, E>, ReceiveChannel<D, F>>>) -> Session<SendChannel<F, End>>  { cut::<HList![], _, _, _, _, _, _>(user(forward(arg1), offer_choice!{ Left => receive_channel(|chan_21| {forward(chan_21)}), Right => receive_channel(|chan_22| {forward(chan_22)}) }), |binder_174| {cut::<HList![R], _, _, _, _, _, _>(myFunc(), |binder_192| {send_channel_to(binder_192, arg2, send_channel_to(binder_192, binder_174, choose!(binder_192, Left, receive_channel_from(binder_192, |binder_208| {wait(binder_192, forward(binder_208))}))))})}) }
+// fn main<D, E, F>(arg1: D, arg2: ExternalChoice<Either<ReceiveChannel<D, E>, ReceiveChannel<D, F>>>) -> Session<SendChannel<F, End>>  { cut::<HList![], _, _, _, _, _, _>(myFunc(), |binder_107| {cut::<HList![L, R], _, _, _, _, _, _>(user(arg1, offer_choice!{ Left => receive_channel(|chan_37| {forward(chan_37)}), Right => receive_channel(|chan_38| {forward(chan_38)}) }), |binder_183| {send_channel_to(binder_183, binder_107, receive_channel_from(binder_183, |binder_187| {wait(binder_183, receive_channel_from(binder_187, |binder_189| {wait(binder_187, send_channel_from(binder_189, terminate ()))}))}))})}) }

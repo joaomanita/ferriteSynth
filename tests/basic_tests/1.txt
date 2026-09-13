@@ -11,4 +11,4 @@ fn myFunc<A, B, C>() -> Session<myType<A, B, C>> where A: Protocol, B: Protocol,
 
 fn user<A, B, C>(arg1: A: 1, arg2: ExternalChoice<Either<ReceiveChannel<A,B>, ReceiveChannel<A, C>>>: 1) -> Session<ReceiveChannel<myType<A, B, C>, SendChannel<C, End>>> { @SYNTHESIZE [] }
 
-fn main(arg1: D: 1, arg2: ExternalChoice<Either<ReceiveChannel<D,E>, ReceiveChannel<D, F>>>: 1) -> Session<SendChannel<F, End>> { @SYNTHESIZE [use myFunc, user;] }
+fn main<D, E, F>(arg1: D: 1, arg2: ExternalChoice<Either<ReceiveChannel<D,E>, ReceiveChannel<D, F>>>: 1) -> Session<SendChannel<F, End>> { @SYNTHESIZE [use myFunc, user;] }

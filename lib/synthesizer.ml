@@ -397,15 +397,19 @@ let rec contains_type target ty =
   | _ -> false
 
 let rec uses_typeR target ty =
+  equal_type_with_existentials target ty
+  ||
   match ty with
   | TyInternalChoice c | TyExternalChoice c -> (
       match c with
       | TyDefineChoice (_, l) ->
           List.exists (fun (_, t) -> uses_typeR target t) l
       | TyEither (t1, t2) -> uses_typeR target t1 || uses_typeR target t2)
-  | TySendChannel (t1, t2) -> equal_type target t1 || uses_typeR target t2
+  | TySendChannel (t1, t2) ->
+      equal_type_with_existentials target t1 || uses_typeR target t2
   | TyReceiveChannel (_, t2) -> uses_typeR target t2
-  | TySendValue (t1, t2) -> equal_type target t1 || uses_typeR target t2
+  | TySendValue (t1, t2) ->
+      equal_type_with_existentials target t1 || uses_typeR target t2
   | TyReceiveValue (_, t1)
   | TySharedToLinear (t1, _)
   | TyLinearToShared (t1, _)
@@ -416,11 +420,13 @@ let rec uses_typeR target ty =
   | TyFunc (((_, _), tRet), _) -> uses_typeR target tRet
   | TyUnitRetFunc (_, argList) ->
       List.exists (fun (_, t1) -> uses_typeR target t1) argList
-  | TyAtomic _ | TyPrimitive _ -> equal_type target ty
+  | TyAtomic _ | TyPrimitive _ -> equal_type_with_existentials target ty
   | TyEnd -> contains_type TyEnd target
   | _ -> false
 
 let rec uses_typeL target ty =
+  equal_type_with_existentials target ty
+  ||
   match ty with
   | TyInternalChoice c | TyExternalChoice c -> (
       match c with
@@ -428,9 +434,11 @@ let rec uses_typeL target ty =
           List.exists (fun (_, t) -> uses_typeL target t) l
       | TyEither (t1, t2) -> uses_typeL target t1 || uses_typeL target t2)
   | TySendChannel (_, t2) -> uses_typeL target t2
-  | TyReceiveChannel (t1, t2) -> equal_type target t1 || uses_typeL target t2
+  | TyReceiveChannel (t1, t2) ->
+      equal_type_with_existentials target t1 || uses_typeL target t2
   | TySendValue (_, t1) -> uses_typeL target t1
-  | TyReceiveValue (t1, t2) -> equal_type target t1 || uses_typeL target t2
+  | TyReceiveValue (t1, t2) ->
+      equal_type_with_existentials target t1 || uses_typeL target t2
   | TySharedToLinear (t1, _) | TyLinearToShared (t1, _) | TySession t1 -> (
       match target with
       | TySession t2 -> uses_typeL t2 t1
@@ -440,7 +448,7 @@ let rec uses_typeL target ty =
   | TyFunc (((_, _), tRet), _) -> uses_typeL target tRet
   | TyUnitRetFunc (_, argList) ->
       List.exists (fun (_, t1) -> uses_typeL target t1) argList
-  | TyAtomic _ | TyPrimitive _ -> equal_type target ty
+  | TyAtomic _ | TyPrimitive _ -> equal_type_with_existentials target ty
   | TyEnd -> contains_type TyEnd target
   | _ -> false
 
@@ -710,8 +718,15 @@ and inversionR gamma delta_in omega t psi zeta theta focus_ctx ident =
             | [] -> return ((gamma, ((delta, theta), focus_ctx)), [])
             | t :: rest ->
                 let res =
-                  decideFocus gamma (delta @ omega) t psi zeta theta focus_ctx
-                    (ident + 1)
+                  try
+                    let id, delta_out = searchAndRemove t delta in
+                    let focus_ctx_out =
+                      searchAndRemoveFocusCtx focus_ctx id t
+                    in
+                    return ((gamma, ((delta_out, theta), focus_ctx_out)), Var id)
+                  with Fail ->
+                    decideFocus gamma (delta @ omega) t psi zeta theta focus_ctx
+                      (ident + 1)
                 in
                 res
                 >>= fun ((gamma', ((delta', theta'), focus_ctx')), arg_tm) ->
@@ -885,23 +900,19 @@ and can_add_focus_ctx focus_ctx t =
   match focus_ctx with
   | [] -> true
   | (_, ty) :: [] -> (
-      match ty with TyReceiveChannel (t1, _) -> equal_type t1 t | _ -> false)
+      match ty with
+      | TyReceiveChannel (t1, _) -> equal_type_with_existentials t1 t
+      | _ -> false)
   | _ -> false
 
 and focusGamma gamma delta_in t psi zeta theta focus_ctx ident =
   let filtered_gamma =
-    let rec aux seen = function
+    let rec aux = function
       | [] -> []
       | ((id, ty), timesUsed) :: xs ->
-          if
-            timesUsed <= 0
-            || List.exists
-                 (fun (seenId, seenT) -> seenId = id || equal_type seenT ty)
-                 seen
-          then aux seen xs
-          else ((id, ty), timesUsed) :: aux ((id, ty) :: seen) xs
+          if timesUsed <= 0 then aux xs else ((id, ty), timesUsed) :: aux xs
     in
-    aux [] gamma
+    aux gamma
   in
   let key = (t, filtered_gamma, delta_in) in
   let focus_options =
@@ -1001,12 +1012,8 @@ and focusR gamma delta_in t psi zeta theta focus_ctx ident =
         in
         result >>= fun (ctxts_out, e1) -> return (ctxts_out, Accept e1)
     | TyEnd ->
-        if delta_in <> [] then (
-          print_fail "focusR" ident;
-          Choice.fail)
-        else (
-          log "%s success\n" (String.make ident ' ');
-          return ((gamma, ((delta_in, theta), focus_ctx)), Terminate))
+        log "%s success\n" (String.make ident ' ');
+        return ((gamma, ((delta_in, theta), focus_ctx)), Terminate)
     | TyAtomic _ -> Choice.fail
     | TyPrimitive _ -> Choice.fail
     | TyExistential _ -> Choice.fail
@@ -1073,26 +1080,57 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
 
   let tm =
     match foc with
-    | TyAtomic _ ->
-        if equal_type foc t then (
-          log "%s success\n" (String.make ident ' ');
-          return ((gamma, ((delta_in, theta), focus_ctx)), Forward id))
-        else (
-          print_fail "focusL" ident;
-          Choice.fail)
+    | TyAtomic _ -> (
+        match t with
+        | TyExistential _ -> (
+            try
+              let theta_out = unify (t, foc) theta in
+
+              log "%s success existential unify\n" (String.make ident ' ');
+
+              return ((gamma, ((delta_in, theta_out), focus_ctx)), Forward id)
+            with Fail ->
+              print_fail "focusL" ident;
+              Choice.fail)
+        | _ ->
+            if equal_type foc t then (
+              log "%s success\n" (String.make ident ' ');
+
+              return ((gamma, ((delta_in, theta), focus_ctx)), Forward id))
+            else (
+              print_fail "focusL" ident;
+              Choice.fail))
     | TyExistential _ -> (
         try
           let theta_out = unify (foc, t) theta in
           log "%s success existential unify\n" (String.make ident ' ');
-          return ((gamma, ((delta_in, theta_out), focus_ctx)), Forward id)
+          match t with
+          | TyExistential _ ->
+              return ((gamma, ((delta_in, theta_out), focus_ctx)), Forward id)
+          | _ ->
+              focusL' gamma delta_in id t t psi zeta theta_out focus_ctx
+                (ident + 1)
         with Fail -> Choice.fail)
-    | TyPrimitive _ ->
-        if equal_type foc t then (
-          log "%s success\n" (String.make ident ' ');
-          return ((gamma, ((delta_in, theta), focus_ctx)), Var id))
-        else (
-          print_fail "focusL" ident;
-          Choice.fail)
+    | TyPrimitive _ -> (
+        match t with
+        | TyExistential _ -> (
+            try
+              let theta_out = unify (t, foc) theta in
+
+              log "%s success existential unify\n" (String.make ident ' ');
+
+              return ((gamma, ((delta_in, theta_out), focus_ctx)), Var id)
+            with Fail ->
+              print_fail "focusL" ident;
+              Choice.fail)
+        | _ ->
+            if equal_type foc t then (
+              log "%s success\n" (String.make ident ' ');
+
+              return ((gamma, ((delta_in, theta), focus_ctx)), Var id))
+            else (
+              print_fail "focusL" ident;
+              Choice.fail))
     | TySession t1 ->
         let x1 = fresh_binder_id () in
         inversionR gamma delta_in
@@ -1102,36 +1140,32 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
         let cut_dirs = List.map (fun (_, _) -> R) delta_in in
         return (ctxts_out, Cut ([ L ] @ cut_dirs, Var id, (x1, e)))
     | TyFunc (((_, _), TySession tRet), _) ->
-        if equal_type tRet t then
-          inversionR gamma ((id, foc) :: delta_in) [] (TyApp tRet) psi zeta
-            theta focus_ctx (ident + 1)
-        else if uses_typeR tRet t || uses_typeDelta tRet delta_in then
-          inversionR gamma ((id, foc) :: delta_in) [] (TyApp tRet) psi zeta
-            theta focus_ctx (ident + 1)
-          >>= fun ((gamma', ((delta', theta'), focus_ctx')), cutL) ->
-          let cut_dirs =
-            delta_in
-            |> List.filter (fun (_, ty) -> is_session_type ty)
-            |> List.map (fun (id, ty) ->
-                   if
-                     List.exists
-                       (fun (id', ty') -> id = id' && equal_type ty ty')
-                       delta'
-                   then R
-                   else L)
-          in
+        inversionR gamma ((id, foc) :: delta_in) [] (TyApp tRet) psi zeta theta
+          focus_ctx (ident + 1)
+        >>= fun ((gamma', ((delta', theta'), focus_ctx')), cutL) ->
+        let cut_dirs =
+          delta_in
+          |> List.filter (fun (_, ty) -> is_session_type ty)
+          |> List.map (fun (id, ty) ->
+                 if
+                   List.exists
+                     (fun (id', ty') -> id = id' && equal_type ty ty')
+                     delta'
+                 then R
+                 else L)
+        in
 
-          let x1 = fresh_binder_id () in
+        let x1 = fresh_binder_id () in
 
-          inversionL gamma' delta'
-            [ (x1, tRet) ]
-            t psi zeta theta' focus_ctx' (ident + 1)
-          >>= fun (ctxts_out, cutR) ->
-          return (ctxts_out, Cut (cut_dirs, cutL, (x1, cutR)))
-        else Choice.fail
+        inversionL gamma' delta'
+          [ (x1, tRet) ]
+          t psi zeta theta' focus_ctx' (ident + 1)
+        >>= fun (ctxts_out, cutR) ->
+        return (ctxts_out, Cut (cut_dirs, cutL, (x1, cutR)))
     | TyScheme (_, _) ->
-        focusL' gamma delta_in id (instantiate foc) t psi zeta theta focus_ctx
-          (ident + 1)
+        inversionR gamma delta_in
+          [ (id, instantiate foc) ]
+          t psi zeta theta focus_ctx (ident + 1)
     | TyRec _ ->
         print_ctxts_with_ident gamma delta_in ident;
 
@@ -1197,8 +1231,9 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
         print_ctxts_with_ident gamma delta_in ident;
         decideFocus gamma delta_in t1 psi zeta theta focus_ctx (ident + 1)
         >>= fun ((gamma_out1, ((delta_out1, theta_out1), focus_ctx')), e1) ->
-        focusL' gamma_out1 delta_out1 id t2 t psi zeta theta_out1 focus_ctx'
-          (ident + 1)
+        inversionL gamma_out1 delta_out1
+          [ (id, t2) ]
+          t psi zeta theta_out1 focus_ctx' (ident + 1)
         >>= fun (ctxts_out, e2) -> return (ctxts_out, SendValueTo ((id, e1), e2))
     | TySharedToLinear (_, counter) ->
         if counter > 2 then (

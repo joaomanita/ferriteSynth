@@ -8,7 +8,7 @@ type Stream = Rec<
 
 fn producer(arg1: String) -> Session<Stream> {
     fix_session(
-        offer_choice! { Left => fix_session(offer_case!(Right, producer(arg1))), Right => receive_value(move |val_0| {cut::<HList![], _, _, _, _, _, _>(producer(val_0), |binder_373| {unfix_session(binder_373, choose!(binder_373, Right, send_value_to(binder_373, val_0, wait(binder_373, terminate ()))))})}) },
+        offer_choice! { Left => fix_session(offer_case!(Right, producer(arg1))), Right => receive_value(move |val_0| {cut::<HList![], _, _, _, _, _, _>(producer(val_0), |binder_906| {unfix_session(binder_906, choose!(binder_906, Right, send_value_to(binder_906, val_0, wait(binder_906, terminate ()))))})}) },
     )
 }
 // fn producer(arg1: String) -> Session<Stream>  { fix_session(offer_choice!{ Left => fix_session(offer_case!(Right, producer(arg1))), Right => receive_value(move |val_0| {terminate ()}) }) }
@@ -30,13 +30,12 @@ fn user(arg2: String) -> Session<ReceiveChannel<Stream, End>> {
 #[tokio::main]
 pub async fn main(arg3: String) {
     run_session(cut::<HList![], _, _, _, _, _, _>(
-        producer(arg3),
-        |binder_613| {
-            cut::<HList![R], _, _, _, _, _, _>(user(arg3), |binder_772| {
-                send_channel_to(binder_772, binder_613, wait(binder_772, terminate()))
-            })
-        },
+        producer(cut::<HList![], _, _, _, _, _, _>(
+            user(arg3),
+            |binder_1645| arg3,
+        )),
+        |binder_1646| send_channel_to(binder_1645, binder_1646, wait(binder_1645, terminate())),
     ))
     .await
 }
-// #[tokio::main] pub async fn main(arg3: String) { run_session(cut::<HList![], _, _, _, _, _, _>(producer(arg3), |binder_613| {cut::<HList![R], _, _, _, _, _, _>(user(arg3), |binder_739| {send_channel_to(binder_739, binder_613, wait(binder_739, terminate ()))})})).await }
+// #[tokio::main] pub async fn main(arg3: String) { run_session(cut::<HList![], _, _, _, _, _, _>(user(cut::<HList![], _, _, _, _, _, _>(producer(arg3), |binder_1039| {arg3})), |binder_1492| {send_channel_to(binder_1492, binder_1039, wait(binder_1492, terminate ()))})).await }
