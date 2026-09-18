@@ -11,6 +11,11 @@ let log fmt =
   | Some ch -> Printf.fprintf ch fmt
   | None -> Printf.ifprintf stdout fmt
 
+let n_rules_applied = ref 0
+let failed_branches = ref 0
+let incr_rules_applied () = incr n_rules_applied
+let incr_failed_branches () = incr failed_branches
+
 let fresh_channel_id =
   let unique = ref (-1) in
   fun () ->

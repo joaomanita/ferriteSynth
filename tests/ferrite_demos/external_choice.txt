@@ -5,7 +5,7 @@ use ferrite_session::{
 
 fn creator() -> Session<SendValue<String, End>> {}
 
-fn provider<A>() -> Session<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>> { @SYNTHESIZE [suggest creator;]}
+fn provider() -> Session<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>> { @SYNTHESIZE [suggest creator;]}
 
 fn client() -> Session<ReceiveChannel<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>, End>> { @SYNTHESIZE [] }
 

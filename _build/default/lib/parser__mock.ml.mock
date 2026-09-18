@@ -1589,7 +1589,7 @@ and (xv_z_type, xv_unit_ret_func, xv_type_def, xv_traits, xv_trait, xv_suggest_f
     
 # 229 "lib/parser.mly"
     (
-      ((arg_name, t), Option.value count ~default:0)
+      ((arg_name, t), Option.value count ~default:1)
     )
 # 1627 "lib/parser__mock.ml.mock"
      in

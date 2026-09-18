@@ -15,9 +15,25 @@ run_test() {
 
     mkdir -p "$OUTPUT_ROOT"
 
-    if $EXEC "$file" >/dev/null 2>&1; then
+    local start end duration
+    local stdout
+
+    start=$(date +%s%N)
+
+    if stdout=$($EXEC "$file" 2>/dev/null); then
+        end=$(date +%s%N)
+        duration=$(awk "BEGIN {printf \"%.3f\", ($end - $start) / 1000000000}")
+
+        local rules
+        rules=$(echo "$stdout" | sed -n 's/^Rules applied: //p')
+        failed_branches=$(echo "$stdout" | sed -n 's/^Failed branches: //p')
+
         cp "$file.out" "$output"
+
         echo "SUCCESS: $(basename "$file")"
+        echo "Duration: ${duration}s"
+        echo "Rules applied: ${rules:-unknown}"
+        echo "Failed branches: ${failed_branches:-unknown}"
         echo "Output:  $output"
     else
         echo "FAIL:    $(basename "$file")"

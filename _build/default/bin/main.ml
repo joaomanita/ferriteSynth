@@ -78,6 +78,8 @@ let () =
         print_prog xs
   in
   print_prog prog;
+  Printf.printf "Rules applied: %d\n%!" !Utils.n_rules_applied;
+  Printf.printf "Failed branches: %d\n%!" !Utils.failed_branches;
   close_out out_channel;
   let _ = Sys.command ("rustfmt --edition 2021 " ^ out_filename) in
   ()

@@ -2,11 +2,10 @@ use ferrite_session::{either::*, prelude::*};
 
 fn creator() -> Session<SendValue<String, End>> {}
 
-fn provider<A>() -> Session<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>>
-{
-    offer_choice! { Left => send_value(cut::<HList![], _, _, _, _, _, _>(creator(), |binder_6| {receive_value_from(binder_6, move |binder_7| {wait(binder_6, binder_7)})}), terminate ()), Right => receive_value(move |val_0| {cut::<HList![], _, _, _, _, _, _>(creator(), |binder_10| {receive_value_from(binder_10, move |binder_11| {wait(binder_10, terminate ())})})}) }
+fn provider() -> Session<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>> {
+    offer_choice! { Left => cut::<HList![], _, _, _, _, _, _>(creator(), |binder_6| {receive_value_from(binder_6, move |binder_7| {wait(binder_6, send_value(binder_7, terminate ()))})}), Right => receive_value(move |val_0| {cut::<HList![], _, _, _, _, _, _>(creator(), |binder_10| {receive_value_from(binder_10, move |binder_11| {wait(binder_10, terminate ())})})}) }
 }
-// fn provider<A>() -> Session<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>>  { offer_choice!{ Left => send_value(cut::<HList![], _, _, _, _, _, _>(creator(), |binder_6| {receive_value_from(binder_6, move |binder_7| {wait(binder_6, binder_7)})}), terminate ()), Right => receive_value(move |val_0| {terminate ()}) } }
+// fn provider() -> Session<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>>  { offer_choice!{ Left => cut::<HList![], _, _, _, _, _, _>(creator(), |binder_6| {receive_value_from(binder_6, move |binder_7| {wait(binder_6, send_value(binder_7, terminate ()))})}), Right => receive_value(move |val_0| {terminate ()}) } }
 
 fn client() -> Session<
     ReceiveChannel<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>, End>,
@@ -22,11 +21,11 @@ fn client() -> Session<
 
 #[tokio::main]
 pub async fn main() {
-    run_session(cut::<HList![], _, _, _, _, _, _>(provider(), |binder_47| {
-        cut::<HList![R], _, _, _, _, _, _>(client(), |binder_62| {
-            send_channel_to(binder_62, binder_47, wait(binder_62, terminate()))
+    run_session(cut::<HList![], _, _, _, _, _, _>(provider(), |binder_28| {
+        cut::<HList![R], _, _, _, _, _, _>(client(), |binder_41| {
+            send_channel_to(binder_41, binder_28, wait(binder_41, terminate()))
         })
     }))
     .await
 }
-// #[tokio::main] pub async fn main() { run_session(cut::<HList![], _, _, _, _, _, _>(client(), |binder_27| {cut::<HList![R], _, _, _, _, _, _>(provider(), |binder_37| {send_channel_to(binder_27, binder_37, wait(binder_27, terminate ()))})})).await }
+// #[tokio::main] pub async fn main() { run_session(cut::<HList![], _, _, _, _, _, _>(client(), |binder_21| {cut::<HList![R], _, _, _, _, _, _>(provider(), |binder_25| {send_channel_to(binder_21, binder_25, wait(binder_21, terminate ()))})})).await }

@@ -368,7 +368,7 @@ module Tables = struct
         let _v : ((string * Mini_ast.ty) * int) = 
 # 229 "lib/parser.mly"
     (
-      ((arg_name, t), Option.value count ~default:0)
+      ((arg_name, t), Option.value count ~default:1)
     )
 # 374 "lib/parser.ml"
          in

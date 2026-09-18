@@ -227,7 +227,7 @@ scheme_func:
 arg:
   | arg_name = ID; COLON; t = arg_type; count = option(preceded(COLON, INT))
     {
-      ((arg_name, t), Option.value count ~default:0)
+      ((arg_name, t), Option.value count ~default:1)
     }
 
 arg_type:
