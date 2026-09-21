@@ -1,6 +1,6 @@
 %{
   open Mini_ast
-  open Utils
+  (* open Utils *)
 %}
 
 %token <string> RAW
@@ -67,13 +67,13 @@ decl:
 
 type_def:
   | TYPE_KEYWORD; _name = ID; EQ; t = s_type; SEMICOLON { TypeDef({name = _name; body = t}) }
-  | TYPE_KEYWORD; _name = ID; LT; schemelist = scheme_args; GT; EQ; t = s_type; SEMICOLON { TypeDef({name = _name ^ "<" ^ (String.concat ", " (List.map print_type schemelist)) ^ ">"; body = TyScheme(schemelist, t)}) }
+  | TYPE_KEYWORD; _name = ID; LT; schemelist = scheme_args; GT; EQ; t = s_type; SEMICOLON { TypeDef({name = _name; body = TyScheme(schemelist, t)}) }
 
 s_type:
   | INT_T                                                                { TyPrimitive("Int")}
   | STRING_T                                                             { TyPrimitive("String")}
   | id = ID                                                              { TyPrimitive(id) }
-  | id = ID; LT; schemelist = scheme_args; GT                            { TyPrimitive(id ^ "<" ^ (String.concat ", " (List.map print_type schemelist)) ^ ">" )}
+  | id = ID; LT; schemelist = scheme_args; GT                            { TySchemeId(id, schemelist) }
   | uppercaseid = ATOMIC                                                 { TyAtomic(uppercaseid) }
   | INTERNALCHOICE; LT; c = choice; GT                                   { TyInternalChoice(c) }
   | EXTERNALCHOICE; LT; c = choice; GT                                   { TyExternalChoice(c) }
@@ -189,8 +189,8 @@ closed_func:
     }
 
 scheme_args:
-  | ts = separated_nonempty_list(COMMA, ATOMIC)
-      { List.map (fun t -> TyAtomic t) ts }
+  | ts = separated_nonempty_list(COMMA, s_type)
+      { ts }
 
 traits:
   | WHERE; ws = separated_nonempty_list(COMMA, trait)

@@ -33,6 +33,7 @@ and ty =
   | TyRec of ty
   | TyZ of int
   | TyScheme of ty list * ty
+  | TySchemeId of string * ty list
   | TyExistential of string
 
 and choice =

@@ -1,1 +1,1 @@
-lib/parser__mock.ml.mock: Lexing List Mini_ast Option String Utils
+lib/parser__mock.ml.mock: Lexing List Mini_ast Option String

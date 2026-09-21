@@ -1,0 +1,17 @@
+use ferrite_session::{
+  either::*,
+  prelude::*,
+};
+
+type Stream<T> = Rec<
+  ExternalChoice<Either<
+    Rec<InternalChoice<Either<SendValue<T, Z>, S<Z>>>>,
+    ReceiveValue<T, End>>
+  >
+>;
+
+fn producer<T>(arg1: T: 2) -> Session<Stream<T>> { @SYNTHESIZE  REC []}
+
+fn user(arg2: String: 1) -> Session<ReceiveChannel<Stream<String>, End>> { @SYNTHESIZE []}
+
+fn main(arg3: String: 2) { @SYNTHESIZE [use producer, user;] }

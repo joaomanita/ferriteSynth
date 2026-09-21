@@ -127,10 +127,10 @@ module MenhirInterpreter : sig
     | N_trait : (string) nonterminal
     | N_suggest_funcs : (string list) nonterminal
     | N_separated_nonempty_list_COMMA_trait_ : (string list) nonterminal
+    | N_separated_nonempty_list_COMMA_s_type_ : (Mini_ast.ty list) nonterminal
     | N_separated_nonempty_list_COMMA_choice_branch_ : ((string * Mini_ast.ty) list) nonterminal
     | N_separated_nonempty_list_COMMA_arg_ : (((string * Mini_ast.ty) * int) list) nonterminal
     | N_separated_nonempty_list_COMMA_ID_ : (string list) nonterminal
-    | N_separated_nonempty_list_COMMA_ATOMIC_ : (string list) nonterminal
     | N_scheme_func : (Mini_ast.decl) nonterminal
     | N_scheme_args : (Mini_ast.ty list) nonterminal
     | N_s_type : (Mini_ast.ty) nonterminal

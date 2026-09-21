@@ -1,0 +1,57 @@
+use ferrite_session::{either::*, prelude::*};
+
+type Stream = Rec<
+    ExternalChoice<
+        Either<Rec<InternalChoice<Either<SendValue<T, Z>, S<Z>>>>, ReceiveValue<T, End>>,
+    >,
+>;
+
+fn producer<T>(arg1: T) -> Session<Stream<T>> {
+    fix_session(
+        offer_choice! { Left => fix_session(offer_case!(Right, producer(forward(arg1)))), Right => receive_value(move |val_0| {cut::<HList![], _, _, _, _, _, _>(producer(forward(val_0)), |binder_187| {unfix_session(binder_187, choose!(binder_187, Right, send_value_to(binder_187, val_0, wait(binder_187, terminate ()))))})}) },
+    )
+}
+// fn producer<T>(arg1: T) -> Session<Stream<T>>  { fix_session(offer_choice!{ Left => fix_session(offer_case!(Right, producer(forward(arg1)))), Right => receive_value(move |val_0| {terminate ()}) }) }
+
+fn user(
+    arg2: String,
+) -> Session<
+    ReceiveChannel<
+        Rec<
+            ExternalChoice<
+                Either<
+                    Rec<InternalChoice<Either<SendValue<String, Z>, S<Z>>>>,
+                    ReceiveValue<String, End>,
+                >,
+            >,
+        >,
+        End,
+    >,
+> {
+    receive_channel(|chan_0| {
+        unfix_session(
+            chan_0,
+            choose!(
+                chan_0,
+                Right,
+                send_value_to(chan_0, arg2, wait(chan_0, terminate()))
+            ),
+        )
+    })
+}
+// fn user(arg2: String) -> Session<ReceiveChannel<Rec<ExternalChoice<Either<Rec<InternalChoice<Either<SendValue<String, Z>, S<Z>>>>, ReceiveValue<String, End>>>>, End>>  { receive_channel(|chan_0| {unfix_session(chan_0, choose!(chan_0, Right, send_value_to(chan_0, arg2, wait(chan_0, terminate ()))))}) }
+
+#[tokio::main]
+pub async fn main(arg3: String) {
+    run_session(cut::<HList![], _, _, _, _, _, _>(
+        user(cut::<HList![], _, _, _, _, _, _>(
+            producer(arg3),
+            |binder_492| arg3,
+        )),
+        |binder_108126| {
+            send_channel_to(binder_108126, binder_492, wait(binder_108126, terminate()))
+        },
+    ))
+    .await
+}
+// #[tokio::main] pub async fn main(arg3: String) { run_session(cut::<HList![], _, _, _, _, _, _>(user(cut::<HList![], _, _, _, _, _, _>(producer(arg3), |binder_492| {unfix_session(binder_492, choose!(binder_492, Right, arg3))})), |binder_108125| {send_value_to(binder_492, binder_108125, wait(binder_492, terminate ()))})).await }

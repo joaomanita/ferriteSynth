@@ -1,0 +1,47 @@
+use std::format;
+
+use ferrite_session::{either::*, prelude::*};
+
+type OrderService = LinearToShared<
+    ReceiveValue<
+        Order,
+        InternalChoice<Either<SendValue<Success, Release>, SendValue<Fail, Release>>>,
+    >,
+>;
+
+type PaymentService = LinearToShared<
+    ReceiveValue<
+        Order,
+        InternalChoice<Either<SendValue<PaySuccess, Release>, SendValue<PayFail, Release>>>,
+    >,
+>;
+
+fn payment_service(arg3: PaySuccess, arg4: PayFail) -> Session<PaymentService> {
+    accept_shared_session(receive_value(move |val_0| {
+        offer_case!(
+            Right,
+            send_value(arg4, detach_shared_session(payment_service(arg3, arg4)))
+        )
+    }))
+}
+// fn payment_service(arg3: PaySuccess, arg4: PayFail) -> Session<PaymentService>  { accept_shared_session(receive_value(move |val_0| {offer_case!(Left, send_value(arg3, detach_shared_session(payment_service(arg3, arg4))))})) }
+
+fn order_service(
+    arg1: Success,
+    arg2: Fail,
+    arg3: PaySuccess,
+    arg4: PayFail,
+) -> Session<OrderService> {
+    cut::<HList![], _, _, _, _, _, _>(payment_service(arg3, arg4), |binder_47| {
+        acquire_shared_session(binder_47, move |chan_47| {
+            accept_shared_session(receive_value(move |val_4| {
+                send_value_to(
+                    chan_47,
+                    val_4,
+                    case! { chan_47 ; Left => receive_value_from(chan_47, move |binder_62| {release_shared_session(chan_47, offer_case!(Left, send_value(arg1, detach_shared_session(order_service(arg1, arg2, binder_62, arg4)))))}), Right => receive_value_from(chan_47, move |binder_63| {release_shared_session(chan_47, offer_case!(Left, send_value(arg1, detach_shared_session(order_service(arg1, arg2, arg3, arg4)))))}) },
+                )
+            }))
+        })
+    })
+}
+// fn order_service(arg1: Success, arg2: Fail, arg3: PaySuccess, arg4: PayFail) -> Session<OrderService>  { cut::<HList![], _, _, _, _, _, _>(payment_service(arg3, arg4), |binder_47| {acquire_shared_session(binder_47, move |chan_47| {accept_shared_session(receive_value(move |val_4| {send_value_to(chan_47, val_4, case!{ chan_47 ; Left => receive_value_from(chan_47, move |binder_62| {release_shared_session(chan_47, offer_case!(Left, send_value(arg1, detach_shared_session(order_service(arg1, arg2, binder_62, arg4)))))}), Right => receive_value_from(chan_47, move |binder_63| {release_shared_session(chan_47, offer_case!(Left, send_value(arg1, detach_shared_session(order_service(arg1, arg2, arg3, binder_63)))))}) })}))})}) }

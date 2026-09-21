@@ -1,0 +1,17 @@
+use std::format;
+
+use ferrite_session::{
+  either::*,
+  prelude::*,
+};
+
+type OrderService = LinearToShared<ReceiveValue<Order, InternalChoice<Either<SendValue<Success, Release>, SendValue<Fail, Release>>>>>;
+
+type PaymentService = LinearToShared<ReceiveValue<Order, InternalChoice<Either<SendValue<PaySuccess, Release>, SendValue<PayFail, Release>>>>>;
+
+fn payment_service(arg3: PaySuccess: 2, arg4: PayFail: 2) -> Session<PaymentService> { @SYNTHESIZE REC []}
+
+fn order_service(arg1: Success: 2, arg2: Fail: 2, arg3: PaySuccess: 2, arg4: PayFail: 2) -> Session<OrderService> { @SYNTHESIZE REC [use payment_service;]}
+
+
+

@@ -36,89 +36,6 @@ let apply_func_choice c f =
       TyDefineChoice (name, List.map (fun (label, ty) -> (label, f ty)) l)
   | TyEither (t1, t2) -> TyEither (f t1, f t2)
 
-(* Resolves type aliases into their real representations *)
-let rec resolve_type t =
-  match t with
-  | TyPrimitive s -> (
-      match lookup_type s !type_ctxt with
-      | Some real_t -> resolve_type real_t
-      | None -> t)
-  | TyAtomic _ -> t
-  | TyExistential _ -> t
-  | TyInternalChoice c -> TyInternalChoice (apply_func_choice c resolve_type)
-  | TyExternalChoice c -> TyExternalChoice (apply_func_choice c resolve_type)
-  | TyInternalChoiceId id ->
-      TyInternalChoice
-        (apply_func_choice
-           (lookup_define_choice id !define_choice_ctxt)
-           resolve_type)
-  | TyExternalChoiceId id ->
-      TyExternalChoice
-        (apply_func_choice
-           (lookup_define_choice id !define_choice_ctxt)
-           resolve_type)
-  | TySendChannel (t1, t2) -> TySendChannel (resolve_type t1, resolve_type t2)
-  | TyReceiveChannel (t1, t2) ->
-      TyReceiveChannel (resolve_type t1, resolve_type t2)
-  | TySendValue (t1, t2) -> TySendValue (resolve_type t1, resolve_type t2)
-  | TyReceiveValue (t1, t2) -> TyReceiveValue (resolve_type t1, resolve_type t2)
-  | TyEnd -> t
-  | TySharedToLinear (t, counter) -> TySharedToLinear (resolve_type t, counter)
-  | TyLinearToShared (t, counter) -> TyLinearToShared (resolve_type t, counter)
-  | TyFixShared -> t
-  | TySession t -> TySession (resolve_type t)
-  | TyFunc (((name, argList), tRet), traits) ->
-      TyFunc
-        ( ( ( name,
-              List.map
-                (fun (argName, argType) -> (argName, resolve_type argType))
-                argList ),
-            resolve_type tRet ),
-          traits )
-  | TyApp ty -> TyApp (resolve_type ty)
-  | TyRec t -> TyRec (resolve_type t)
-  | TyZ _ -> t
-  | TyUnitRetFunc (name, argList) ->
-      TyUnitRetFunc
-        ( name,
-          List.map
-            (fun (argName, argType) -> (argName, resolve_type argType))
-            argList )
-  | TyScheme (tList, tau) -> TyScheme (tList, resolve_type tau)
-
-(* Replaces types with their aliases if they are defined *)
-let rec rev_resolve_type t =
-  match rev_resolve_atomic t !type_ctxt with
-  | Some name -> TyPrimitive name
-  | None -> (
-      match t with
-      | TyInternalChoice c ->
-          TyInternalChoice (apply_func_choice c rev_resolve_type)
-      | TyExternalChoice c ->
-          TyExternalChoice (apply_func_choice c rev_resolve_type)
-      | TySendChannel (t1, t2) ->
-          TySendChannel (rev_resolve_type t1, rev_resolve_type t2)
-      | TyReceiveChannel (t1, t2) ->
-          TyReceiveChannel (rev_resolve_type t1, rev_resolve_type t2)
-      | TySendValue (t1, t2) ->
-          TySendValue (rev_resolve_type t1, rev_resolve_type t2)
-      | TyReceiveValue (t1, t2) ->
-          TyReceiveValue (rev_resolve_type t1, rev_resolve_type t2)
-      | TySharedToLinear (t1, counter) ->
-          TySharedToLinear (rev_resolve_type t1, counter)
-      | TyLinearToShared (t1, counter) ->
-          TyLinearToShared (rev_resolve_type t1, counter)
-      | TySession t1 -> TySession (rev_resolve_type t1)
-      | TyApp ty -> TyApp (rev_resolve_type ty)
-      | TyRec t1 -> TyRec (rev_resolve_type t1)
-      | TyScheme (tList, ty) -> TyScheme (tList, rev_resolve_type ty)
-      | _ -> t)
-
-and rev_resolve_atomic t ctxt =
-  match ctxt with
-  | [] -> None
-  | (name, ty) :: xs -> if ty = t then Some name else rev_resolve_atomic t xs
-
 (* For context see Table 2 of https://web.tecnico.ulisboa.pt/bernardo.toninho/papers/ecoop22-ferrite.pdf*)
 type tm =
   | RawText of string
@@ -156,86 +73,6 @@ and side = L | R
 
 let print_side = function L -> "L" | R -> "R"
 
-let rec print_exp e =
-  match e with
-  | RawText s -> s
-  | Var a -> a
-  | Offer (label, tm) -> sprintf "offer_case!(%s, %s)" label (print_exp tm)
-  | Case (chan, choices) ->
-      sprintf "case!{ %s ; %s }" chan (print_labeled_choices choices print_exp)
-  | OfferChoice choices ->
-      sprintf "offer_choice!{ %s }" (print_labeled_choices choices print_exp)
-  | Choose (chan, (label, tm)) ->
-      sprintf "choose!(%s, %s, %s)" chan label (print_exp tm)
-  | SendChannelFrom (chan, tm) ->
-      sprintf "send_channel_from(%s, %s)" chan (print_exp tm)
-  | ReceiveChannelFrom (chan, (binder, tm)) ->
-      sprintf "receive_channel_from(%s, |%s| {%s})" chan binder (print_exp tm)
-  | ReceiveChannel (binder, tm) ->
-      sprintf "receive_channel(|%s| {%s})" binder (print_exp tm)
-  | SendChannelTo ((chan, chan_sent), tm) ->
-      sprintf "send_channel_to(%s, %s, %s)" chan chan_sent (print_exp tm)
-  | SendValue (v, tm) ->
-      sprintf "send_value(%s, %s)" (print_exp v) (print_exp tm)
-  | SendValueTo ((chan, v), tm) ->
-      sprintf "send_value_to(%s, %s, %s)" chan (print_exp v) (print_exp tm)
-  | ReceiveValueFrom ((chan, binder), tm) ->
-      sprintf "receive_value_from(%s, move |%s| {%s})" chan binder
-        (print_exp tm)
-  | ReceiveValue (binder, tm) ->
-      sprintf "receive_value(move |%s| {%s})" binder (print_exp tm)
-  | Terminate -> "terminate ()"
-  | Wait (chan, tm) -> sprintf "wait(%s, %s)" chan (print_exp tm)
-  | Detach tm -> sprintf "detach_shared_session(%s)" (print_exp tm)
-  | Release (chan, tm) ->
-      sprintf "release_shared_session(%s, %s)" chan (print_exp tm)
-  | Accept tm -> sprintf "accept_shared_session(%s)" (print_exp tm)
-  | Acquire (chan, (binder, tm)) ->
-      sprintf "acquire_shared_session(%s, move |%s| {%s})" chan binder
-        (print_exp tm)
-  | Forward chan -> sprintf "forward(%s)" chan
-  | Cut (cut_dirs, session_tm, (binder, tm)) ->
-      sprintf "cut::<HList![%s], _, _, _, _, _, _>(%s, |%s| {%s})"
-        (String.concat ", " (List.map print_side cut_dirs))
-        (print_exp session_tm) binder (print_exp tm)
-  | Func (((name, argList), (t, tm)), traits) ->
-      let args_str =
-        argList
-        |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
-        |> String.concat ", "
-      in
-      sprintf "fn %s(%s) -> %s %s { %s }" name args_str (print_type t) traits
-        (print_exp tm)
-  | App (func_name, arg_tmList) ->
-      sprintf "%s(%s)" (print_exp func_name)
-        (arg_tmList |> List.map print_exp |> String.concat ", ")
-  | Fix tm -> sprintf "fix_session(%s)" (print_exp tm)
-  | Unfix (id, tm) -> sprintf "unfix_session(%s, %s)" id (print_exp tm)
-  | UnitRetFunc ((name, argList), tm) -> (
-      let args_str =
-        argList
-        |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
-        |> String.concat ", "
-      in
-      match tm with
-      | RunSession _ | ApplyChannel _ ->
-          sprintf "#[tokio::main] pub async fn %s(%s) { %s }" name args_str
-            (print_exp tm)
-      | _ -> sprintf "fn %s(%s) { %s }" name args_str (print_exp tm))
-  | RunSession tm -> sprintf "run_session(%s).await" (print_exp tm)
-  | ApplyChannel (tm1, tm2) ->
-      sprintf "apply_channel(%s, %s)" (print_exp tm1) (print_exp tm2)
-  | SchemeFunc ((tList, ((name, argList), (t, tm))), traits) ->
-      let args_str =
-        argList
-        |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
-        |> String.concat ", "
-      in
-      sprintf "fn %s<%s>(%s) -> %s %s { %s }" name
-        (String.concat ", " (List.map print_type tList))
-        args_str (print_type t) traits (print_exp tm)
-
-(* Substitutes x in type t1 with replacement *)
 let rec substT x replacement t1 =
   if equal_type x t1 then replacement
   else
@@ -316,6 +153,183 @@ let rec subst e1 x e2 =
   | RunSession tm -> RunSession (subst tm x e2)
   | ApplyChannel (tm1, tm2) -> ApplyChannel (subst tm1 x e2, subst tm2 x e2)
   | _ -> e1
+
+(* Resolves type aliases into their real representations *)
+let rec resolve_type t =
+  match t with
+  | TyPrimitive s -> (
+      match lookup_type s !type_ctxt with
+      | Some real_t -> resolve_type real_t
+      | None -> t)
+  | TySchemeId (id, schemelist) -> (
+      match lookup_type id !type_ctxt with
+      | Some (TyScheme (tList, tau)) ->
+          let tau' =
+            List.fold_left2
+              (fun tau' t replacement -> substT t replacement tau')
+              tau tList schemelist
+          in
+          tau'
+      | _ -> raise Fail)
+  | TyAtomic _ -> t
+  | TyExistential _ -> t
+  | TyInternalChoice c -> TyInternalChoice (apply_func_choice c resolve_type)
+  | TyExternalChoice c -> TyExternalChoice (apply_func_choice c resolve_type)
+  | TyInternalChoiceId id ->
+      TyInternalChoice
+        (apply_func_choice
+           (lookup_define_choice id !define_choice_ctxt)
+           resolve_type)
+  | TyExternalChoiceId id ->
+      TyExternalChoice
+        (apply_func_choice
+           (lookup_define_choice id !define_choice_ctxt)
+           resolve_type)
+  | TySendChannel (t1, t2) -> TySendChannel (resolve_type t1, resolve_type t2)
+  | TyReceiveChannel (t1, t2) ->
+      TyReceiveChannel (resolve_type t1, resolve_type t2)
+  | TySendValue (t1, t2) -> TySendValue (resolve_type t1, resolve_type t2)
+  | TyReceiveValue (t1, t2) -> TyReceiveValue (resolve_type t1, resolve_type t2)
+  | TyEnd -> t
+  | TySharedToLinear (t, counter) -> TySharedToLinear (resolve_type t, counter)
+  | TyLinearToShared (t, counter) -> TyLinearToShared (resolve_type t, counter)
+  | TyFixShared -> t
+  | TySession t -> TySession (resolve_type t)
+  | TyFunc (((name, argList), tRet), traits) ->
+      TyFunc
+        ( ( ( name,
+              List.map
+                (fun (argName, argType) -> (argName, resolve_type argType))
+                argList ),
+            resolve_type tRet ),
+          traits )
+  | TyApp ty -> TyApp (resolve_type ty)
+  | TyRec t -> TyRec (resolve_type t)
+  | TyZ _ -> t
+  | TyUnitRetFunc (name, argList) ->
+      TyUnitRetFunc
+        ( name,
+          List.map
+            (fun (argName, argType) -> (argName, resolve_type argType))
+            argList )
+  | TyScheme (tList, tau) -> TyScheme (tList, resolve_type tau)
+
+(* Replaces types with their aliases if they are defined *)
+let rec rev_resolve_type t =
+  match rev_resolve_atomic t !type_ctxt with
+  | Some name -> TyPrimitive name
+  | None -> (
+      match t with
+      | TyInternalChoice c ->
+          TyInternalChoice (apply_func_choice c rev_resolve_type)
+      | TyExternalChoice c ->
+          TyExternalChoice (apply_func_choice c rev_resolve_type)
+      | TySendChannel (t1, t2) ->
+          TySendChannel (rev_resolve_type t1, rev_resolve_type t2)
+      | TyReceiveChannel (t1, t2) ->
+          TyReceiveChannel (rev_resolve_type t1, rev_resolve_type t2)
+      | TySendValue (t1, t2) ->
+          TySendValue (rev_resolve_type t1, rev_resolve_type t2)
+      | TyReceiveValue (t1, t2) ->
+          TyReceiveValue (rev_resolve_type t1, rev_resolve_type t2)
+      | TySharedToLinear (t1, counter) ->
+          TySharedToLinear (rev_resolve_type t1, counter)
+      | TyLinearToShared (t1, counter) ->
+          TyLinearToShared (rev_resolve_type t1, counter)
+      | TySession t1 -> TySession (rev_resolve_type t1)
+      | TyApp ty -> TyApp (rev_resolve_type ty)
+      | TyRec t1 -> TyRec (rev_resolve_type t1)
+      | TyScheme (tList, ty) -> TyScheme (tList, rev_resolve_type ty)
+      | _ -> t)
+
+and rev_resolve_atomic t ctxt =
+  match ctxt with
+  | [] -> None
+  | (name, TyScheme (tList, ty)) :: xs ->
+      if ty = t then
+        let args = String.concat ", " (List.map print_type tList) in
+        Some (Printf.sprintf "%s<%s>" name args)
+      else rev_resolve_atomic t xs
+  | (name, ty) :: xs -> if ty = t then Some name else rev_resolve_atomic t xs
+
+let rec print_exp e =
+  match e with
+  | RawText s -> s
+  | Var a -> a
+  | Offer (label, tm) -> sprintf "offer_case!(%s, %s)" label (print_exp tm)
+  | Case (chan, choices) ->
+      sprintf "case!{ %s ; %s }" chan (print_labeled_choices choices print_exp)
+  | OfferChoice choices ->
+      sprintf "offer_choice!{ %s }" (print_labeled_choices choices print_exp)
+  | Choose (chan, (label, tm)) ->
+      sprintf "choose!(%s, %s, %s)" chan label (print_exp tm)
+  | SendChannelFrom (chan, tm) ->
+      sprintf "send_channel_from(%s, %s)" chan (print_exp tm)
+  | ReceiveChannelFrom (chan, (binder, tm)) ->
+      sprintf "receive_channel_from(%s, |%s| {%s})" chan binder (print_exp tm)
+  | ReceiveChannel (binder, tm) ->
+      sprintf "receive_channel(|%s| {%s})" binder (print_exp tm)
+  | SendChannelTo ((chan, chan_sent), tm) ->
+      sprintf "send_channel_to(%s, %s, %s)" chan chan_sent (print_exp tm)
+  | SendValue (v, tm) ->
+      sprintf "send_value(%s, %s)" (print_exp v) (print_exp tm)
+  | SendValueTo ((chan, v), tm) ->
+      sprintf "send_value_to(%s, %s, %s)" chan (print_exp v) (print_exp tm)
+  | ReceiveValueFrom ((chan, binder), tm) ->
+      sprintf "receive_value_from(%s, move |%s| {%s})" chan binder
+        (print_exp tm)
+  | ReceiveValue (binder, tm) ->
+      sprintf "receive_value(move |%s| {%s})" binder (print_exp tm)
+  | Terminate -> "terminate ()"
+  | Wait (chan, tm) -> sprintf "wait(%s, %s)" chan (print_exp tm)
+  | Detach tm -> sprintf "detach_shared_session(%s)" (print_exp tm)
+  | Release (chan, tm) ->
+      sprintf "release_shared_session(%s, %s)" chan (print_exp tm)
+  | Accept tm -> sprintf "accept_shared_session(%s)" (print_exp tm)
+  | Acquire (chan, (binder, tm)) ->
+      sprintf "acquire_shared_session(%s, move |%s| {%s})" chan binder
+        (print_exp tm)
+  | Forward chan -> sprintf "forward(%s)" chan
+  | Cut (cut_dirs, session_tm, (binder, tm)) ->
+      sprintf "cut::<HList![%s], _, _, _, _, _, _>(%s, |%s| {%s})"
+        (String.concat ", " (List.map print_side cut_dirs))
+        (print_exp session_tm) binder (print_exp tm)
+  | Func (((name, argList), (t, tm)), traits) ->
+      let args_str =
+        argList
+        |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
+        |> String.concat ", "
+      in
+      sprintf "fn %s(%s) -> %s %s { %s }" name args_str (print_type t) traits
+        (print_exp tm)
+  | App (func_name, arg_tmList) ->
+      sprintf "%s(%s)" (print_exp func_name)
+        (arg_tmList |> List.map print_exp |> String.concat ", ")
+  | Fix tm -> sprintf "fix_session(%s)" (print_exp tm)
+  | Unfix (id, tm) -> sprintf "unfix_session(%s, %s)" id (print_exp tm)
+  | UnitRetFunc ((name, argList), tm) -> (
+      let args_str =
+        argList
+        |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
+        |> String.concat ", "
+      in
+      match tm with
+      | RunSession _ | ApplyChannel _ ->
+          sprintf "#[tokio::main] pub async fn %s(%s) { %s }" name args_str
+            (print_exp tm)
+      | _ -> sprintf "fn %s(%s) { %s }" name args_str (print_exp tm))
+  | RunSession tm -> sprintf "run_session(%s).await" (print_exp tm)
+  | ApplyChannel (tm1, tm2) ->
+      sprintf "apply_channel(%s, %s)" (print_exp tm1) (print_exp tm2)
+  | SchemeFunc ((tList, ((name, argList), (t, tm))), traits) ->
+      let args_str =
+        argList
+        |> List.map (fun (n, ty) -> n ^ ": " ^ print_type ty)
+        |> String.concat ", "
+      in
+      sprintf "fn %s<%s>(%s) -> %s %s { %s }" name
+        (String.concat ", " (List.map print_type tList))
+        args_str (print_type t) traits (print_exp tm)
 
 (* Shift the depth of TyZ for unfolding nested recursive types*)
 let rec shift d t =

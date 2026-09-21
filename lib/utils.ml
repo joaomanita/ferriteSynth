@@ -3,7 +3,7 @@ open Printf
 
 exception Fail
 
-let debug_enabled = true
+let debug_enabled = false
 let debug_out = if debug_enabled then Some (open_out "debug.log") else None
 
 let log fmt =
@@ -98,6 +98,7 @@ and print_type t =
   | TyUnitRetFunc (name, argList) ->
       "FN<<" ^ name ^ ", " ^ print_labeled_choices argList print_type ^ ">, >"
   | TyScheme (_, tau) -> print_type tau
+  | TySchemeId _ -> "??"
 
 and print_type_internal t =
   match t with
@@ -134,6 +135,7 @@ and print_type_internal t =
       "Scheme<<"
       ^ String.concat ", " (List.map print_type tList)
       ^ ">, " ^ print_type tau ^ ">"
+  | TySchemeId _ -> "??"
 
 and print_peano i =
   match i with 0 -> "Z" | x -> "S<" ^ print_peano (x - 1) ^ ">"
@@ -241,12 +243,14 @@ and equal_labeled_types_with_existentials l1 l2 =
 
 and is_session_type ty =
   match ty with
-  | TyAtomic _ | TyExistential _ | TySession _ | TySendChannel _
-  | TyReceiveChannel _ | TySendValue _ | TyReceiveValue _ | TyInternalChoice _
-  | TyExternalChoice _ | TyInternalChoiceId _ | TyExternalChoiceId _ | TyEnd
-  | TySharedToLinear _ | TyLinearToShared _ | TyRec _ | TyFixShared | TyZ _ ->
+  | TySession _ | TySendChannel _ | TyReceiveChannel _ | TySendValue _
+  | TyReceiveValue _ | TyInternalChoice _ | TyExternalChoice _
+  | TyInternalChoiceId _ | TyExternalChoiceId _ | TyEnd | TySharedToLinear _
+  | TyLinearToShared _ | TyRec _ | TyFixShared | TyZ _ ->
       true
-  | TyPrimitive _ | TyFunc _ | TyScheme _ | TyUnitRetFunc _ | TyApp _ -> false
+  | TyPrimitive _ | TyFunc _ | TyScheme _ | TyUnitRetFunc _ | TyApp _
+  | TySchemeId _ | TyAtomic _ | TyExistential _ ->
+      false
 
 let rec print_ctxt_delta ctxt =
   match ctxt with
