@@ -1,0 +1,43 @@
+type Stream = Rec<
+    ExternalChoice<Either<
+        SendValue<String,
+            SendValue<String,
+                Rec<
+                    InternalChoice<Either<
+                      ReceiveValue<String, S<Z>>,
+                      ReceiveValue<String, End>
+                    >>
+                >
+            >
+        >,
+        ReceiveValue<String,
+            InternalChoice<Either<
+                SendValue<String, Z>,
+                ReceiveValue<String, End>
+            >>
+        >
+    >>
+>;
+
+type StreamConsumer = ReceiveChannel<
+    Stream,
+    SendValue<String, End>
+>;
+
+type StreamForwarder = ReceiveChannel<
+    Stream,
+    ReceiveValue<String, End>
+>;
+
+fn stream_service(
+    arg1: String,
+    arg2: String
+) -> Session<Stream> {
+    @SYNTHESIZE REC []
+}
+
+fn stream_consumer(
+    arg3: String
+) -> Session<StreamConsumer> {
+    @SYNTHESIZE REC []
+}

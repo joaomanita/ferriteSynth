@@ -3,7 +3,7 @@ open Printf
 
 exception Fail
 
-let debug_enabled = false
+let debug_enabled = true
 let debug_out = if debug_enabled then Some (open_out "debug.log") else None
 
 let log fmt =

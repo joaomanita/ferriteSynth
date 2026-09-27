@@ -1192,33 +1192,35 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
         let cut_dirs = List.map (fun (_, _) -> R) delta_in in
         return (ctxts_out, Cut ([ L ] @ cut_dirs, Var id, (x1, e)))
     | TyFunc (((_, _), TySession tRet), _) ->
-        inversionR gamma ((id, foc) :: delta_in) [] (TyApp tRet) psi zeta theta
-          focus_ctx (ident + 1)
-        >>= fun ((gamma', ((delta', theta'), focus_ctx')), cutL) ->
-        let cut_dirs =
-          delta_in
-          |> List.filter (fun (_, ty) -> is_session_type ty)
-          |> List.map (fun (id, ty) ->
-                 if
-                   List.exists
-                     (fun (id', ty') -> id = id' && equal_type ty ty')
-                     delta'
-                 then R
-                 else L)
-        in
+        if not (is_session_type t) then Choice.fail
+        else
+          inversionR gamma ((id, foc) :: delta_in) [] (TyApp tRet) psi zeta
+            theta focus_ctx (ident + 1)
+          >>= fun ((gamma', ((delta', theta'), focus_ctx')), cutL) ->
+          let cut_dirs =
+            delta_in
+            |> List.filter (fun (_, ty) -> is_session_type ty)
+            |> List.map (fun (id, ty) ->
+                   if
+                     List.exists
+                       (fun (id', ty') -> id = id' && equal_type ty ty')
+                       delta'
+                   then R
+                   else L)
+          in
 
-        let x1 = fresh_binder_id () in
+          let x1 = fresh_binder_id () in
 
-        inversionL gamma' delta'
-          [ (x1, tRet) ]
-          t psi zeta theta' focus_ctx' (ident + 1)
-        >>= fun (ctxts_out, cutR) ->
-        return (ctxts_out, Cut (cut_dirs, cutL, (x1, cutR)))
+          inversionL gamma' delta'
+            [ (x1, tRet) ]
+            t psi zeta theta' focus_ctx' (ident + 1)
+          >>= fun (ctxts_out, cutR) ->
+          return (ctxts_out, Cut (cut_dirs, cutL, (x1, cutR)))
     | TyScheme (_, _) ->
         inversionR gamma delta_in
           [ (id, instantiate foc) ]
           t psi zeta theta focus_ctx (ident + 1)
-    | TyRec _ ->
+    | TyRec _ -> (
         print_ctxts_with_ident gamma delta_in ident;
 
         let zeta =
@@ -1240,27 +1242,32 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
         else
           let unfolded_foc = unfold foc in
 
-          let pruned_foc = prune_recursive_choices foc unfolded_foc in
+          try
+            let pruned_foc = prune_recursive_choices foc unfolded_foc in
 
-          let did_prune = not (equal_type pruned_foc unfolded_foc) in
+            let did_prune = not (equal_type pruned_foc unfolded_foc) in
 
-          let zeta_for_pruned =
-            if did_prune then zeta else incTimesUsedZeta id foc [] zeta
-          in
+            let zeta_for_pruned =
+              if did_prune then zeta else incTimesUsedZeta id foc [] zeta
+            in
 
-          let try_no_unfolding =
-            focusL' gamma delta_in id pruned_foc t psi zeta_for_pruned theta
-              focus_ctx (ident + 1)
-          in
+            let try_no_unfolding =
+              focusL' gamma delta_in id pruned_foc t psi zeta_for_pruned theta
+                focus_ctx (ident + 1)
+            in
 
-          if is_empty try_no_unfolding then
+            if is_empty try_no_unfolding then
+              focusL' gamma delta_in id unfolded_foc t psi
+                (incTimesUsedZeta id foc [] zeta)
+                theta focus_ctx (ident + 1)
+              >>= fun (ctxts_out, e) -> return (ctxts_out, Unfix (id, e))
+            else
+              try_no_unfolding >>= fun (ctxts_out, e) ->
+              return (ctxts_out, Unfix (id, e))
+          with Fail ->
             focusL' gamma delta_in id unfolded_foc t psi
               (incTimesUsedZeta id foc [] zeta)
-              theta focus_ctx (ident + 1)
-            >>= fun (ctxts_out, e) -> return (ctxts_out, Unfix (id, e))
-          else
-            try_no_unfolding >>= fun (ctxts_out, e) ->
-            return (ctxts_out, Unfix (id, e))
+              theta focus_ctx (ident + 1))
     | TyReceiveChannel (tChan, tCont) -> (
         try
           let id_chan, delta_in' = searchAndRemove tChan delta_in in

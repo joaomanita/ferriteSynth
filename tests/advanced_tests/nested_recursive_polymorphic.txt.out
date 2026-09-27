@@ -44,14 +44,20 @@ fn user(
 #[tokio::main]
 pub async fn main(arg3: String) {
     run_session(cut::<HList![], _, _, _, _, _, _>(
-        user(cut::<HList![], _, _, _, _, _, _>(
-            producer(arg3),
-            |binder_492| arg3,
-        )),
-        |binder_108126| {
-            send_channel_to(binder_108126, binder_492, wait(binder_108126, terminate()))
+        user(arg3),
+        |binder_243| {
+            cut::<HList![L], _, _, _, _, _, _>(producer(binder_243), |binder_287| {
+                unfix_session(
+                    binder_287,
+                    choose!(
+                        binder_287,
+                        Right,
+                        send_value_to(binder_287, arg3, wait(binder_287, terminate()))
+                    ),
+                )
+            })
         },
     ))
     .await
 }
-// #[tokio::main] pub async fn main(arg3: String) { run_session(cut::<HList![], _, _, _, _, _, _>(user(cut::<HList![], _, _, _, _, _, _>(producer(arg3), |binder_492| {unfix_session(binder_492, choose!(binder_492, Right, arg3))})), |binder_108125| {send_value_to(binder_492, binder_108125, wait(binder_492, terminate ()))})).await }
+// #[tokio::main] pub async fn main(arg3: String) { run_session(cut::<HList![], _, _, _, _, _, _>(user(arg3), |binder_243| {cut::<HList![L], _, _, _, _, _, _>(producer(binder_243), |binder_287| {unfix_session(binder_287, choose!(binder_287, Right, send_value_to(binder_287, arg3, wait(binder_287, terminate ()))))})})).await }
