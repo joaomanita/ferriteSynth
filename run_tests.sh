@@ -2,7 +2,7 @@
 
 set -u
 
-TEST_ROOT="$HOME/Tese/ferriteSynth/tests"
+TEST_ROOT="tests"
 OUTPUT_ROOT="$HOME/Tese/rustapps/ferrite/ferrite-demo/examples"
 EXEC="dune exec bin/main.exe"
 
