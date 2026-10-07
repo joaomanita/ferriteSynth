@@ -47,10 +47,16 @@ let () =
                     Printf.fprintf out_channel "\n")
                   branches;
                 Printf.fprintf out_channel "}\n")
-        | TypeDef v ->
+        | TypeDef v -> (
             Synthesizer.append_type_ctxt v.name v.body;
-            Printf.fprintf out_channel "type %s = %s;" v.name
-              (print_type v.body)
+            match v.body with
+            | TyScheme (tList, _) ->
+                Printf.fprintf out_channel "type %s<%s> = %s;" v.name
+                  (String.concat ", " (List.map print_type tList))
+                  (print_type v.body)
+            | _ ->
+                Printf.fprintf out_channel "type %s = %s;" v.name
+                  (print_type v.body))
         | Function (fType, argcounts, recursive, (required_funcs, usable_funcs))
           -> (
             let results =

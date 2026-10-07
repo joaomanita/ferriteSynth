@@ -14,4 +14,8 @@ fn producer(arg1: String: 2) -> Session<Stream> { @SYNTHESIZE  REC []}
 
 fn user(arg2: String: 1) -> Session<ReceiveChannel<Stream, End>> { @SYNTHESIZE []}
 
+/*
 fn main(arg3: String: 2) { @SYNTHESIZE [use producer, user;] }
+*/
+
+fn main() {}

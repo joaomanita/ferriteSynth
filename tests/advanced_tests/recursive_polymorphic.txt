@@ -4,5 +4,5 @@ use ferrite_session::prelude::*;
 
 fn chooser<A, B>(arg1: A: 2, arg2: B: 2) -> Session<Rec<InternalChoice<Either< SendValue<A, Z>, SendValue<B, Z>>>>> { @SYNTHESIZE REC [] }
 
-fn repeater() -> Session<ReceiveValue<Int, ReceiveValue<String, Rec<InternalChoice<Either< SendValue<Int, Z>, SendValue<String, Z>>>>>>> { @SYNTHESIZE [use chooser;]}
+fn repeater() -> Session<ReceiveValue<i32, ReceiveValue<String, Rec<InternalChoice<Either< SendValue<i32, Z>, SendValue<String, Z>>>>>>> { @SYNTHESIZE [use chooser;]}
 

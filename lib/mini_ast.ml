@@ -12,6 +12,7 @@ and label = string
 and value = string
 
 and ty =
+  | TyFail
   | TyPrimitive of value
   | TyAtomic of string
   | TyInternalChoice of choice

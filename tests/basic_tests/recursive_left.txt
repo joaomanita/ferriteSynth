@@ -1,12 +1,14 @@
 use std::format;
 
-use ferrite_session::prelude::*;
+use ferrite_session::{either::*, prelude::*};
 
 type myType = Rec<
     ExternalChoice<
-      Either<SendValue<Int, Z>,
+      Either<SendValue<i32, Z>,
       End>
     >
   >;
 
-fn myFunc() -> Session<ReceiveChannel<myType, SendValue<Int, SendValue<Int, End>>>> { @SYNTHESIZE [] }
+fn myFunc() -> Session<ReceiveChannel<myType, SendValue<i32, SendValue<i32, End>>>> { @SYNTHESIZE [] }
+
+fn main() {}

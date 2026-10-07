@@ -1,0 +1,30 @@
+Test                                        Mean (s)     Std Dev       Rules    Failures
+----------------------------------------------------------------------------------------
+12                                             0.138       0.007          49          10
+2                                              0.095       0.001          30           1
+5                                              0.098       0.002         109          20
+7                                              0.097       0.002         192          36
+bank                                           0.102       0.001        3625        1368
+basic_bank                                     0.100       0.002         810         321
+basic_shared                                   0.097       0.004         154          24
+break_linearity                                0.097       0.001          91          41
+chained_receiving                              0.096       0.002          52           6
+channel                                        0.099       0.002        1919         708
+custom_choice                                  0.096       0.002         448         116
+cut                                            0.100       0.013           7           1
+detach                                         0.096       0.002         942         348
+external_choice                                0.097       0.001         445         106
+func_calling                                   0.095       0.002         146          38
+funcscalling_polymorphic                       0.134       0.007       16188        4769
+hello                                          0.095       0.001         100          27
+internal_choice                                0.093       0.003         202          67
+joining_choices                                0.097       0.001         149          31
+nested_recursive                               0.113       0.001        8650        3178
+nested_recursive_polymorphic                   1.142       0.154      505813      152022
+polymorphic                                    0.132       0.010         328          70
+polymorphic_right                              0.095       0.001          57          21
+queue                                          0.103       0.011        1200         407
+recursive_left                                 0.095       0.002         680         190
+recursive_polymorphic                          0.125       0.012       10941        3800
+recursive_right                                0.096       0.001         213          54
+recursive_shared                               2.025       0.082      296080      137305

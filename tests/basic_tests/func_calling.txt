@@ -2,8 +2,18 @@ use std::format;
 
 use ferrite_session::prelude::*;
 
+/*
 type myType = ReceiveChannel<A, B>;
 
 fn myFunc(arg1: myType: 1, arg2: A: 1) -> Session<B> {}
 
 fn myFunc2() -> Session<ReceiveChannel<myType, ReceiveChannel<A, SendChannel<B, End>>>> { @SYNTHESIZE [use myFunc;] }
+*/
+
+type myType<A, B> = ReceiveChannel<A, B>;
+
+fn myFunc<A, B>(arg1: myType<A, B>: 1, arg2: A: 1) -> Session<B> where A: Protocol, B: Protocol {}
+
+fn myFunc2<A, B>() -> Session<ReceiveChannel<myType<A, B>, ReceiveChannel<A, SendChannel<B, End>>>> where A: Protocol, B: Protocol { @SYNTHESIZE [use myFunc;] }
+
+fn main() {}

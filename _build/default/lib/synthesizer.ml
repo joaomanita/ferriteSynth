@@ -8,33 +8,11 @@ open Memo
 type id = string
 
 let fn_ctxt = ref []
-let type_ctxt = ref []
 let append_type_ctxt name t = type_ctxt := (name, t) :: !type_ctxt
-let define_choice_ctxt = ref []
 let argcounts = ref []
 
 let append_define_choice cdef =
   define_choice_ctxt := cdef :: !define_choice_ctxt
-
-let rec lookup_type name ctxt =
-  match ctxt with
-  | [] -> None
-  | (n, t) :: xs -> if n = name then Some t else lookup_type name xs
-
-let rec lookup_define_choice name ctxt =
-  match ctxt with
-  | [] -> raise Fail
-  | c :: xs -> (
-      match c with
-      | TyDefineChoice (id, _) ->
-          if id = name then c else lookup_define_choice name xs
-      | _ -> raise Fail)
-
-let apply_func_choice c f =
-  match c with
-  | TyDefineChoice (name, l) ->
-      TyDefineChoice (name, List.map (fun (label, ty) -> (label, f ty)) l)
-  | TyEither (t1, t2) -> TyEither (f t1, f t2)
 
 (* For context see Table 2 of https://web.tecnico.ulisboa.pt/bernardo.toninho/papers/ecoop22-ferrite.pdf*)
 type tm =
@@ -72,37 +50,6 @@ type tm =
 and side = L | R
 
 let print_side = function L -> "L" | R -> "R"
-
-let rec substT x replacement t1 =
-  if equal_type x t1 then replacement
-  else
-    match t1 with
-    | TyAtomic a -> if TyAtomic a = x then replacement else t1
-    | TyInternalChoice c ->
-        TyInternalChoice (apply_func_choice c (substT x replacement))
-    | TyExternalChoice c ->
-        TyExternalChoice (apply_func_choice c (substT x replacement))
-    | TySendChannel (t1, t2) ->
-        TySendChannel (substT x replacement t1, substT x replacement t2)
-    | TyReceiveChannel (t1, t2) ->
-        TyReceiveChannel (substT x replacement t1, substT x replacement t2)
-    | TySendValue (t1, t2) ->
-        TySendValue (substT x replacement t1, substT x replacement t2)
-    | TyReceiveValue (t1, t2) ->
-        TyReceiveValue (substT x replacement t1, substT x replacement t2)
-    | TySharedToLinear (t, counter) ->
-        TySharedToLinear (substT x replacement t, counter)
-    | TyLinearToShared (t, counter) ->
-        TyLinearToShared (substT x replacement t, counter)
-    | TySession t -> TySession (substT x replacement t)
-    | TyRec t -> TyRec (substT x replacement t)
-    | TyFunc (((n, args), ret), traits) ->
-        TyFunc
-          ( ( (n, List.map (fun (l, t) -> (l, substT x replacement t)) args),
-              substT x replacement ret ),
-            traits )
-    | TyScheme (ts, tau) -> TyScheme (ts, substT x replacement tau)
-    | _ -> t1
 
 (* Substitutes name x in expression e1 with expression e2 *)
 let rec subst e1 x e2 =
@@ -154,104 +101,6 @@ let rec subst e1 x e2 =
   | ApplyChannel (tm1, tm2) -> ApplyChannel (subst tm1 x e2, subst tm2 x e2)
   | _ -> e1
 
-(* Resolves type aliases into their real representations *)
-let rec resolve_type t =
-  match t with
-  | TyPrimitive s -> (
-      match lookup_type s !type_ctxt with
-      | Some real_t -> resolve_type real_t
-      | None -> t)
-  | TySchemeId (id, schemelist) -> (
-      match lookup_type id !type_ctxt with
-      | Some (TyScheme (tList, tau)) ->
-          let tau' =
-            List.fold_left2
-              (fun tau' t replacement -> substT t replacement tau')
-              tau tList schemelist
-          in
-          tau'
-      | _ -> raise Fail)
-  | TyAtomic _ -> t
-  | TyExistential _ -> t
-  | TyInternalChoice c -> TyInternalChoice (apply_func_choice c resolve_type)
-  | TyExternalChoice c -> TyExternalChoice (apply_func_choice c resolve_type)
-  | TyInternalChoiceId id ->
-      TyInternalChoice
-        (apply_func_choice
-           (lookup_define_choice id !define_choice_ctxt)
-           resolve_type)
-  | TyExternalChoiceId id ->
-      TyExternalChoice
-        (apply_func_choice
-           (lookup_define_choice id !define_choice_ctxt)
-           resolve_type)
-  | TySendChannel (t1, t2) -> TySendChannel (resolve_type t1, resolve_type t2)
-  | TyReceiveChannel (t1, t2) ->
-      TyReceiveChannel (resolve_type t1, resolve_type t2)
-  | TySendValue (t1, t2) -> TySendValue (resolve_type t1, resolve_type t2)
-  | TyReceiveValue (t1, t2) -> TyReceiveValue (resolve_type t1, resolve_type t2)
-  | TyEnd -> t
-  | TySharedToLinear (t, counter) -> TySharedToLinear (resolve_type t, counter)
-  | TyLinearToShared (t, counter) -> TyLinearToShared (resolve_type t, counter)
-  | TyFixShared -> t
-  | TySession t -> TySession (resolve_type t)
-  | TyFunc (((name, argList), tRet), traits) ->
-      TyFunc
-        ( ( ( name,
-              List.map
-                (fun (argName, argType) -> (argName, resolve_type argType))
-                argList ),
-            resolve_type tRet ),
-          traits )
-  | TyApp ty -> TyApp (resolve_type ty)
-  | TyRec t -> TyRec (resolve_type t)
-  | TyZ _ -> t
-  | TyUnitRetFunc (name, argList) ->
-      TyUnitRetFunc
-        ( name,
-          List.map
-            (fun (argName, argType) -> (argName, resolve_type argType))
-            argList )
-  | TyScheme (tList, tau) -> TyScheme (tList, resolve_type tau)
-
-(* Replaces types with their aliases if they are defined *)
-let rec rev_resolve_type t =
-  match rev_resolve_atomic t !type_ctxt with
-  | Some name -> TyPrimitive name
-  | None -> (
-      match t with
-      | TyInternalChoice c ->
-          TyInternalChoice (apply_func_choice c rev_resolve_type)
-      | TyExternalChoice c ->
-          TyExternalChoice (apply_func_choice c rev_resolve_type)
-      | TySendChannel (t1, t2) ->
-          TySendChannel (rev_resolve_type t1, rev_resolve_type t2)
-      | TyReceiveChannel (t1, t2) ->
-          TyReceiveChannel (rev_resolve_type t1, rev_resolve_type t2)
-      | TySendValue (t1, t2) ->
-          TySendValue (rev_resolve_type t1, rev_resolve_type t2)
-      | TyReceiveValue (t1, t2) ->
-          TyReceiveValue (rev_resolve_type t1, rev_resolve_type t2)
-      | TySharedToLinear (t1, counter) ->
-          TySharedToLinear (rev_resolve_type t1, counter)
-      | TyLinearToShared (t1, counter) ->
-          TyLinearToShared (rev_resolve_type t1, counter)
-      | TySession t1 -> TySession (rev_resolve_type t1)
-      | TyApp ty -> TyApp (rev_resolve_type ty)
-      | TyRec t1 -> TyRec (rev_resolve_type t1)
-      | TyScheme (tList, ty) -> TyScheme (tList, rev_resolve_type ty)
-      | _ -> t)
-
-and rev_resolve_atomic t ctxt =
-  match ctxt with
-  | [] -> None
-  | (name, TyScheme (tList, ty)) :: xs ->
-      if ty = t then
-        let args = String.concat ", " (List.map print_type tList) in
-        Some (Printf.sprintf "%s<%s>" name args)
-      else rev_resolve_atomic t xs
-  | (name, ty) :: xs -> if ty = t then Some name else rev_resolve_atomic t xs
-
 let rec print_exp e =
   match e with
   | RawText s -> s
@@ -291,8 +140,15 @@ let rec print_exp e =
         (print_exp tm)
   | Forward chan -> sprintf "forward(%s)" chan
   | Cut (cut_dirs, session_tm, (binder, tm)) ->
-      sprintf "cut::<HList![%s], _, _, _, _, _, _>(%s, |%s| {%s})"
-        (String.concat ", " (List.map print_side cut_dirs))
+      let hlist =
+        if List.for_all (( = ) L) cut_dirs && cut_dirs <> [] then "AllLeft"
+        else if List.for_all (( = ) R) cut_dirs && cut_dirs <> [] then
+          "AllRight"
+        else
+          sprintf "HList![%s]"
+            (String.concat ", " (List.map print_side cut_dirs))
+      in
+      sprintf "cut::<%s, _, _, _, _, _, _>(%s, |%s| {%s})" hlist
         (print_exp session_tm) binder (print_exp tm)
   | Func (((name, argList), (t, tm)), traits) ->
       let args_str =
@@ -488,13 +344,9 @@ let rec prune_recursive_choices target ty =
       | TyEither (t1, t2) -> (
           match (contains_type target t1, contains_type target t2) with
           | true, true -> raise Fail
-          | true, false -> prune_recursive_choices target t2
-          | false, true -> prune_recursive_choices target t1
-          | false, false ->
-              TyExternalChoice
-                (TyEither
-                   ( prune_recursive_choices target t1,
-                     prune_recursive_choices target t2 ))))
+          | true, false -> TyExternalChoice (TyEither (TyFail, t2))
+          | false, true -> TyExternalChoice (TyEither (t1, TyFail))
+          | false, false -> TyExternalChoice (TyEither (t1, t2))))
   | TySendChannel (t1, t2) ->
       TySendChannel
         (prune_recursive_choices target t1, prune_recursive_choices target t2)
@@ -630,6 +482,7 @@ let process_closed_function closed =
       in
       fn_ctxt := (name, t_resolved) :: !fn_ctxt;
       SchemeFunc ((scheme_list, ((name, argList), (tRet, RawText body))), traits)
+  | TyUnitRetFunc (name, args), body -> UnitRetFunc ((name, args), RawText body)
   | _ -> raise Fail
 
 let rec synthesize t argcountlist add_rec required_funcs usable_funcs =
@@ -703,20 +556,25 @@ and inversionR gamma delta_in omega t psi zeta theta focus_ctx ident =
         in
         let _ty = apply_all_subst ty subst in
         inversionR gamma delta_in omega _ty psi zeta theta focus_ctx ident
-        >>= fun (ctxts_out, e) ->
+        >>= fun ((gamma_out, ((delta_out, theta_out), focus_ctx')), e) ->
         match e with
         | Func (((_, _), (_, e1)), traits) ->
             let (name, argList), tRet =
               match ty with
-              | TyFunc (((name, argList), tRet), _) -> ((name, argList), tRet)
+              | TyFunc (((name, argList), tRet), _) ->
+                  ( ( name,
+                      List.map
+                        (fun (n, t) -> (n, apply_all_subst t theta_out))
+                        argList ),
+                    apply_all_subst tRet theta_out )
               | _ -> raise Fail
             in
             return
-              ( ctxts_out,
+              ( (gamma_out, ((delta_out, theta_out), focus_ctx')),
                 SchemeFunc
                   ( (tList, ((name, argList), (rev_resolve_type tRet, e1))),
                     traits ) )
-        | _ -> return (ctxts_out, e))
+        | _ -> return ((gamma_out, ((delta_out, theta_out), focus_ctx')), e))
     | TyApp ret_ty -> (
         try
           let subst, ((id, func_ty), delta_in') =
@@ -741,8 +599,12 @@ and inversionR gamma delta_in omega t psi zeta theta focus_ctx ident =
                     in
                     return ((gamma, ((delta_out, theta), focus_ctx_out)), Var id)
                   with Fail ->
-                    decideFocus gamma (delta @ omega) t psi zeta theta focus_ctx
-                      (ident + 1)
+                    if is_session_type t then (
+                      incr_failed_branches ();
+                      Choice.fail)
+                    else
+                      decideFocus gamma (delta @ omega) t psi zeta theta
+                        focus_ctx (ident + 1)
                 in
                 res
                 >>= fun ((gamma', ((delta', theta'), focus_ctx')), arg_tm) ->
@@ -969,13 +831,7 @@ and focusGamma gamma delta_in t psi zeta theta focus_ctx ident =
           Choice.fail)
         else
           let gamma' = decTimesUsedGamma id [] filtered_gamma in
-          let gamma'' =
-            match ty with
-            | TyFunc _ | TyLinearToShared _ | TySharedToLinear _ | TyScheme _ ->
-                removeWithIdGamma id ty gamma'
-            | _ -> gamma'
-          in
-          inversionR gamma'' ((id, ty) :: delta_in) [] t psi zeta theta
+          inversionR gamma' ((id, ty) :: delta_in) [] t psi zeta theta
             ((id, ty) :: focus_ctx) (ident + 1))
   in
   if not (is_empty r) then (
@@ -1058,6 +914,9 @@ and focusR gamma delta_in t psi zeta theta focus_ctx ident =
         incr_failed_branches ();
         Choice.fail
     | TyExistential _ ->
+        incr_failed_branches ();
+        Choice.fail
+    | TyFail ->
         incr_failed_branches ();
         Choice.fail
     | _ -> inversionR gamma delta_in [] t psi zeta theta focus_ctx (ident + 1)
@@ -1330,6 +1189,9 @@ and focusL' gamma delta_in id foc t psi zeta theta focus_ctx ident =
             [ (x1, t2) ]
             t psi zeta theta focus_ctx (ident + 1)
           >>= fun (ctxts_out, e1) -> return (ctxts_out, Acquire (id, (x1, e1)))
+    | TyFail ->
+        incr_failed_branches ();
+        Choice.fail
     | _ ->
         inversionL gamma delta_in
           [ (id, foc) ]

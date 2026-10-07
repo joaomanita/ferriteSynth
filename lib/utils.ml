@@ -3,7 +3,7 @@ open Printf
 
 exception Fail
 
-let debug_enabled = true
+let debug_enabled = false
 let debug_out = if debug_enabled then Some (open_out "debug.log") else None
 
 let log fmt =
@@ -46,99 +46,22 @@ let fresh_existential_id =
     incr unique;
     string_of_int !unique
 
-let rec print_labeled_choices l print_func =
-  match l with
-  | [] -> ""
-  | (label, tx) :: [] -> label ^ " => " ^ print_func tx
-  | (label, tx) :: xs ->
-      label ^ " => " ^ print_func tx ^ ", "
-      ^ print_labeled_choices xs print_func
+let type_ctxt = ref []
+let define_choice_ctxt = ref []
 
-let rec print_choice c =
-  match c with
-  (*| TyDefineChoice (name, options) ->
-      let opts =
-        options
-        |> List.map (fun (lbl, ty) -> lbl ^ ": " ^ print_type ty)
-        |> String.concat ", "
-      in
-      name ^ "{" ^ opts ^ "}" *)
-  | TyDefineChoice (name, _) -> name
-  | TyEither (t1, t2) -> "Either<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+let rec lookup_type name ctxt =
+  match ctxt with
+  | [] -> None
+  | (n, t) :: xs -> if n = name then Some t else lookup_type name xs
 
-and print_type t =
-  match t with
-  | TyPrimitive t -> t
-  | TyAtomic a -> a
-  | TyExistential a -> "?" ^ a
-  | TyInternalChoice c -> "InternalChoice<" ^ print_choice c ^ ">"
-  | TyExternalChoice c -> "ExternalChoice<" ^ print_choice c ^ ">"
-  | TyInternalChoiceId _ -> "TyInternalChoiceId"
-  | TyExternalChoiceId _ -> "TyExternalChoiceId"
-  | TySendChannel (t1, t2) ->
-      "SendChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
-  | TyReceiveChannel (t1, t2) ->
-      "ReceiveChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
-  | TySendValue (t1, t2) ->
-      "SendValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
-  | TyReceiveValue (t1, t2) ->
-      "ReceiveValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
-  | TyEnd -> "End"
-  | TySharedToLinear (t, _) -> "SharedToLinear<" ^ print_type t ^ ">"
-  | TyLinearToShared (t, _) -> "LinearToShared<" ^ print_type t ^ ">"
-  | TyFixShared -> "Release"
-  | TySession t -> "Session<" ^ print_type t ^ ">"
-  | TyFunc (((name, tyArgs), tyRet), _) ->
-      "FN<<" ^ name ^ ", "
-      ^ print_labeled_choices tyArgs print_type
-      ^ ">, " ^ print_type tyRet ^ ">"
-  | TyApp func_ty -> "App<" ^ print_type func_ty ^ ">"
-  | TyRec t -> "Rec<" ^ print_type t ^ ">"
-  | TyZ i -> print_peano i
-  | TyUnitRetFunc (name, argList) ->
-      "FN<<" ^ name ^ ", " ^ print_labeled_choices argList print_type ^ ">, >"
-  | TyScheme (_, tau) -> print_type tau
-  | TySchemeId _ -> "??"
-
-and print_type_internal t =
-  match t with
-  | TyPrimitive t -> t
-  | TyAtomic a -> a
-  | TyExistential a -> "?" ^ a
-  | TyInternalChoice c -> "TyInternalChoice<" ^ print_choice c ^ ">"
-  | TyExternalChoice c -> "TyExternalChoice<" ^ print_choice c ^ ">"
-  | TyInternalChoiceId _ -> "TyInternalChoiceId"
-  | TyExternalChoiceId _ -> "TyExternalChoiceId"
-  | TySendChannel (t1, t2) ->
-      "SendChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
-  | TyReceiveChannel (t1, t2) ->
-      "ReceiveChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
-  | TySendValue (t1, t2) ->
-      "SendValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
-  | TyReceiveValue (t1, t2) ->
-      "ReceiveValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
-  | TyEnd -> "End"
-  | TySharedToLinear (t, _) -> "SharedToLinear<" ^ print_type t ^ ">"
-  | TyLinearToShared (t, _) -> "LinearToShared<" ^ print_type t ^ ">"
-  | TyFixShared -> "FixShared"
-  | TySession t -> "Session<" ^ print_type t ^ ">"
-  | TyFunc (((name, tyArgs), tyRet), _) ->
-      "FN<<" ^ name ^ ", "
-      ^ print_labeled_choices tyArgs print_type
-      ^ ">, " ^ print_type tyRet ^ ">"
-  | TyApp func_ty -> "App<" ^ print_type func_ty ^ ">"
-  | TyRec t -> "Rec<" ^ print_type t ^ ">"
-  | TyZ i -> print_peano i
-  | TyUnitRetFunc (name, argList) ->
-      "FN<<" ^ name ^ ", " ^ print_labeled_choices argList print_type ^ ">, >"
-  | TyScheme (tList, tau) ->
-      "Scheme<<"
-      ^ String.concat ", " (List.map print_type tList)
-      ^ ">, " ^ print_type tau ^ ">"
-  | TySchemeId _ -> "??"
-
-and print_peano i =
-  match i with 0 -> "Z" | x -> "S<" ^ print_peano (x - 1) ^ ">"
+let rec lookup_define_choice name ctxt =
+  match ctxt with
+  | [] -> raise Fail
+  | c :: xs -> (
+      match c with
+      | TyDefineChoice (id, _) ->
+          if id = name then c else lookup_define_choice name xs
+      | _ -> raise Fail)
 
 and equal_type t1 t2 =
   match (t1, t2) with
@@ -241,6 +164,243 @@ and equal_labeled_types_with_existentials l1 l2 =
          lbl1 = lbl2 && equal_type_with_existentials ty1 ty2)
        l1 l2
 
+let rec print_labeled_choices l print_func =
+  match l with
+  | [] -> ""
+  | (label, tx) :: [] -> label ^ " => " ^ print_func tx
+  | (label, tx) :: xs ->
+      label ^ " => " ^ print_func tx ^ ", "
+      ^ print_labeled_choices xs print_func
+
+let rec print_choice c =
+  match c with
+  (*| TyDefineChoice (name, options) ->
+      let opts =
+        options
+        |> List.map (fun (lbl, ty) -> lbl ^ ": " ^ print_type ty)
+        |> String.concat ", "
+      in
+      name ^ "{" ^ opts ^ "}" *)
+  | TyDefineChoice (name, _) -> name
+  | TyEither (t1, t2) -> "Either<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+
+and print_peano i =
+  match i with 0 -> "Z" | x -> "S<" ^ print_peano (x - 1) ^ ">"
+
+and print_type t =
+  match t with
+  | TyPrimitive t -> t
+  | TyAtomic a -> a
+  | TyExistential a -> "?" ^ a
+  | TyInternalChoice c -> "InternalChoice<" ^ print_choice c ^ ">"
+  | TyExternalChoice c -> "ExternalChoice<" ^ print_choice c ^ ">"
+  | TyInternalChoiceId _ -> print_type (resolve_type t)
+  | TyExternalChoiceId _ -> print_type (resolve_type t)
+  | TySendChannel (t1, t2) ->
+      "SendChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TyReceiveChannel (t1, t2) ->
+      "ReceiveChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TySendValue (t1, t2) ->
+      "SendValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TyReceiveValue (t1, t2) ->
+      "ReceiveValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TyEnd -> "End"
+  | TySharedToLinear (t, _) -> "SharedToLinear<" ^ print_type t ^ ">"
+  | TyLinearToShared (t, _) -> "LinearToShared<" ^ print_type t ^ ">"
+  | TyFixShared -> "Release"
+  | TySession t -> "Session<" ^ print_type t ^ ">"
+  | TyFunc (((name, tyArgs), tyRet), _) ->
+      "FN<<" ^ name ^ ", "
+      ^ print_labeled_choices tyArgs print_type
+      ^ ">, " ^ print_type tyRet ^ ">"
+  | TyApp func_ty -> "App<" ^ print_type func_ty ^ ">"
+  | TyRec t -> "Rec<" ^ print_type t ^ ">"
+  | TyZ i -> print_peano i
+  | TyUnitRetFunc (name, argList) ->
+      "FN<<" ^ name ^ ", " ^ print_labeled_choices argList print_type ^ ">, >"
+  | TyScheme (_, tau) -> print_type tau
+  | TySchemeId (name, tList) ->
+      name ^ "<" ^ String.concat ", " (List.map print_type tList) ^ ">"
+  | TyFail -> "TyFail"
+
+and print_type_internal t =
+  match t with
+  | TyPrimitive t -> t
+  | TyAtomic a -> a
+  | TyExistential a -> "?" ^ a
+  | TyInternalChoice c -> "TyInternalChoice<" ^ print_choice c ^ ">"
+  | TyExternalChoice c -> "TyExternalChoice<" ^ print_choice c ^ ">"
+  | TyInternalChoiceId _ -> "TyInternalChoiceId"
+  | TyExternalChoiceId _ -> "TyExternalChoiceId"
+  | TySendChannel (t1, t2) ->
+      "SendChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TyReceiveChannel (t1, t2) ->
+      "ReceiveChannel<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TySendValue (t1, t2) ->
+      "SendValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TyReceiveValue (t1, t2) ->
+      "ReceiveValue<" ^ print_type t1 ^ ", " ^ print_type t2 ^ ">"
+  | TyEnd -> "End"
+  | TySharedToLinear (t, _) -> "SharedToLinear<" ^ print_type t ^ ">"
+  | TyLinearToShared (t, _) -> "LinearToShared<" ^ print_type t ^ ">"
+  | TyFixShared -> "FixShared"
+  | TySession t -> "Session<" ^ print_type t ^ ">"
+  | TyFunc (((name, tyArgs), tyRet), _) ->
+      "FN<<" ^ name ^ ", "
+      ^ print_labeled_choices tyArgs print_type
+      ^ ">, " ^ print_type tyRet ^ ">"
+  | TyApp func_ty -> "App<" ^ print_type func_ty ^ ">"
+  | TyRec t -> "Rec<" ^ print_type t ^ ">"
+  | TyZ i -> print_peano i
+  | TyUnitRetFunc (name, argList) ->
+      "FN<<" ^ name ^ ", " ^ print_labeled_choices argList print_type ^ ">, >"
+  | TyScheme (tList, tau) ->
+      "Scheme<<"
+      ^ String.concat ", " (List.map print_type tList)
+      ^ ">, " ^ print_type tau ^ ">"
+  | TySchemeId _ -> "??"
+  | TyFail -> "TyFail"
+
+and apply_func_choice c f =
+  match c with
+  | TyDefineChoice (name, l) ->
+      TyDefineChoice (name, List.map (fun (label, ty) -> (label, f ty)) l)
+  | TyEither (t1, t2) -> TyEither (f t1, f t2)
+
+and substT x replacement t1 =
+  if equal_type x t1 then replacement
+  else
+    match t1 with
+    | TyAtomic a -> if TyAtomic a = x then replacement else t1
+    | TyInternalChoice c ->
+        TyInternalChoice (apply_func_choice c (substT x replacement))
+    | TyExternalChoice c ->
+        TyExternalChoice (apply_func_choice c (substT x replacement))
+    | TySendChannel (t1, t2) ->
+        TySendChannel (substT x replacement t1, substT x replacement t2)
+    | TyReceiveChannel (t1, t2) ->
+        TyReceiveChannel (substT x replacement t1, substT x replacement t2)
+    | TySendValue (t1, t2) ->
+        TySendValue (substT x replacement t1, substT x replacement t2)
+    | TyReceiveValue (t1, t2) ->
+        TyReceiveValue (substT x replacement t1, substT x replacement t2)
+    | TySharedToLinear (t, counter) ->
+        TySharedToLinear (substT x replacement t, counter)
+    | TyLinearToShared (t, counter) ->
+        TyLinearToShared (substT x replacement t, counter)
+    | TySession t -> TySession (substT x replacement t)
+    | TyRec t -> TyRec (substT x replacement t)
+    | TyFunc (((n, args), ret), traits) ->
+        TyFunc
+          ( ( (n, List.map (fun (l, t) -> (l, substT x replacement t)) args),
+              substT x replacement ret ),
+            traits )
+    | TyScheme (ts, tau) -> TyScheme (ts, substT x replacement tau)
+    | _ -> t1
+
+(* Resolves type aliases into their real representations *)
+and resolve_type t =
+  match t with
+  | TyPrimitive s -> (
+      match lookup_type s !type_ctxt with
+      | Some real_t -> resolve_type real_t
+      | None -> t)
+  | TySchemeId (id, schemelist) -> (
+      match lookup_type id !type_ctxt with
+      | Some (TyScheme (tList, tau)) ->
+          let tau', new_schemelist =
+            List.fold_left2
+              (fun (tau', new_schemelist) t replacement ->
+                let tau' = substT t replacement tau' in
+                match replacement with
+                | TyAtomic _ -> (tau', new_schemelist @ [ replacement ])
+                | _ -> (tau', new_schemelist))
+              (tau, []) tList schemelist
+          in
+          TyScheme (new_schemelist, tau')
+      | _ -> raise Fail)
+  | TyAtomic _ -> t
+  | TyExistential _ -> t
+  | TyInternalChoice c -> TyInternalChoice (apply_func_choice c resolve_type)
+  | TyExternalChoice c -> TyExternalChoice (apply_func_choice c resolve_type)
+  | TyInternalChoiceId id ->
+      TyInternalChoice
+        (apply_func_choice
+           (lookup_define_choice id !define_choice_ctxt)
+           resolve_type)
+  | TyExternalChoiceId id ->
+      TyExternalChoice
+        (apply_func_choice
+           (lookup_define_choice id !define_choice_ctxt)
+           resolve_type)
+  | TySendChannel (t1, t2) -> TySendChannel (resolve_type t1, resolve_type t2)
+  | TyReceiveChannel (t1, t2) ->
+      TyReceiveChannel (resolve_type t1, resolve_type t2)
+  | TySendValue (t1, t2) -> TySendValue (resolve_type t1, resolve_type t2)
+  | TyReceiveValue (t1, t2) -> TyReceiveValue (resolve_type t1, resolve_type t2)
+  | TyEnd -> t
+  | TySharedToLinear (t, counter) -> TySharedToLinear (resolve_type t, counter)
+  | TyLinearToShared (t, counter) -> TyLinearToShared (resolve_type t, counter)
+  | TyFixShared -> t
+  | TySession t -> TySession (resolve_type t)
+  | TyFunc (((name, argList), tRet), traits) ->
+      TyFunc
+        ( ( ( name,
+              List.map
+                (fun (argName, argType) -> (argName, resolve_type argType))
+                argList ),
+            resolve_type tRet ),
+          traits )
+  | TyApp ty -> TyApp (resolve_type ty)
+  | TyRec t -> TyRec (resolve_type t)
+  | TyZ _ -> t
+  | TyUnitRetFunc (name, argList) ->
+      TyUnitRetFunc
+        ( name,
+          List.map
+            (fun (argName, argType) -> (argName, resolve_type argType))
+            argList )
+  | TyScheme (tList, tau) -> TyScheme (tList, resolve_type tau)
+  | TyFail -> raise Fail
+
+(* Replaces types with their aliases if they are defined *)
+let rec rev_resolve_type t =
+  match rev_resolve_atomic t !type_ctxt with
+  | Some name -> TyPrimitive name
+  | None -> (
+      match t with
+      | TyInternalChoice c ->
+          TyInternalChoice (apply_func_choice c rev_resolve_type)
+      | TyExternalChoice c ->
+          TyExternalChoice (apply_func_choice c rev_resolve_type)
+      | TySendChannel (t1, t2) ->
+          TySendChannel (rev_resolve_type t1, rev_resolve_type t2)
+      | TyReceiveChannel (t1, t2) ->
+          TyReceiveChannel (rev_resolve_type t1, rev_resolve_type t2)
+      | TySendValue (t1, t2) ->
+          TySendValue (rev_resolve_type t1, rev_resolve_type t2)
+      | TyReceiveValue (t1, t2) ->
+          TyReceiveValue (rev_resolve_type t1, rev_resolve_type t2)
+      | TySharedToLinear (t1, counter) ->
+          TySharedToLinear (rev_resolve_type t1, counter)
+      | TyLinearToShared (t1, counter) ->
+          TyLinearToShared (rev_resolve_type t1, counter)
+      | TySession t1 -> TySession (rev_resolve_type t1)
+      | TyApp ty -> TyApp (rev_resolve_type ty)
+      | TyRec t1 -> TyRec (rev_resolve_type t1)
+      | TyScheme (tList, ty) -> TyScheme (tList, rev_resolve_type ty)
+      | _ -> t)
+
+and rev_resolve_atomic t ctxt =
+  match ctxt with
+  | [] -> None
+  | (name, TyScheme (tList, ty)) :: xs ->
+      if ty = t then
+        let args = String.concat ", " (List.map print_type tList) in
+        Some (Printf.sprintf "%s<%s>" name args)
+      else rev_resolve_atomic t xs
+  | (name, ty) :: xs -> if ty = t then Some name else rev_resolve_atomic t xs
+
 and is_session_type ty =
   match ty with
   | TySession _ | TySendChannel _ | TyReceiveChannel _ | TySendValue _
@@ -249,7 +409,7 @@ and is_session_type ty =
   | TyLinearToShared _ | TyRec _ | TyFixShared | TyZ _ ->
       true
   | TyPrimitive _ | TyFunc _ | TyScheme _ | TyUnitRetFunc _ | TyApp _
-  | TySchemeId _ | TyAtomic _ | TyExistential _ ->
+  | TySchemeId _ | TyAtomic _ | TyExistential _ | TyFail ->
       false
 
 let rec print_ctxt_delta ctxt =

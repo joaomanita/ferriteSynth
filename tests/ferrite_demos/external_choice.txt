@@ -3,7 +3,7 @@ use ferrite_session::{
   prelude::*,
 };
 
-fn creator() -> Session<SendValue<String, End>> {}
+fn creator() -> Session<SendValue<String, End>> { send_value("boas".to_string(), terminate()) }
 
 fn provider() -> Session<ExternalChoice<Either<SendValue<String, End>, ReceiveValue<u64, End>>>> { @SYNTHESIZE [suggest creator;]}
 

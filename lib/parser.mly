@@ -188,6 +188,17 @@ closed_func:
          String.concat "" body)
     }
 
+    | FUNC; name = ID;
+    LPAR; ars = separated_list(COMMA, arg); RPAR;
+    LBRACE;
+    body = list(RAW);
+    RBRACE
+    {
+      ClosedFunction(
+        TyUnitRetFunc((name, List.map fst ars)),
+         String.concat "" body)
+    }
+
 scheme_args:
   | ts = separated_nonempty_list(COMMA, s_type)
       { ts }

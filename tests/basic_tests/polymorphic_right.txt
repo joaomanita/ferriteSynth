@@ -1,7 +1,9 @@
 use std::format;
 
-use ferrite_session::prelude::*;
+use ferrite_session::{either::*, prelude::*};
 
 type myType<A, B> = ExternalChoice<Either<A, B>>;
 
-fn provider<A, B>(arg1: A: 1, arg2: B: 1) -> Session<myType<A, B>> { @SYNTHESIZE []}
+fn provider<A, B>(arg1: Session<A>: 1, arg2: Session<B>: 1) -> Session<myType<A, B>> where A: Protocol, B: Protocol { @SYNTHESIZE []}
+
+fn main() {}

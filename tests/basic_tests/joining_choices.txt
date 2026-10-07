@@ -1,7 +1,18 @@
 use std::format;
 
-use ferrite_session::prelude::*;
+use ferrite_session::{
+  either::*,
+  prelude::*,
+};
 
+/*
 type myType = Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<B, C>>>>>;
 
 fn myFunc() -> myType { @SYNTHESIZE [] }
+*/
+
+type myType<A, B, C> = Session<ReceiveChannel<ExternalChoice<Either<ReceiveChannel<A, B>, ReceiveChannel<A, C>>>, ReceiveChannel<A, ExternalChoice<Either<B, C>>>>>;
+
+fn myFunc<A, B, C>() -> myType where A: Protocol, B: Protocol, C: Protocol { @SYNTHESIZE [] }
+
+fn main() {}

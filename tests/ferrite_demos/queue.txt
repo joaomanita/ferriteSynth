@@ -12,3 +12,5 @@ use tokio::time::sleep;
 type StringQueue = Rec<InternalChoice<Either<End, SendValue<String, Z>>>>;
 
 fn read_queue() -> Session<ReceiveChannel<StringQueue, End>> { @SYNTHESIZE REC []}
+
+fn main() {}

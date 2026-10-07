@@ -1,0 +1,8 @@
+use ferrite_session::{either::*, prelude::*};
+type myType1<A> = ReceiveChannel<ExternalChoice<Either<A, A>>, A>;
+
+fn myFunc2<A>() -> Session<myType1<A>> where A: Protocol { @SYNTHESIZE [] }
+
+/* When trying to compile in Rust uncomment this
+fn main() -> {}
+*/

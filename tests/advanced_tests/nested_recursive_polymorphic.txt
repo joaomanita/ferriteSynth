@@ -10,7 +10,7 @@ type Stream<T> = Rec<
   >
 >;
 
-fn producer<T>(arg1: T: 2) -> Session<Stream<T>> { @SYNTHESIZE  REC []}
+fn producer<T>(arg1: T: 2) -> Session<Stream<T>> where T: Protocol { @SYNTHESIZE  REC []}
 
 fn user(arg2: String: 1) -> Session<ReceiveChannel<Stream<String>, End>> { @SYNTHESIZE []}
 

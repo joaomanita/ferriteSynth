@@ -9,5 +9,7 @@ fn client(arg1: u64: 1) -> Session<ReceiveChannel<Choice, End>> { @SYNTHESIZE []
 
 fn provider(arg2: String: 1) -> Session<Choice> { @SYNTHESIZE [] }
 
+fn main() {}
+
 
 

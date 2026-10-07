@@ -3,6 +3,9 @@
 (** @canonical FerriteSynth.Lexer *)
 module Lexer = FerriteSynth__Lexer
 
+(** @canonical FerriteSynth.Lexer_state *)
+module Lexer_state = FerriteSynth__Lexer_state
+
 (** @canonical FerriteSynth.Memo *)
 module Memo = FerriteSynth__Memo
 

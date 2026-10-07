@@ -1,12 +1,19 @@
 use std::format;
 
+use ferrite_session::{
+  either::*,
+  prelude::*,
+};
+
 use ferrite_session::prelude::*;
 
 fn myFunc() -> Session<
   Rec<
     ExternalChoice<
-      Either<ReceiveValue<Int, End>,
+      Either<ReceiveValue<i32, End>,
       Z>
     >
   >
 > { @SYNTHESIZE REC [] }
+
+fn main () {}

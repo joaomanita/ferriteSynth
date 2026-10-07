@@ -1,1 +1,1 @@
-lib/lexer.ml: Lexing Parser String
+lib/lexer.ml: Buffer Lexer_state Lexing Parser String

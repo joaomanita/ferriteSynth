@@ -1,4 +1,17 @@
 use ferrite_session::prelude::*;
+
+// This will not pass rust compilation because A, B, C are not defined
+/*
 type myType = ReceiveChannel< ReceiveChannel<A, ReceiveChannel<B,C>>, ReceiveChannel<SendChannel<A,B>, C>>;
 
 fn myFunc2() -> Session<myType> { @SYNTHESIZE [] }
+*/
+
+// To pass compilation uncomment and generate this polymorphic version
+type myType<A, B, C> = ReceiveChannel< ReceiveChannel<A, ReceiveChannel<B,C>>, ReceiveChannel<SendChannel<A,B>, C>>;
+
+fn myFunc2<A, B, C>() -> Session<myType> where A: Protocol, B: Protocol, C: Protocol { @SYNTHESIZE [] }
+
+fn main() {}
+
+

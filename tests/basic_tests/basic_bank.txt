@@ -2,13 +2,15 @@ use ferrite_session::{prelude::*};
 
 define_choice! {
     BankOps;
-    deposit: ReceiveValue<Int, End>,
-    withdraw: SendValue<Int, ReceiveValue<Int, End>>,
+    Deposit: ReceiveValue<i32, End>,
+    Withdraw: SendValue<i32, ReceiveValue<i32, End>>,
     Terminate: End
 }
 
-fn bankops(arg1: Int: 1) -> Session<ExternalChoice<BankOps>> { @SYNTHESIZE []}
+fn bankops(arg1: i32: 1) -> Session<ExternalChoice<BankOps>> { @SYNTHESIZE []}
 
-fn bank_session(withdraw_value: Int: 1) -> Session<ReceiveValue<String, ExternalChoice<BankOps>>> { @SYNTHESIZE [] }
+fn bank_session(withdraw_value: i32: 1) -> Session<ReceiveValue<String, ExternalChoice<BankOps>>> { @SYNTHESIZE [] }
 
-fn client_session(myId: String: 1, depositAmt: Int: 1) -> Session< ReceiveChannel< ReceiveValue<String, ExternalChoice<BankOps>>, End>> { @SYNTHESIZE [] }
+fn client_session(myId: String: 1, depositAmt: i32: 1) -> Session< ReceiveChannel< ReceiveValue<String, ExternalChoice<BankOps>>, End>> { @SYNTHESIZE [] }
+
+fn main() {}

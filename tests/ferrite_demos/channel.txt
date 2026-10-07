@@ -11,22 +11,22 @@ use tokio::time::sleep;
 
 define_choice! {
     ActionsReceiver;
-    Next: SendValue<Int, Z>,
+    Next: SendValue<i32, Z>,
     Close: End
 }
 
 define_choice! {
     ActionsChannel;
-    ReceiveNext: ReceiveValue<Int, Release>,
-    SendNext: SendValue<Int, Release>
+    ReceiveNext: ReceiveValue<i32, Release>,
+    SendNext: SendValue<i32, Release>
 }
 
 type Receiver = Rec<ExternalChoice<ActionsReceiver>>;
 
 type Channel = LinearToShared<ExternalChoice<ActionsChannel>>;
 
-fn make_channel(val: Int: 2) -> Session<Channel> { @SYNTHESIZE  REC []}
+fn make_channel(val: i32: 2) -> Session<Channel> { @SYNTHESIZE  REC []}
 
-fn make_receiver(val: Int: 2) -> Session<Receiver> { @SYNTHESIZE  REC [] }
+fn make_receiver(val: i32: 2) -> Session<Receiver> { @SYNTHESIZE  REC [] }
 
 

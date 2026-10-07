@@ -1,4 +1,13 @@
 use ferrite_session::prelude::*;
+
+/*
 type myType = ReceiveChannel< SendChannel< SendChannel<ReceiveChannel<A, B>, ReceiveChannel<B, C>>, ReceiveChannel<C, D>>, ReceiveChannel<A, D>>;
 
 fn myFunc2() -> Session<myType> { @SYNTHESIZE [] }
+*/
+
+type myType<A, B, C, D> = ReceiveChannel< SendChannel< SendChannel<ReceiveChannel<A, B>, ReceiveChannel<B, C>>, ReceiveChannel<C, D>>, ReceiveChannel<A, D>>;
+
+fn myFunc2<A, B, C, D>() -> Session<myType> where A: Protocol, B: Protocol, C: Protocol, D: Protocol { @SYNTHESIZE [] }
+
+fn main() {}

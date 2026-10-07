@@ -1,4 +1,7 @@
-use ferrite_session::prelude::*;
+use ferrite_session::{
+  either::*,
+  prelude::*,
+};
 
 define_choice! {
     FooBarBaz;
@@ -11,5 +14,9 @@ fn provider(arg1: String: 1) -> Session<ExternalChoice<FooBarBaz>> { @SYNTHESIZE
 
 fn client() -> Session<ReceiveChannel<ExternalChoice<FooBarBaz>, End>> { @SYNTHESIZE  []}
 
+/*
 fn main(arg1:String: 1) { @SYNTHESIZE [use provider, client;] }
+*/
+
+fn main() {}
 

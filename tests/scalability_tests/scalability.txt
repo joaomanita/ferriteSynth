@@ -3,8 +3,8 @@ type Stream = Rec<
         SendValue<String,
             SendValue<String,
                 Rec<
-                    InternalChoice<Either<
-                      ReceiveValue<String, S<Z>>,
+                    InternalChoice<Either< InternalChoice<Either<
+                      ReceiveValue<String, S<S<Z>>>, S<Z>>>,
                       ReceiveValue<String, End>
                     >>
                 >

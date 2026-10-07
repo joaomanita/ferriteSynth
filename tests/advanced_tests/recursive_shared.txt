@@ -12,3 +12,5 @@ fn shared_provider(arg1: String: 2) -> Session<SharedService> { @SYNTHESIZE REC 
 fn rec_provider(arg1: String: 2) -> Session<Rec<ExternalChoice<Either<SendChannel<SharedService, Z>, End>>>> { @SYNTHESIZE REC [suggest shared_provider;]}
 
 fn user() -> Session<ReceiveChannel<Rec<ExternalChoice<Either<SendChannel<SharedService, Z>, End>>>, SendValue<String, SendValue<String, End>>>> { @SYNTHESIZE REC [] }
+
+fn main() {}
